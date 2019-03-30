@@ -1,0 +1,41 @@
+/*
+ * site-wide variable declaration
+ *
+ ********************************************************************************/
+
+/*
+ * font declarations
+ *
+ ************************************************************/
+
+$base-font: 'Raleway-Light', Helvetica, sans-serif;
+
+$base-font-size:            16;
+$base-line-height:          1.5;
+$base-margin-bottom:        ($base-font-size * $base-line-height) * 1px;
+$base-vertical-margin:      14px;
+
+/*
+ * color map
+ *
+ ************************************************************/
+
+$colors: (
+    primary: (
+        base: #1b1b1b,
+        dark: #222,
+    ),
+    secondary: (
+        light: #f4f4f4,
+        base: #ecf0f1,
+    ),
+    status: (
+        danger: #f53d3d,
+    ),
+    default: (
+        dark: #000,
+        light: #fff,
+    ),
+);
+
+$text-color: color(primary, base);

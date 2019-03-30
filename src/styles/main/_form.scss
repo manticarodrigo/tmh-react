@@ -1,0 +1,12 @@
+input,
+textarea,
+button {
+  @include font-size(16);
+
+  border: 0;
+  margin: 5px 0;
+  padding: 10px;
+  width: 100%;
+  background-color: color(secondary, light);
+  font-family: $base-font;
+}
