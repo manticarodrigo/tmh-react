@@ -3,10 +3,19 @@ textarea,
 button {
   @include font-size(16);
 
-  border: 0;
   margin: 5px 0;
   padding: 10px;
+  border: 0;
   width: 100%;
-  background-color: color(secondary, light);
   font-family: $base-font;
+}
+
+input,
+textarea {
+  background-color: color(secondary, light);
+}
+
+button {
+  background-color: color(primary, base);
+  color: color(default, light);
 }
