@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import { Action } from 'redux';
 import { ThunkDispatch } from 'redux-thunk';
-import { connect } from 'react-redux';
 import './LoginPage.scss';
 
-import { AppState } from '../../store/Store';
-import { User, UserState } from '../../reducers/UserReducer';
 import { login } from '../../actions/UserActions';
+import { User, UserState } from '../../reducers/UserReducer';
+import { AppState } from '../../store/Store';
 
 import logo from '../../assets/logo.png';
 
@@ -17,8 +17,8 @@ interface LoginProps {
 
 class LoginPage extends Component<LoginProps> {
   state = {
-    username: '',
     password: '',
+    username: '',
   };
 
   handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -32,7 +32,7 @@ class LoginPage extends Component<LoginProps> {
     this.props.login(username, password);
   }
 
-  public render() {
+  render() {
     const { currentUser } = this.props;
     const { username, password } = this.state;
 
