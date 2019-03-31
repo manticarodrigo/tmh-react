@@ -18,8 +18,8 @@ const rootReducer = combineReducers<AppState>({
 });
 
 // Create a configure store function of type `AppState`
-export default function configureStore(): Store<AppState, any> {
-  const devTools = (window as any).__REDUX_DEVTOOLS_EXTENSION__ && (window as any).__REDUX_DEVTOOLS_EXTENSION__();
-  const store = createStore(rootReducer, undefined, applyMiddleware(thunk));
+export default function configureStore(initialState?: {}): Store<AppState, any> {
+  const composeEnhancers = (window as any).__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
+  const store = createStore(rootReducer, initialState, composeEnhancers(applyMiddleware(thunk)));
   return store;
 }

@@ -36,8 +36,6 @@ class LoginPage extends Component<LoginProps> {
     const { currentUser } = this.props;
     const { username, password } = this.state;
 
-    console.log(currentUser);
-
     return (
       <div className="splash">
         <div className="splash__container">
