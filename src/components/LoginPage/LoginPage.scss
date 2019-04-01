@@ -18,7 +18,21 @@
     &__fields {
       display: flex;
       flex-direction: column;
-      align-items: flex-start;
+
+      p, label { @include fade-in(.5s); }
+
+      p {
+        @include font-size(14);
+
+        align-self: flex-end;
+        margin: 0 0 5px;
+      }
+
+      label {
+        font-weight: bold;
+        align-self: flex-start;
+        margin: 5px 0 0;
+      }
     }
 
     &__divider {
