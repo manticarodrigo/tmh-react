@@ -21,7 +21,7 @@ export class User {
   getShortName() {
     return `${this.first_name} ${this.last_name[0]}`;
   }
-  
+
   getFullName() {
     return `${this.first_name} ${this.last_name}`;
   }
@@ -37,7 +37,7 @@ const initialUserState: UserState = {
 
 export const UserReducer: Reducer<UserState, UserActions> = (
   state = initialUserState,
-  action
+  action,
 ) => {
   switch (action.type) {
     case UserActionTypes.LOGIN: {

@@ -1,19 +1,53 @@
 import React, { Component } from 'react';
-import { BrowserRouter as Router, Route } from 'react-router-dom';
+import { connect } from 'react-redux';
+import { BrowserRouter as Router } from 'react-router-dom';
 import './App.scss';
 
-import LoginPage from './LoginPage/LoginPage';
+import { User } from '../reducers/UserReducer';
+import { AppState } from '../store/Store';
 
-class App extends Component {
+import { ProtectedRoute, ProtectedRouteProps } from '../containers/ProtectedRoute/ProtectedRoute';
+
+import DashboardPage from '../containers/DashboardPage/DashboardPage';
+import LoginPage from '../containers/LoginPage/LoginPage';
+
+interface AppProps {
+  currentUser?: User;
+}
+
+class App extends Component<AppProps> {
   render() {
+    const { currentUser } = this.props;
+
+    const defaultProtectedRouteProps: ProtectedRouteProps = {
+      isAuthenticated: !!currentUser,
+      authenticationPath: '/login',
+    };
+
     return (
       <div className="app">
         <Router>
-          <Route exact path="/" component={LoginPage} />
+          <ProtectedRoute
+              isAuthenticated={!currentUser}
+              authenticationPath={'/'}
+              component={LoginPage}
+              exact={true}
+              path="/login"
+          />
+          <ProtectedRoute
+              {...defaultProtectedRouteProps}
+              component={DashboardPage}
+              exact={true}
+              path="/"
+          />
         </Router>
       </div>
     );
   }
 }
 
-export default App;
+const mapStateToProps = (store: AppState) => ({
+  currentUser: store.authState.currentUser,
+});
+
+export default connect(mapStateToProps)(App);
