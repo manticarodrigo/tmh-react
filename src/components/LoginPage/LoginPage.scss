@@ -8,6 +8,28 @@
   }
 
   &__form {
+    width: 500px;
     margin: 10px 0;
+    
+    @media (max-width: 750px) {
+      width: 100%;
+    }
+
+    &__fields {
+      display: flex;
+      flex-direction: column;
+      align-items: start;
+    }
+
+    &__divider {
+      padding: 10px 0 0;
+      border-top: 1px solid rgba(color(primary, base), .1);
+    }
+
+    &__toggle {
+      color: color(primary, base);
+      background-color: color(default, light);
+      border: 2px solid color(primary, base);
+    }
   }
 }

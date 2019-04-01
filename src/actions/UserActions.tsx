@@ -1,11 +1,12 @@
-import { ActionCreator, Dispatch } from 'redux';
-import { ThunkAction, ThunkDispatch } from 'redux-thunk';
 import axios from 'axios';
+import { ActionCreator, Dispatch } from 'redux';
+import { ThunkAction } from 'redux-thunk';
 
 import { User, UserState } from '../reducers/UserReducer';
 
 export enum UserActionTypes {
   LOGIN = 'LOGIN',
+  REGISTER = 'REGISTER',
 }
 
 export interface UserLoginAction {
@@ -13,27 +14,52 @@ export interface UserLoginAction {
   currentUser: User;
 }
 
-/* 
-Combine the action types with a union
-example: export type UserActions = UserLoginAction | UserRegisterAction ... 
-*/
-export type UserActions = UserLoginAction;
+export interface UserRegisterAction {
+  type: UserActionTypes.REGISTER;
+  currentUser: User;
+}
 
-/* Login Action
-<Promise<Return Type>, State Interface, Type of Param, Type of Action> */
+export type UserActions = UserLoginAction | UserRegisterAction;
 
+/* ThunkAction<Promise<Return Type>, State Interface, Type of Param, Type of Action> */
 export const login: ActionCreator<
-  ThunkAction<Promise<any>, UserState, { username: string, password: string }, UserLoginAction>
-> = (username, password) => {
-  return async (dispatch: Dispatch) => {
-    try {
-      const response = await axios.post(`${process.env.REACT_APP_API_URL}/rest-auth/login/`, { username, password });
-      dispatch({
-        currentUser: response.data,
-        type: UserActionTypes.LOGIN,
-      });
-    } catch (err) {
-      console.error(err);
-    }
-  };
-};
+  ThunkAction<Promise<any>, UserState, void, UserLoginAction>
+> = (username, password) => (async (dispatch: Dispatch) => {
+  try {
+    const response = await axios.post(`${process.env.REACT_APP_API_URL}/rest-auth/login/`, { username, password });
+    dispatch({
+      currentUser: response.data,
+      type: UserActionTypes.LOGIN,
+    });
+  } catch (err) {
+    return err;
+  }
+});
+
+export const register: ActionCreator<
+  ThunkAction<Promise<any>, UserState, void, UserRegisterAction>
+> = ({
+  username,
+  first_name,
+  last_name,
+  email,
+  password1,
+  password2,
+}) => (async (dispatch: Dispatch) => {
+  try {
+    const response = await axios.post(`${process.env.REACT_APP_API_URL}/rest-auth/registration/`, {
+      username,
+      email,
+      first_name,
+      last_name,
+      password1,
+      password2,
+    });
+    dispatch({
+      currentUser: response.data,
+      type: UserActionTypes.LOGIN,
+    });
+  } catch (err) {
+    return err;
+  }
+});

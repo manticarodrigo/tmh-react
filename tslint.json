@@ -6,6 +6,8 @@
   "rules": {
     "quotemark": [true, "single", "jsx-double"],
     "no-trailing-whitespace": true,
+    "object-literal-sort-keys": false,
+    "jsx-no-multiline-js": false,
     "jsx-boolean-value": false,
     "member-access": [true, "no-public"],
     "interface-name": [false, "always-prefix"]
