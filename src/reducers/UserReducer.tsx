@@ -5,6 +5,11 @@ import {
   UserActionTypes,
 } from '../actions/UserActions';
 
+interface CurrentUser {
+  user: User;
+  key: string;
+}
+
 export class User {
   readonly id?: string;
   readonly joined_date?: string;
@@ -31,12 +36,34 @@ export interface UserState {
   readonly currentUser?: User;
 }
 
-const initialUserState: UserState = {
+const defaultUserState: UserState = {
   currentUser: undefined,
 };
 
+const loadUserState = () => {
+  try {
+    const serializedState = localStorage.getItem('initialUserState');
+    if (serializedState === null) {
+      return defaultUserState;
+    }
+    return JSON.parse(serializedState);
+  } catch (err) {
+    return defaultUserState;
+  }
+};
+
+export const saveUserState = (currentUser: CurrentUser) => {
+  try {
+    const state = { currentUser };
+    const serializedState = JSON.stringify(state);
+    localStorage.setItem('initialUserState', serializedState);
+  } catch {
+    // ignore write errors
+  }
+};
+
 export const UserReducer: Reducer<UserState, UserActions> = (
-  state = initialUserState,
+  state = loadUserState(),
   action,
 ) => {
   switch (action.type) {

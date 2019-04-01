@@ -2,7 +2,7 @@ import axios from 'axios';
 import { ActionCreator, Dispatch } from 'redux';
 import { ThunkAction } from 'redux-thunk';
 
-import { User, UserState } from '../reducers/UserReducer';
+import { saveUserState, User, UserState } from '../reducers/UserReducer';
 
 export enum UserActionTypes {
   LOGIN = 'LOGIN',
@@ -27,6 +27,9 @@ export const login: ActionCreator<
 > = (username, password) => (async (dispatch: Dispatch) => {
   try {
     const response = await axios.post(`${process.env.REACT_APP_API_URL}/rest-auth/login/`, { username, password });
+
+    saveUserState(response.data);
+
     dispatch({
       currentUser: response.data,
       type: UserActionTypes.LOGIN,
@@ -55,6 +58,9 @@ export const register: ActionCreator<
       password1,
       password2,
     });
+
+    saveUserState(response.data);
+
     dispatch({
       currentUser: response.data,
       type: UserActionTypes.LOGIN,
