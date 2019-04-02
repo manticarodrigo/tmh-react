@@ -34,19 +34,19 @@ class App extends Component<AppProps> {
               isAuthenticated={!currentUser}
               authenticationPath={'/'}
               component={LoginPage}
-              exact={true}
+              exact
               path="/login"
           />
           <ProtectedRoute
               {...defaultProtectedRouteProps}
               component={DashboardPage}
-              exact={true}
+              exact
               path="/"
           />
           <ProtectedRoute
               {...defaultProtectedRouteProps}
               component={OnboardingPage}
-              exact={true}
+              exact
               path="/onboarding"
           />
         </Router>

@@ -13,7 +13,7 @@ import { getProjects } from '../../actions/ProjectActions';
 import { Project } from '../../reducers/ProjectReducer';
 
 
-import { LoadingComponent } from '../../components/LoadingComponent/LoadingComponent';
+import LoadingComponent from '../../components/LoadingComponent/LoadingComponent';
 
 interface DashboardPageProps extends RouteComponentProps {
   currentUser?: CurrentUser;

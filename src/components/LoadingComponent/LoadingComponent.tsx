@@ -3,7 +3,7 @@ import './LoadingComponent.scss';
 
 import logo from '../../assets/logo.png';
 
-export const LoadingComponent = () => (
+const LoadingComponent = () => (
   <main className="splash">
     <div className="splash__container">
       <div className="loading__content">
@@ -13,3 +13,5 @@ export const LoadingComponent = () => (
     </div>
   </main>
 );
+
+export default React.memo(LoadingComponent);
