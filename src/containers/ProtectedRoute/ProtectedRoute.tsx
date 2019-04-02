@@ -8,11 +8,8 @@ export interface ProtectedRouteProps extends RouteProps {
 
 export class ProtectedRoute extends Route<ProtectedRouteProps> {
   render() {
-      let redirectPath: string = '';
-
-      if (!this.props.isAuthenticated) {
-          redirectPath = this.props.authenticationPath;
-      }
+      const { isAuthenticated, authenticationPath } = this.props;
+      const redirectPath: string = !isAuthenticated ? authenticationPath : '';
 
       if (redirectPath) {
           const renderComponent = () => (<Redirect to={{ pathname: redirectPath }}/>);

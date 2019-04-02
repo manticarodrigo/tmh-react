@@ -11,7 +11,7 @@ interface Props {
 }
 
 import './styles/main.scss';
-import App from './components/App';
+import App from './containers/App/App';
 
 const Root: React.FunctionComponent<Props> = props => {
   return (

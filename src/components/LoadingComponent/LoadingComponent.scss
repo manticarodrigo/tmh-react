@@ -1,0 +1,16 @@
+@import '../../styles/global';
+
+.loading {
+  
+  &__content {
+    text-align: center;
+  }
+
+  &__image {
+    width: 70px;
+  }
+
+  &__status {
+    color: color(default, light);
+  }
+}

@@ -1,6 +1,6 @@
 import React, { Component, Fragment } from 'react';
-import { connect } from 'react-redux';
 import { Action } from 'redux';
+import { connect } from 'react-redux';
 import { ThunkDispatch } from 'redux-thunk';
 import './LoginPage.scss';
 
@@ -97,7 +97,7 @@ class LoginPage extends Component<LoginPageProps, LoginPageState> {
     const getBtnText = (isLogin: boolean) => isLogin ? 'LOG IN' : 'SIGN UP';
 
     return (
-      <div className="splash">
+      <main className="splash">
         <div className="splash__container">
           <div className="splash__container__inner">
             <img className="login__logo" src={logo} />
@@ -128,7 +128,7 @@ class LoginPage extends Component<LoginPageProps, LoginPageState> {
             </form>
           </div>
         </div>
-      </div>
+      </main>
     );
   }
 }

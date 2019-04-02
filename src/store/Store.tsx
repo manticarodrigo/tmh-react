@@ -7,14 +7,21 @@ import {
   UserState,
 } from '../reducers/UserReducer';
 
+import {
+  ProjectReducer,
+  ProjectState,
+} from '../reducers/ProjectReducer';
+
 // Create an interface for the application state
 export interface AppState {
-  authState: UserState;
+  userState: UserState;
+  projectState: ProjectState;
 }
 
 // Create the root reducer
 const rootReducer = combineReducers<AppState>({
-  authState: UserReducer,
+  userState: UserReducer,
+  projectState: ProjectReducer,
 });
 
 // Create a configure store function of type `AppState`

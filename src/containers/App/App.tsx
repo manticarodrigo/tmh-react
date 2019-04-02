@@ -1,18 +1,21 @@
 import React, { Component } from 'react';
-import { connect } from 'react-redux';
 import { BrowserRouter as Router } from 'react-router-dom';
+import { connect } from 'react-redux';
 import './App.scss';
 
-import { User } from '../reducers/UserReducer';
-import { AppState } from '../store/Store';
+import { AppState } from '../../store/Store';
 
-import { ProtectedRoute, ProtectedRouteProps } from '../containers/ProtectedRoute/ProtectedRoute';
+import { CurrentUser } from '../../reducers/UserReducer';
 
-import DashboardPage from '../containers/DashboardPage/DashboardPage';
-import LoginPage from '../containers/LoginPage/LoginPage';
+import { ProtectedRoute, ProtectedRouteProps } from '../ProtectedRoute/ProtectedRoute';
+
+import DashboardPage from '../DashboardPage/DashboardPage';
+import LoginPage from '../LoginPage/LoginPage';
+import OnboardingPage from '../OnboardingPage/OnboardingPage';
+
 
 interface AppProps {
-  currentUser?: User;
+  currentUser?: CurrentUser;
 }
 
 class App extends Component<AppProps> {
@@ -40,6 +43,12 @@ class App extends Component<AppProps> {
               exact={true}
               path="/"
           />
+          <ProtectedRoute
+              {...defaultProtectedRouteProps}
+              component={OnboardingPage}
+              exact={true}
+              path="/onboarding"
+          />
         </Router>
       </div>
     );
@@ -47,7 +56,7 @@ class App extends Component<AppProps> {
 }
 
 const mapStateToProps = (store: AppState) => ({
-  currentUser: store.authState.currentUser,
+  currentUser: store.userState.currentUser,
 });
 
 export default connect(mapStateToProps)(App);

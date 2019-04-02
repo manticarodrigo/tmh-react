@@ -5,9 +5,9 @@ import {
   UserActionTypes,
 } from '../actions/UserActions';
 
-interface CurrentUser {
-  user: User;
-  key: string;
+export class CurrentUser {
+  user!: User;
+  key!: string;
 }
 
 export class User {
@@ -33,7 +33,7 @@ export class User {
 }
 
 export interface UserState {
-  readonly currentUser?: User;
+  readonly currentUser?: CurrentUser;
 }
 
 const defaultUserState: UserState = {

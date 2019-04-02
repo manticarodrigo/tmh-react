@@ -2,7 +2,7 @@ import axios from 'axios';
 import { ActionCreator, Dispatch } from 'redux';
 import { ThunkAction } from 'redux-thunk';
 
-import { saveUserState, User, UserState } from '../reducers/UserReducer';
+import { saveUserState, UserState, CurrentUser } from '../reducers/UserReducer';
 
 export enum UserActionTypes {
   LOGIN = 'LOGIN',
@@ -11,12 +11,12 @@ export enum UserActionTypes {
 
 export interface UserLoginAction {
   type: UserActionTypes.LOGIN;
-  currentUser: User;
+  currentUser: CurrentUser;
 }
 
 export interface UserRegisterAction {
   type: UserActionTypes.REGISTER;
-  currentUser: User;
+  currentUser: CurrentUser;
 }
 
 export type UserActions = UserLoginAction | UserRegisterAction;
