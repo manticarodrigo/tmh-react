@@ -1,8 +1,11 @@
 import React from 'react';
 import './OnboardingStepsComponent.scss';
 
+import leftArrow from '../../../assets/images/icons/left-arrow.png';
+
 interface OnboardingStepsComponentProps {
   step: number;
+  handleBackClicked: () => void;
 }
 
 interface StepType {
@@ -22,17 +25,25 @@ const steps: StepType[] = [
 ];
 
 const OnboardingStepsComponent = (props: OnboardingStepsComponentProps) => {
-  const { step } = props;
+  const { step, handleBackClicked } = props;
 
   return (
     <div className="onboarding__steps__container">
       <div className="onboarding__steps__header">
-        <div className="onboarding__steps__title">
-          {steps[step].title}
+        <div className="onboarding__steps__header__title">
+          <h1 className="u-margin-hug--vert u-text-bold">
+            {steps[step].title}
+          </h1>
         </div>
-        <div className="onboarding__steps__subtitle">
-          {steps[step].subtitle}
-        </div>
+        <nav className="onboarding__steps__header__nav">
+          <button onClick={handleBackClicked}><img src={leftArrow} />BACK</button>
+          STEP {step}/5
+        </nav>
+      </div>
+      <div className="onboarding__steps__subheader">
+        {steps[step].subtitle}
+      </div>
+      <div className="onboarding__steps__content">
         <OnboardingCurrentStepComponent {...props} />
       </div>
     </div>

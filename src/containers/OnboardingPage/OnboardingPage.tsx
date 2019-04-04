@@ -10,6 +10,8 @@ class OnboardingPage extends Component {
 
   handleStart = () => this.setState({ step: 1 });
 
+  handleHandleBack = () => this.setState({ step: this.state.step - 1 });
+
   render() {
     const { step } = this.state;
     return (
@@ -29,7 +31,7 @@ class OnboardingPage extends Component {
               </div>
             )}
             {step > 0 && (
-              <OnboardingStepsComponent step={step} />
+              <OnboardingStepsComponent step={step} handleBackClicked={this.handleHandleBack} />
             )}
           </div>
         </main>

@@ -11,16 +11,42 @@
       margin-left: auto;
     }
 
-    &__header {
+    &__header,
+    &__subheader {
       width: 100%;
-    }
-
-    &__title,
-    &__subtitle {
       margin-bottom: 20px;
       padding: 20px;
       background-color: color(primary, base);
       color: color(default, light);
+     }
+
+    &__header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+
+      &__nav {
+        @include font-size(14);
+
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-end;
+
+        img {
+          margin-right: 5px;
+          width: 9px;
+        }
+
+        button {
+          margin-top: 0;
+          padding: 0;
+          width: auto;
+        }
+      }
+    }
+
+    &__content {
+      
     }
 
     &__quiz {

@@ -16,7 +16,7 @@ const HeaderComponent = (props: HeaderComponentProps) => {
   return (
     <header className={`header__container${pathname === '/onboarding' ? ' header__container--transparent' : ''}`}>
       {true ? (
-        <h1 className="u-margin-hug--top u-margin-hug--bottom">
+        <h1 className="u-margin-hug--vert">
           <img className="loading__image" src={logo} />
         </h1>
       ) : (

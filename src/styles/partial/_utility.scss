@@ -1,6 +1,14 @@
 .u-margin-hug {
+  &--vert {
+    margin-top: 0;
+    margin-bottom: 0;
+  }
 
   &--top { margin-top: 0; }
 
   &--bottom { margin-bottom: 0; }
+}
+
+.u-text-bold {
+  font-weight: bold;
 }
