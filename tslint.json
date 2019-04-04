@@ -11,6 +11,6 @@
     "jsx-boolean-value": false,
     "member-access": [true, "no-public"],
     "interface-name": [false, "always-prefix"],
-    "variable-name": [true, "allow-snake-case", "allow-pascal-case"],
+    "variable-name": [true, "allow-snake-case", "allow-pascal-case"]
   }
 }
