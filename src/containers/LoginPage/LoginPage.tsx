@@ -1,8 +1,9 @@
 import React, { Component, Fragment } from 'react';
-import { Action } from 'redux';
-import { connect } from 'react-redux';
-import { ThunkDispatch } from 'redux-thunk';
 import './LoginPage.scss';
+
+import { connect } from 'react-redux';
+import { Action } from 'redux';
+import { ThunkDispatch } from 'redux-thunk';
 
 import { login, register } from '../../actions/UserActions';
 import { User, UserState } from '../../reducers/UserReducer';
@@ -100,32 +101,34 @@ class LoginPage extends Component<LoginPageProps, LoginPageState> {
       <main className="splash">
         <div className="splash__container">
           <div className="splash__container__inner">
-            <img className="login__logo" src={logo} />
-            <form className="login__form" onSubmit={this.handleSubmit}>
-              <div className="login__form__fields">
-                {Object.keys(form).map((key) => (
-                  <TextInput
-                    isRegistration={isRegistration}
-                    key={key}
-                    name={key}
-                    value={form[key]}
-                    fieldErrors={fieldErrors}
-                    onChange={this.handleInputChange}
-                  />
+            <div className="login__container">
+              <img className="login__logo" src={logo} />
+              <form className="login__form" onSubmit={this.handleSubmit}>
+                <div className="login__form__fields">
+                  {Object.keys(form).map((key) => (
+                    <TextInput
+                      isRegistration={isRegistration}
+                      key={key}
+                      name={key}
+                      value={form[key]}
+                      fieldErrors={fieldErrors}
+                      onChange={this.handleInputChange}
+                    />
+                  ))}
+                </div>
+                <button>{getBtnText(!isRegistration)}</button>
+                <p className="login__form__divider">or</p>
+                <button
+                  type="button"
+                  className="login__form__toggle"
+                  onClick={this.toggleAuthType}>
+                  {getBtnText(isRegistration)}
+                </button>
+                {nonFieldErrors && nonFieldErrors.map((err, index) => (
+                  <p key={index}>{err}</p>
                 ))}
-              </div>
-              <button>{getBtnText(!isRegistration)}</button>
-              <p className="login__form__divider">or</p>
-              <button
-                type="button"
-                className="login__form__toggle"
-                onClick={this.toggleAuthType}>
-                {getBtnText(isRegistration)}
-              </button>
-              {nonFieldErrors && nonFieldErrors.map((err, index) => (
-                <p key={index}>{err}</p>
-              ))}
-            </form>
+              </form>
+            </div>
           </div>
         </div>
       </main>

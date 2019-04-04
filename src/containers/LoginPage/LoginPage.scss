@@ -2,6 +2,11 @@
 
 .login {
 
+  &__container {
+    padding: 30px;
+    background-color: color(default, light);
+  }
+
   &__logo {
     width: 60px;
     filter: brightness(0.1);
@@ -29,6 +34,8 @@
       }
 
       label {
+        @include font-size(14);
+
         font-weight: bold;
         align-self: flex-start;
         margin: 5px 0 0;
