@@ -1,30 +1,32 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, RouteComponentProps, withRouter } from 'react-router-dom';
 import './HeaderComponent.scss';
+
+import { CurrentUser } from '../../reducers/UserReducer';
 
 import logo from '../../assets/logo.png';
 
-interface HeaderProps {
-  isRoot?: boolean,
-  isOnboarding?: boolean,
-  avatarUrl?: string,
+interface HeaderComponentProps extends RouteComponentProps {
+  currentUser: CurrentUser;
 }
 
-const HeaderComponent = (props: HeaderProps) => (
-  <header className={`header__container${props.isOnboarding ? ' header__container--transparent' : ''}`}>
-    {props.isRoot ? (
-      <h1><img className="loading__image" src={logo}/></h1>
-    ) : (
-      <Link to="/"><img className="loading__image" src={logo}/></Link>
-    )}
-    <nav className="header__avatar">
-      {props.avatarUrl && (<img src={props.avatarUrl} />)}
-    </nav>
-  </header>
-);
+const HeaderComponent = (props: HeaderComponentProps) => {
+  const { currentUser, location } = props;
+  const { pathname } = location;
+  return (
+    <header className={`header__container${pathname === '/onboarding' ? ' header__container--transparent' : ''}`}>
+      {true ? (
+        <h1 className="u-margin-hug--top u-margin-hug--bottom">
+          <img className="loading__image" src={logo} />
+        </h1>
+      ) : (
+        <Link to="/"><img className="loading__image" src={logo} /></Link>
+      )}
+      <nav className="header__avatar">
+        {currentUser.user.image && (<img src={currentUser.user.image as string} />)}
+      </nav>
+    </header>
+  );
+};
 
-interface HeaderLogoProps {
-  isRoot?: boolean,
-}
-
-export default React.memo(HeaderComponent);
+export default React.memo(withRouter(HeaderComponent));

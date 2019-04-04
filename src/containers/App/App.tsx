@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import { BrowserRouter as Router } from 'react-router-dom';
 import { connect } from 'react-redux';
+import { BrowserRouter as Router } from 'react-router-dom';
 import './App.scss';
 
 import { AppState } from '../../store/Store';
@@ -9,10 +9,11 @@ import { CurrentUser } from '../../reducers/UserReducer';
 
 import { ProtectedRoute, ProtectedRouteProps } from '../ProtectedRoute/ProtectedRoute';
 
+import HeaderComponent from '../../components/HeaderComponent/HeaderComponent';
+
 import DashboardPage from '../DashboardPage/DashboardPage';
 import LoginPage from '../LoginPage/LoginPage';
 import OnboardingPage from '../OnboardingPage/OnboardingPage';
-
 
 interface AppProps {
   currentUser?: CurrentUser;
@@ -30,6 +31,7 @@ class App extends Component<AppProps> {
     return (
       <div className="app">
         <Router>
+          {currentUser && (<HeaderComponent currentUser={currentUser} />)}
           <ProtectedRoute
               isAuthenticated={!currentUser}
               authenticationPath={'/'}
