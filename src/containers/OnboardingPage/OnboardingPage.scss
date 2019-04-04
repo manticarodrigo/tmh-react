@@ -1,10 +1,44 @@
 @import '../../styles/global';
 
-.splash {
-  background: url('../../assets/images/layout/onboarding.png') no-repeat top center fixed;
-  background-size: cover;
-}
-
 .onboarding {
 
+  &__container {
+    display: flex;
+    width: 100%;
+    min-height: 100%;
+    background: url('../../assets/images/layout/onboarding.png') no-repeat top center fixed;
+    background-size: cover;
+
+    &__inner {
+      display: flex;
+      width: 100%;
+      min-height: 100%;
+      padding: 102px 20px 20px;
+      background-color: rgba(color(primary, base), 0.5);
+    }
+  }
+
+  &__welcome {
+    align-self: center;
+    margin-right: auto;
+    margin-left: auto;
+    max-width: 300px;
+    color: color(default, light);
+    text-align: center;
+
+    &__headline {
+      font-weight: bold;
+    }
+
+    &__button {
+      background-color: transparent;
+      border: 2px solid color(default, light);
+
+      &:focus,
+      &:hover {
+        background-color: color(default, dark);
+        border-color: color(default, dark);
+      }
+    }
+  }
 }

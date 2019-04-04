@@ -1,0 +1,49 @@
+@import '../../../styles/global';
+
+.onboarding {
+
+  &__steps {
+
+    &__container {
+      width: 100%;
+      max-width: 1440px;
+      margin-right: auto;
+      margin-left: auto;
+    }
+
+    &__header {
+      width: 100%;
+    }
+
+    &__title,
+    &__subtitle {
+      margin-bottom: 20px;
+      padding: 20px;
+      background-color: color(primary, base);
+      color: color(default, light);
+    }
+
+    &__quiz {
+      display: flex;
+      justify-content: space-between;
+
+      @media (max-width: 500px) { flex-direction: column; }
+
+      &__image {
+        width: 48%;
+
+        @media (max-width: 500px) { width: 100%; }
+
+        &:focus,
+        &:hover { border: 5px solid color(default, dark); }
+        
+        img {
+          width: 100%;
+          height: auto;
+  
+          
+        }
+      }
+    }
+  }
+}
