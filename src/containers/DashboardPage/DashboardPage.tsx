@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
-import { withRouter, RouteComponentProps } from 'react-router-dom';
-import { Action } from 'redux';
-import { connect } from 'react-redux';
-import { ThunkDispatch } from 'redux-thunk';
+import { RouteComponentProps, withRouter } from 'react-router-dom';
 import './DashboardPage.scss';
+
+import { connect } from 'react-redux';
+import { Action } from 'redux';
+import { ThunkDispatch } from 'redux-thunk';
 
 import { AppState } from '../../store/Store';
 
@@ -11,7 +12,6 @@ import { CurrentUser } from '../../reducers/UserReducer';
 
 import { getProjects } from '../../actions/ProjectActions';
 import { Project } from '../../reducers/ProjectReducer';
-
 
 import LoadingComponent from '../../components/LoadingComponent/LoadingComponent';
 
@@ -24,15 +24,14 @@ interface DashboardPageProps extends RouteComponentProps {
 class DashboardPage extends Component<DashboardPageProps> {
   state = {
     loaded: false,
-  }
+  };
 
   async componentDidMount() {
-    console.log(this.props);
-    const { currentUser, projects, getProjects, history } = this.props;
+    const { currentUser, projects, history } = this.props;
     if (currentUser && !projects) {
-      const latest = await getProjects();
+      const latest = await this.props.getProjects();
       if (latest && latest.length) {
-        return this.setState({ loaded: true })
+        return this.setState({ loaded: true });
       }
 
       history.push('/onboarding');
