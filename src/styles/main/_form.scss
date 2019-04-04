@@ -16,6 +16,8 @@ textarea {
 }
 
 button {
+  font-weight: bold;
   background-color: color(primary, base);
   color: color(default, light);
+  cursor: pointer;
 }
