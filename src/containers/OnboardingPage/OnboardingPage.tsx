@@ -1,4 +1,4 @@
-import React, { ChangeEvent, Component } from 'react';
+import React, { Component } from 'react';
 import './OnboardingPage.scss';
 
 import OnboardingStepsComponent from './OnboardingStepsComponent/OnboardingStepsComponent';
@@ -10,6 +10,7 @@ interface OnboardingPageState {
 
 export interface OnboardingForm {
   type: string;
+  styles: object;
 }
 
 class OnboardingPage extends Component<any, OnboardingPageState> {
@@ -17,6 +18,7 @@ class OnboardingPage extends Component<any, OnboardingPageState> {
     step: 0,
     form: {
       type: '',
+      styles: {},
     },
   };
 
@@ -24,8 +26,28 @@ class OnboardingPage extends Component<any, OnboardingPageState> {
 
   handleBackClicked = () => this.setState({ step: this.state.step - 1 });
 
-  handleTypeClicked = (e: ChangeEvent<HTMLInputElement>) => {
-    this.setState({ form: { ...this.state.form, type: e.target.name }, step: 2 });
+  handleTypeClicked = (e: React.SyntheticEvent<HTMLInputElement>) => {
+    this.setState({
+      step: 2,
+      form: {
+        ...this.state.form,
+        type: e.currentTarget.name,
+      },
+    });
+  }
+
+  handleQuizImageClicked = (e: React.SyntheticEvent<HTMLButtonElement>) => {
+    const { step, choice } = e.currentTarget.dataset;
+    this.setState({
+      step: this.state.step + 1,
+      form: {
+        ...this.state.form,
+        styles: {
+          ...this.state.form.styles,
+          [step as string]: choice,
+        },
+      },
+    });
   }
 
   render() {
@@ -49,7 +71,9 @@ class OnboardingPage extends Component<any, OnboardingPageState> {
             <OnboardingStepsComponent
               {...this.state}
               handleBackClicked={this.handleBackClicked}
-              handleTypeClicked={this.handleTypeClicked} />
+              handleTypeClicked={this.handleTypeClicked}
+              handleQuizImageClicked={this.handleQuizImageClicked}
+            />
           )}
         </div>
       </main>
