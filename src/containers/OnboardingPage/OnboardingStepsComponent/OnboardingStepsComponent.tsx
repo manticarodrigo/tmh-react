@@ -5,7 +5,11 @@ import leftArrow from '../../../assets/images/icons/left-arrow.png';
 
 import { OnboardingForm } from '../OnboardingPage';
 
-interface OnboardingStepsComponentProps {
+import OnboardingPackagesComponent from '../OnboardingPackagesComponent/OnboardingPackagesComponent';
+import OnboardingQuizComponent from '../OnboardingQuizComponent/OnboardingQuizComponent';
+import OnboardingRoomSelectComponent from '../OnboardingRoomSelectComponent/OnboardingRoomSelectComponent';
+
+export interface OnboardingStepsComponentProps {
   step: number;
   form: OnboardingForm;
   handleBackClicked: () => void;
@@ -59,7 +63,7 @@ const getStep = (props: OnboardingStepsComponentProps) => {
       return {
         title: 'Packages',
         subtitle: 'How many spaces are you working on?',
-        component: <OnboardingPackagesComponent {...props} />,
+        component: <OnboardingPackagesComponent />,
       };
     default:
       return {
@@ -69,120 +73,5 @@ const getStep = (props: OnboardingStepsComponentProps) => {
       };
   }
 };
-
-interface RoomType {
-  type: string;
-  title: string;
-}
-
-const rooms: RoomType[] = [
-  {
-    type: 'LIVING_ROOM',
-    title: 'Living Room',
-  },
-  {
-    type: 'BEDROOM',
-    title: 'Bedroom',
-  },
-  {
-    type: 'DINING_ROOM',
-    title: 'Dining Room',
-  },
-  {
-    type: 'HOME_OFFICE',
-    title: 'Home Office',
-  },
-  {
-    type: 'STUDIO',
-    title: 'Studio',
-  },
-  {
-    type: 'MULTIPURPOSE_ROOM',
-    title: 'Multipurpose Room',
-  },
-];
-
-const OnboardingRoomSelectComponent = (props: OnboardingStepsComponentProps) => (
-  <div className="onboarding__steps__rooms">
-    {rooms.map((room) => (
-      <div className="onboarding__steps__rooms__container" key={room.type}>
-        <input
-          type="radio"
-          id={room.type}
-          name={room.type}
-          checked={props.form.type === room.type}
-          onClick={props.handleTypeClicked}
-          readOnly
-        />
-        <label className="onboarding__steps__rooms__item" htmlFor={room.type}>
-          <img src={require(`../../../assets/images/onboarding/rooms/${room.type}.png`)} />
-          <p className="u-margin-hug--bottom">{room.title}</p>
-        </label>
-      </div>
-    ))}
-  </div>
-);
-
-const getQuizImage = (step: number, index: number) => {
-  return require(`../../../assets/images/onboarding/styles/quiz_${step - 1}_${index + 1}.jpg`);
-};
-
-const OnboardingQuizComponent = (props: OnboardingStepsComponentProps) => (
-  <div className="onboarding__steps__quiz">
-    {[...Array(2)].map((_, index) => (
-      <button
-        key={index}
-        className="onboarding__steps__quiz__button"
-        style={{
-          backgroundImage: `url(${getQuizImage(props.step, index)})`,
-        }}
-        data-step={props.step}
-        data-choice={index}
-        onClick={props.handleQuizImageClicked}
-      />
-    ))}
-  </div>
-);
-
-interface PackageType {
-  type: string;
-  title: string;
-  subtitle: string;
-  price: number;
-}
-
-const packages: PackageType[] = [
-  {
-    type: 'single',
-    title: 'Single Room',
-    subtitle: 'Keep it simple. Start with a single room.',
-    price: 399,
-  },
-  {
-    type: 'double',
-    title: 'Double Room',
-    subtitle: 'Cover more of your floorplan.',
-    price: 699,
-  },
-  {
-    type: 'triple',
-    title: 'Triple Room',
-    subtitle: 'Impress throughout your home.',
-    price: 999,
-  },
-];
-
-const OnboardingPackagesComponent = (props: OnboardingStepsComponentProps) => (
-  <div className="onboarding__steps__packages">
-    {packages.map((pckg, index) => (
-      <div key={index} className="onboarding__steps__packages__item">
-        <img src={require(`../../../assets/images/onboarding/packages/${pckg.type}.png`)} />
-        <h3>{pckg.title}</h3>
-        <p>{pckg.subtitle}</p>
-        <h4>${pckg.price}</h4>
-      </div>
-    ))}
-  </div>
-);
 
 export default React.memo(OnboardingStepsComponent);
