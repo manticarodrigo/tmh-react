@@ -18,7 +18,7 @@
     &__inner {
       text-align: center;
 
-      @media (max-width: 750px) {
+      @media (max-width: $break-md) {
         @include center-content();
 
         width: 100%;

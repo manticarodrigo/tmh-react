@@ -19,7 +19,7 @@ body {
       -webkit-font-smoothing: subpixel-antialiased;
   }
 
-  @media (max-width: 500px) {
+  @media (max-width: $break-sm) {
     @include line-height(14, 18);
     @include font-size(14);
   }
@@ -48,7 +48,7 @@ h1,
   @include line-height(30, 36);
   @include font-size(30);
 
-  @media (max-width: 500px) {
+  @media (max-width: $break-sm) {
     @include line-height(24, 28);
     @include font-size(24);
   }
@@ -59,7 +59,7 @@ h2,
   @include line-height(24, 30);
   @include font-size(24);
 
-  @media (max-width: 500px) {
+  @media (max-width: $break-sm) {
     @include line-height(20, 24);
     @include font-size(20);
   }
@@ -70,7 +70,7 @@ h3,
   @include line-height(18, 22);
   @include font-size(18);
 
-  @media (max-width: 500px) {
+  @media (max-width: $break-sm) {
     @include line-height(16, 20);
     @include font-size(16);
   }

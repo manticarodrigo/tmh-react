@@ -16,7 +16,7 @@
     margin: 10px 0;
     width: 500px;
     
-    @media (max-width: 750px) {
+    @media (max-width: $break-md) {
       width: 100%;
     }
 

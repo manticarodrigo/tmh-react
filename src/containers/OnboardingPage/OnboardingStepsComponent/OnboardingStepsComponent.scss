@@ -5,25 +5,25 @@
   &__steps {
 
     &__container {
-      width: 100%;
-      max-width: 1440px;
       margin-right: auto;
       margin-left: auto;
+      width: 100%;
+      max-width: 1440px;
     }
 
     &__header,
     &__subheader {
-      width: 100%;
       margin-bottom: 20px;
-      padding: 20px;
       background-color: color(primary, base);
+      padding: 20px;
+      width: 100%;
       color: color(default, light);
      }
 
     &__header {
       display: flex;
-      justify-content: space-between;
       align-items: center;
+      justify-content: space-between;
       text-transform: uppercase;
 
       &__nav {
