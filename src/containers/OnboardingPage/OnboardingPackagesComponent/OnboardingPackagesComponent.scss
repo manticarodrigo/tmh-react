@@ -5,7 +5,78 @@
   &__steps {
 
     &__packages {
-      
+
+      &__options {
+        display: flex;
+        padding: 20px;
+
+        @media (max-width: $break-md) {
+          flex-direction: column;
+        }
+
+        &__item {
+          display: flex;
+          flex-direction: column;
+          margin: 20px;
+          padding: 30px;
+          width: 30%;
+          text-align: center;
+          color: color(default, light);
+
+          @media (max-width: $break-md) {
+            margin: 0;
+            width: 100%;
+          }
+
+          &:hover {
+            background-color: color(default, light);
+            color: color(primary, base);
+
+            img {
+              filter: invert(100%);
+            }
+          }
+
+          p {
+            flex-grow: 1;
+          }
+
+          img {
+            max-width: 100%;
+            filter: drop-shadow(0 1px 10px rgba(0, 0, 0, .43));
+          }
+        }
+      }
+
+      &__info {
+        background-color: rgba(color(primary, base), .5);
+        padding: 20px;
+        width: 100%;
+        text-align: center;
+        color: color(default, light);
+
+        &__columns {
+          display: flex;
+
+          @media (max-width: $break-md) {
+            flex-direction: column;
+          }
+
+          &__item {
+            width: 100%;
+            text-align: center;
+
+            &:first-child {
+              border-right: 1px solid color(default, light);
+
+              @media (max-width: $break-md) {
+                border-right: 0;
+                border-bottom: 1px solid color(default, light);
+              }
+            }
+          }
+        }
+      }
     }
   }
 }

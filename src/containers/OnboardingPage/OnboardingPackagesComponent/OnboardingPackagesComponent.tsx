@@ -31,16 +31,50 @@ const packages: PackageType[] = [
   },
 ];
 
-const OnboardingPackagesComponent = () => (
+const OnboardingPackagesComponent = (props: OnboardingStepsComponentProps) => (
   <div className="onboarding__steps__packages">
-    {packages.map((pckg, index) => (
-      <div key={index} className="onboarding__steps__packages__item">
-        <img src={require(`../../../assets/images/onboarding/packages/${pckg.type}.png`)} />
-        <h3>{pckg.title}</h3>
-        <p>{pckg.subtitle}</p>
-        <h4>${pckg.price}</h4>
+    <div className="onboarding__steps__packages__options">
+      {packages.map((pckg, index) => (
+        <div key={index} className="onboarding__steps__packages__options__item">
+          <div>
+            <img src={require(`../../../assets/images/onboarding/packages/${pckg.type}.png`)} />
+          </div>
+          <p className="h2 u-text-bold u-text-uppercase">{pckg.title}</p>
+          <p>{pckg.subtitle}</p>
+          <p className="h1 u-text-bold">${pckg.price}</p>
+          <button
+            type="button"
+            data-type={pckg.type}
+            onClick={props.handlePackageClicked}
+          >
+            Select
+          </button>
+        </div>
+      ))}
+    </div>
+    <div className="onboarding__steps__packages__info">
+      <h4 className="u-text-uppercase">Included In Each Package</h4>
+      <div className="onboarding__steps__packages__info__columns">
+        <div className="onboarding__steps__packages__info__columns__item">
+          <p className="h3">Full Service Design:</p>
+          <ul className="u-list-unstyled">
+            <li>15 day design process per room</li>
+            <li>2 conceptboard options</li>
+            <li>Unlimited design revisions within window</li>
+            <li>Chat service with personal designer</li>
+          </ul>
+        </div>
+        <div className="onboarding__steps__packages__info__columns__item">
+          <p className="h3">Final revisions:</p>
+          <ul className="u-list-unstyled">
+            <li>3D Virtual Tour of design</li>
+            <li>Conceptboard and Floorplan</li>
+            <li>Shopping List &amp; Cart</li>
+            <li>Detailed set-up instructions</li>
+          </ul>
+        </div>
       </div>
-    ))}
+    </div>
   </div>
 );
 

@@ -15,6 +15,7 @@ export interface OnboardingStepsComponentProps {
   handleBackClicked: () => void;
   handleTypeClicked: (e: React.SyntheticEvent<HTMLInputElement>) => void;
   handleQuizImageClicked: (e: React.SyntheticEvent<HTMLButtonElement>) => void;
+  handlePackageClicked: (e: React.SyntheticEvent<HTMLButtonElement>) => void;
 }
 
 const OnboardingStepsComponent = (props: OnboardingStepsComponentProps) => {
@@ -34,7 +35,7 @@ const OnboardingStepsComponent = (props: OnboardingStepsComponentProps) => {
         </nav>
       </div>
       <div className="onboarding__steps__subheader">
-        {getStep(props).subtitle}
+        <h2 className="p u-margin-hug--vert">{getStep(props).subtitle}</h2>
       </div>
       <div className="onboarding__steps__content">
         {getStep(props).component}
@@ -63,7 +64,7 @@ const getStep = (props: OnboardingStepsComponentProps) => {
       return {
         title: 'Packages',
         subtitle: 'How many spaces are you working on?',
-        component: <OnboardingPackagesComponent />,
+        component: <OnboardingPackagesComponent {...props} />,
       };
     default:
       return {

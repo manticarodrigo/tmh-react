@@ -19,6 +19,7 @@ class OnboardingPage extends Component<any, OnboardingPageState> {
     form: {
       type: '',
       styles: {},
+      package: '',
     },
   };
 
@@ -50,6 +51,17 @@ class OnboardingPage extends Component<any, OnboardingPageState> {
     });
   }
 
+  handlePackageClicked = (e: React.SyntheticEvent<HTMLButtonElement>) => {
+    const { type } = e.currentTarget.dataset;
+    this.setState({
+      step: this.state.step + 1,
+      form: {
+        ...this.state.form,
+        package: type,
+      },
+    });
+  }
+
   render() {
     const { step } = this.state;
     return (
@@ -73,6 +85,7 @@ class OnboardingPage extends Component<any, OnboardingPageState> {
               handleBackClicked={this.handleBackClicked}
               handleTypeClicked={this.handleTypeClicked}
               handleQuizImageClicked={this.handleQuizImageClicked}
+              handlePackageClicked={this.handlePackageClicked}
             />
           )}
         </div>
