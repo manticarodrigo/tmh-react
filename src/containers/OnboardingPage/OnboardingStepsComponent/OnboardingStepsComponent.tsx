@@ -50,10 +50,10 @@ const getStep = (props: OnboardingStepsComponentProps) => {
     case 2:
     case 3:
     case 4:
-    return {
-      title: 'STYLE PREFERENCE',
-      subtitle: 'Select which style best fits you',
-      component: <OnboardingQuizComponent {...props} />,
+      return {
+        title: 'STYLE PREFERENCE',
+        subtitle: 'Select which style best fits you',
+        component: <OnboardingQuizComponent {...props} />,
       };
     default:
       return {
@@ -117,18 +117,23 @@ const OnboardingRoomSelectComponent = (props: OnboardingStepsComponentProps) => 
   </div>
 );
 
+const getQuizImage = (step: number, index: number) => {
+  return require(`../../../assets/images/onboarding/styles/quiz_${step - 1}_${index + 1}.jpg`)
+};
+
 const OnboardingQuizComponent = (props: OnboardingStepsComponentProps) => (
   <div className="onboarding__steps__quiz">
     {[...Array(2)].map((_, index) => (
       <button
         key={index}
-        className="onboarding__steps__quiz__image"
+        className="onboarding__steps__quiz__button"
+        style={{
+          backgroundImage: `url(${getQuizImage(props.step, index)})`,
+        }}
         data-step={props.step}
         data-choice={index}
         onClick={props.handleQuizImageClicked}
-      >
-        <img src={require(`../../../assets/images/onboarding/styles/quiz_${props.step - 1}_${index + 1}.jpg`)} />
-      </button>
+      />
     ))}
   </div>
 );
