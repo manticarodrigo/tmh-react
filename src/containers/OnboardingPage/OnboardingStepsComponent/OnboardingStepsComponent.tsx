@@ -43,7 +43,7 @@ const getStep = (props: OnboardingStepsComponentProps) => {
   switch (props.step) {
     case 1:
       return {
-        title: 'ROOM SELECTION',
+        title: 'Room Selection',
         subtitle: 'Select your space',
         component: <OnboardingRoomSelectComponent {...props} />,
       };
@@ -51,9 +51,15 @@ const getStep = (props: OnboardingStepsComponentProps) => {
     case 3:
     case 4:
       return {
-        title: 'STYLE PREFERENCE',
+        title: 'Style Preference',
         subtitle: 'Select which style best fits you',
         component: <OnboardingQuizComponent {...props} />,
+      };
+    case 5:
+      return {
+        title: 'Packages',
+        subtitle: 'How many spaces are you working on?',
+        component: <OnboardingPackagesComponent {...props} />,
       };
     default:
       return {
@@ -118,7 +124,7 @@ const OnboardingRoomSelectComponent = (props: OnboardingStepsComponentProps) => 
 );
 
 const getQuizImage = (step: number, index: number) => {
-  return require(`../../../assets/images/onboarding/styles/quiz_${step - 1}_${index + 1}.jpg`)
+  return require(`../../../assets/images/onboarding/styles/quiz_${step - 1}_${index + 1}.jpg`);
 };
 
 const OnboardingQuizComponent = (props: OnboardingStepsComponentProps) => (
@@ -134,6 +140,47 @@ const OnboardingQuizComponent = (props: OnboardingStepsComponentProps) => (
         data-choice={index}
         onClick={props.handleQuizImageClicked}
       />
+    ))}
+  </div>
+);
+
+interface PackageType {
+  type: string;
+  title: string;
+  subtitle: string;
+  price: number;
+}
+
+const packages: PackageType[] = [
+  {
+    type: 'single',
+    title: 'Single Room',
+    subtitle: 'Keep it simple. Start with a single room.',
+    price: 399,
+  },
+  {
+    type: 'double',
+    title: 'Double Room',
+    subtitle: 'Cover more of your floorplan.',
+    price: 699,
+  },
+  {
+    type: 'triple',
+    title: 'Triple Room',
+    subtitle: 'Impress throughout your home.',
+    price: 999,
+  },
+];
+
+const OnboardingPackagesComponent = (props: OnboardingStepsComponentProps) => (
+  <div className="onboarding__steps__packages">
+    {packages.map((pckg, index) => (
+      <div key={index} className="onboarding__steps__packages__item">
+        <img src={require(`../../../assets/images/onboarding/packages/${pckg.type}.png`)} />
+        <h3>{pckg.title}</h3>
+        <p>{pckg.subtitle}</p>
+        <h4>${pckg.price}</h4>
+      </div>
     ))}
   </div>
 );
