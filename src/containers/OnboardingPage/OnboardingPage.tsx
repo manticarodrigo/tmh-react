@@ -9,33 +9,38 @@ interface OnboardingPageState {
 }
 
 export interface OnboardingForm {
-  type: string;
+  room: string;
   styles: object;
+  package: string;
+  zip: string;
 }
 
 class OnboardingPage extends Component<any, OnboardingPageState> {
   state = {
     step: 0,
     form: {
-      type: '',
+      room: '',
       styles: {},
       package: '',
+      zip: '',
     },
   };
 
   handleStart = () => this.setState({ step: 1 });
 
-  handleBackClicked = () => this.setState({ step: this.state.step - 1 });
+  handleStepBack = () => this.setState({ step: this.state.step - 1 });
 
-  handleTypeClicked = (e: React.SyntheticEvent<HTMLInputElement>) => {
+  handleStepForward = () => this.setState({ step: this.state.step + 1 });
+
+  handleRoomClicked = (e: React.SyntheticEvent<HTMLInputElement>) => (
     this.setState({
-      step: 2,
+      step: this.state.step + 1,
       form: {
         ...this.state.form,
-        type: e.currentTarget.name,
+        room: e.currentTarget.name,
       },
-    });
-  }
+    })
+  )
 
   handleQuizImageClicked = (e: React.SyntheticEvent<HTMLButtonElement>) => {
     const { step, choice } = e.currentTarget.dataset;
@@ -57,9 +62,26 @@ class OnboardingPage extends Component<any, OnboardingPageState> {
       step: this.state.step + 1,
       form: {
         ...this.state.form,
-        package: type,
+        package: type as string,
       },
     });
+  }
+
+  handleZipChanged = (e: React.SyntheticEvent<HTMLInputElement>) => {
+    const re = /^[0-9\b]+$/;
+    if (re.test(e.currentTarget.value)) {
+      this.setState({
+        form: {
+          ...this.state.form,
+          zip: e.currentTarget.value,
+        },
+      });
+    }
+  }
+
+  handleZipSubmitted = () => {
+    const { zip } = this.state.form;
+    console.log('yo');
   }
 
   render() {
@@ -82,10 +104,12 @@ class OnboardingPage extends Component<any, OnboardingPageState> {
           {step > 0 && (
             <OnboardingStepsComponent
               {...this.state}
-              handleBackClicked={this.handleBackClicked}
-              handleTypeClicked={this.handleTypeClicked}
+              handleStepBack={this.handleStepBack}
+              handleStepForward={this.handleStepForward}
+              handleRoomClicked={this.handleRoomClicked}
               handleQuizImageClicked={this.handleQuizImageClicked}
               handlePackageClicked={this.handlePackageClicked}
+              handleZipChanged={this.handleZipChanged}
             />
           )}
         </div>

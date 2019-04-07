@@ -43,8 +43,8 @@ const OnboardingRoomSelectComponent = (props: OnboardingStepsComponentProps) => 
           type="radio"
           id={room.type}
           name={room.type}
-          checked={props.form.type === room.type}
-          onClick={props.handleTypeClicked}
+          checked={props.form.room === room.type}
+          onClick={props.handleRoomClicked}
           readOnly
         />
         <label className="onboarding__steps__rooms__item" htmlFor={room.type}>

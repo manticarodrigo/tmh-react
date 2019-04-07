@@ -8,18 +8,21 @@ import { OnboardingForm } from '../OnboardingPage';
 import OnboardingPackagesComponent from '../OnboardingPackagesComponent/OnboardingPackagesComponent';
 import OnboardingQuizComponent from '../OnboardingQuizComponent/OnboardingQuizComponent';
 import OnboardingRoomSelectComponent from '../OnboardingRoomSelectComponent/OnboardingRoomSelectComponent';
+import OnboardingZipComponent from '../OnboardingZipComponent/OnboardingZipComponent';
 
 export interface OnboardingStepsComponentProps {
   step: number;
   form: OnboardingForm;
-  handleBackClicked: () => void;
-  handleTypeClicked: (e: React.SyntheticEvent<HTMLInputElement>) => void;
+  handleStepBack: () => void;
+  handleStepForward: () => void;
+  handleRoomClicked: (e: React.SyntheticEvent<HTMLInputElement>) => void;
   handleQuizImageClicked: (e: React.SyntheticEvent<HTMLButtonElement>) => void;
   handlePackageClicked: (e: React.SyntheticEvent<HTMLButtonElement>) => void;
+  handleZipChanged: (e: React.SyntheticEvent<HTMLInputElement>) => void;
 }
 
 const OnboardingStepsComponent = (props: OnboardingStepsComponentProps) => {
-  const { step, handleBackClicked } = props;
+  const { step, handleStepBack } = props;
 
   return (
     <div className="onboarding__steps__container">
@@ -30,8 +33,8 @@ const OnboardingStepsComponent = (props: OnboardingStepsComponentProps) => {
           </h1>
         </div>
         <nav className="onboarding__steps__header__nav">
-          <button onClick={handleBackClicked}><img src={leftArrow} />BACK</button>
-          STEP {step}/5
+          <button onClick={handleStepBack}><img src={leftArrow} />BACK</button>
+          STEP {step}/8
         </nav>
       </div>
       <div className="onboarding__steps__subheader">
@@ -65,6 +68,12 @@ const getStep = (props: OnboardingStepsComponentProps) => {
         title: 'Packages',
         subtitle: 'How many spaces are you working on?',
         component: <OnboardingPackagesComponent {...props} />,
+      };
+    case 6:
+      return {
+        title: 'Final Questions',
+        subtitle: 'Just a few questions. We promise.',
+        component: <OnboardingZipComponent {...props} />,
       };
     default:
       return {

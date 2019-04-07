@@ -17,6 +17,13 @@
   text-transform: uppercase;
 }
 
+.u-placeholder-uppercase {
+
+  &::placeholder {
+    text-transform: uppercase;
+  }
+}
+
 .u-list-unstyled {
   padding-left: 0;
   list-style: none;

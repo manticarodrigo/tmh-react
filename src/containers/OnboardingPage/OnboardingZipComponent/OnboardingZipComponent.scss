@@ -1,0 +1,17 @@
+@import '../../../styles/global';
+
+.onboarding {
+
+  &__steps {
+
+    &__zip {
+
+      &__form {
+        margin: auto;
+        background-color: color(default, light);
+        padding: 30px;
+        max-width: $break-sm;
+      }
+    }
+  }
+}

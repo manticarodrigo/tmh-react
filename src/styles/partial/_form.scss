@@ -20,4 +20,8 @@ button {
   cursor: pointer;
   color: color(default, light);
   font-weight: bold;
+
+  &:disabled {
+    background-color: color(primary, light);
+  }
 }
