@@ -6,8 +6,10 @@ import leftArrow from '../../../assets/images/icons/left-arrow.png';
 import { OnboardingForm } from '../OnboardingPage';
 
 import OnboardingPackagesComponent from '../OnboardingPackagesComponent/OnboardingPackagesComponent';
+import OnboardingPetsComponent from '../OnboardingPetsComponent/OnboardingPetsComponent';
 import OnboardingQuizComponent from '../OnboardingQuizComponent/OnboardingQuizComponent';
 import OnboardingRoomSelectComponent from '../OnboardingRoomSelectComponent/OnboardingRoomSelectComponent';
+import OnboardingSharedWithComponent from '../OnboardingSharedWithComponent/OnboardingSharedWithComponent';
 import OnboardingZipComponent from '../OnboardingZipComponent/OnboardingZipComponent';
 
 export interface OnboardingStepsComponentProps {
@@ -19,6 +21,8 @@ export interface OnboardingStepsComponentProps {
   handleQuizImageClicked: (e: React.SyntheticEvent<HTMLButtonElement>) => void;
   handlePackageClicked: (e: React.SyntheticEvent<HTMLButtonElement>) => void;
   handleZipChanged: (e: React.SyntheticEvent<HTMLInputElement>) => void;
+  handleSharedWithChanged: (e: React.SyntheticEvent<HTMLInputElement>) => void;
+  handlePetsChanged: (e: React.SyntheticEvent<HTMLInputElement>) => void;
 }
 
 const OnboardingStepsComponent = (props: OnboardingStepsComponentProps) => {
@@ -71,9 +75,18 @@ const getStep = (props: OnboardingStepsComponentProps) => {
       };
     case 6:
       return {
+        title: 'Zip Code',
+        subtitle: 'Please enter a valid postal code.',
+        component: <OnboardingZipComponent {...props} />,
+      };
+    case 7:
+    case 8:
+    case 9:
+    case 10:
+      return {
         title: 'Final Questions',
         subtitle: 'Just a few questions. We promise.',
-        component: <OnboardingZipComponent {...props} />,
+        component: getFinalStep(props),
       };
     default:
       return {
@@ -81,6 +94,17 @@ const getStep = (props: OnboardingStepsComponentProps) => {
         subtitle: '',
         component: <React.Fragment />,
       };
+  }
+};
+
+const getFinalStep = (props: OnboardingStepsComponentProps) => {
+  switch (props.step) {
+    case 7:
+      return <OnboardingSharedWithComponent {...props} />;
+    case 8:
+      return <OnboardingPetsComponent {...props} />;
+    default:
+      return <React.Fragment />;
   }
 };
 

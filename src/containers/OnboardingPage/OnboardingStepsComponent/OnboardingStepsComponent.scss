@@ -46,5 +46,41 @@
         }
       }
     }
+
+    &__questions {
+      margin: auto;
+      background-color: color(default, light);
+      padding: 30px;
+      max-width: $break-sm;
+
+      &__form {
+        
+        &__item {
+          position: relative;
+
+          input {
+            position: absolute;
+            opacity: 0;
+            pointer-events: none;
+
+            &:checked + label,
+            &:focus + label,
+            &:hover + label {
+              background-color: color(primary, base);
+              color: color(default, light);
+            }
+          }
+
+          label {
+            display: block;
+            margin: 10px 0;
+            border: 2px solid color(primary, base);
+            cursor: pointer;
+            padding: 10px;
+            width: 100%;
+          }
+        }
+      }
+    }
   }
 }

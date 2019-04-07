@@ -13,16 +13,20 @@ export interface OnboardingForm {
   styles: object;
   package: string;
   zip: string;
+  shared_with: string;
+  pet_friendly: boolean | undefined;
 }
 
 class OnboardingPage extends Component<any, OnboardingPageState> {
   state = {
-    step: 0,
+    step: 7,
     form: {
       room: '',
       styles: {},
       package: '',
       zip: '',
+      shared_with: '',
+      pet_friendly: undefined,
     },
   };
 
@@ -79,9 +83,24 @@ class OnboardingPage extends Component<any, OnboardingPageState> {
     }
   }
 
-  handleZipSubmitted = () => {
-    const { zip } = this.state.form;
-    console.log('yo');
+  handleSharedWithChanged = (e: React.SyntheticEvent<HTMLInputElement>) => (
+    this.setState({
+      step: this.state.step + 1,
+      form: {
+        ...this.state.form,
+        shared_with: e.currentTarget.value,
+      },
+    })
+  )
+
+  handlePetsChanged = (e: React.SyntheticEvent<HTMLInputElement>) => {
+    return this.setState({
+      step: this.state.step + 1,
+      form: {
+        ...this.state.form,
+        pet_friendly: Boolean(parseInt(e.currentTarget.value, 10)),
+      },
+    });
   }
 
   render() {
@@ -110,6 +129,8 @@ class OnboardingPage extends Component<any, OnboardingPageState> {
               handleQuizImageClicked={this.handleQuizImageClicked}
               handlePackageClicked={this.handlePackageClicked}
               handleZipChanged={this.handleZipChanged}
+              handleSharedWithChanged={this.handleSharedWithChanged}
+              handlePetsChanged={this.handlePetsChanged}
             />
           )}
         </div>
