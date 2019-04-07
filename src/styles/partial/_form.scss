@@ -8,6 +8,11 @@ button {
   padding: 10px;
   width: 100%;
   font-family: $base-font;
+
+  @media (max-width: $break-sm) {
+    @include line-height(14, 18);
+    @include font-size(14);
+  }
 }
 
 input,

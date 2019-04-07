@@ -6,6 +6,7 @@ import leftArrow from '../../../assets/images/icons/left-arrow.png';
 import { OnboardingForm } from '../OnboardingPage';
 
 import OnboardingAccessComponent from '../OnboardingAccessComponent/OnboardingAccessComponent';
+import OnboardingBudgetComponent from '../OnboardingBudgetComponent/OnboardingBudgetComponent';
 import OnboardingPackagesComponent from '../OnboardingPackagesComponent/OnboardingPackagesComponent';
 import OnboardingPetsComponent from '../OnboardingPetsComponent/OnboardingPetsComponent';
 import OnboardingQuizComponent from '../OnboardingQuizComponent/OnboardingQuizComponent';
@@ -22,9 +23,10 @@ export interface OnboardingStepsComponentProps {
   handleQuizImageClicked: (e: React.SyntheticEvent<HTMLButtonElement>) => void;
   handlePackageClicked: (e: React.SyntheticEvent<HTMLButtonElement>) => void;
   handleZipChanged: (e: React.SyntheticEvent<HTMLInputElement>) => void;
-  handleSharedWithChanged: (e: React.SyntheticEvent<HTMLInputElement>) => void;
-  handlePetsChanged: (e: React.SyntheticEvent<HTMLInputElement>) => void;
-  handleAccessChanged: (e: React.SyntheticEvent<HTMLInputElement>) => void;
+  handleSharedWithClicked: (e: React.SyntheticEvent<HTMLInputElement>) => void;
+  handlePetsClicked: (e: React.SyntheticEvent<HTMLInputElement>) => void;
+  handleAccessClicked: (e: React.SyntheticEvent<HTMLInputElement>) => void;
+  handleBudgetClicked: (e: React.SyntheticEvent<HTMLInputElement>) => void;
 }
 
 const OnboardingStepsComponent = (props: OnboardingStepsComponentProps) => {
@@ -40,7 +42,7 @@ const OnboardingStepsComponent = (props: OnboardingStepsComponentProps) => {
         </div>
         <nav className="onboarding__steps__header__nav">
           <button onClick={handleStepBack}><img src={leftArrow} />BACK</button>
-          STEP {step}/8
+          <p className="u-margin-hug--vert">STEP {step}/10</p>
         </nav>
       </div>
       <div className="onboarding__steps__subheader">
@@ -107,6 +109,8 @@ const getFinalStep = (props: OnboardingStepsComponentProps) => {
       return <OnboardingPetsComponent {...props} />;
     case 9:
       return <OnboardingAccessComponent {...props} />;
+    case 10:
+      return <OnboardingBudgetComponent {...props} />;
     default:
       return <React.Fragment />;
   }

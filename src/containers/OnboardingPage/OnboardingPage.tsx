@@ -16,6 +16,7 @@ export interface OnboardingForm {
   shared_with: string;
   pet_friendly: boolean | undefined;
   limited_access: boolean | undefined;
+  budget: string;
 }
 
 class OnboardingPage extends Component<any, OnboardingPageState> {
@@ -29,6 +30,7 @@ class OnboardingPage extends Component<any, OnboardingPageState> {
       shared_with: '',
       pet_friendly: undefined,
       limited_access: undefined,
+      budget: '',
     },
   };
 
@@ -85,7 +87,7 @@ class OnboardingPage extends Component<any, OnboardingPageState> {
     }
   }
 
-  handleSharedWithChanged = (e: React.SyntheticEvent<HTMLInputElement>) => (
+  handleSharedWithClicked = (e: React.SyntheticEvent<HTMLInputElement>) => (
     this.setState({
       step: this.state.step + 1,
       form: {
@@ -95,7 +97,7 @@ class OnboardingPage extends Component<any, OnboardingPageState> {
     })
   )
 
-  handlePetsChanged = (e: React.SyntheticEvent<HTMLInputElement>) => (
+  handlePetsClicked = (e: React.SyntheticEvent<HTMLInputElement>) => (
     this.setState({
       step: this.state.step + 1,
       form: {
@@ -105,12 +107,22 @@ class OnboardingPage extends Component<any, OnboardingPageState> {
     })
   )
 
-  handleAccessChanged = (e: React.SyntheticEvent<HTMLInputElement>) => (
+  handleAccessClicked = (e: React.SyntheticEvent<HTMLInputElement>) => (
     this.setState({
       step: this.state.step + 1,
       form: {
         ...this.state.form,
         limited_access: Boolean(parseInt(e.currentTarget.value, 10)),
+      },
+    })
+  )
+
+  handleBudgetClicked = (e: React.SyntheticEvent<HTMLInputElement>) => (
+    this.setState({
+      step: this.state.step + 1,
+      form: {
+        ...this.state.form,
+        budget: e.currentTarget.value,
       },
     })
   )
@@ -141,9 +153,10 @@ class OnboardingPage extends Component<any, OnboardingPageState> {
               handleQuizImageClicked={this.handleQuizImageClicked}
               handlePackageClicked={this.handlePackageClicked}
               handleZipChanged={this.handleZipChanged}
-              handleSharedWithChanged={this.handleSharedWithChanged}
-              handlePetsChanged={this.handlePetsChanged}
-              handleAccessChanged={this.handleAccessChanged}
+              handleSharedWithClicked={this.handleSharedWithClicked}
+              handlePetsClicked={this.handlePetsClicked}
+              handleAccessClicked={this.handleAccessClicked}
+              handleBudgetClicked={this.handleBudgetClicked}
             />
           )}
         </div>

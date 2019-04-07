@@ -26,7 +26,7 @@ const OnboardingAccessComponent = (props: OnboardingStepsComponentProps) => (
             type="radio"
             value={option.value}
             checked={props.form.limited_access === Boolean(option.value)}
-            onClick={props.handleAccessChanged}
+            onClick={props.handleAccessClicked}
             readOnly
           />
           <label className="u-text-uppercase u-text-bold" htmlFor={option.label.toLowerCase()}>

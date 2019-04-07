@@ -24,7 +24,7 @@ const OnboardingPetsComponent = (props: OnboardingStepsComponentProps) => (
             type="radio"
             value={option.value}
             checked={props.form.pet_friendly === Boolean(option.value)}
-            onClick={props.handlePetsChanged}
+            onClick={props.handlePetsClicked}
             readOnly
           />
           <label className="u-text-uppercase u-text-bold" htmlFor={option.label.toLowerCase()}>

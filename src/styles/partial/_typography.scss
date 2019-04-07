@@ -29,8 +29,6 @@ body {
   @include line-height(16, 20);
   @include font-size($base-font-size);
 
-  font-weight: lighter;
-
   @media (max-width: $break-sm) {
     @include line-height(14, 18);
     @include font-size(14);

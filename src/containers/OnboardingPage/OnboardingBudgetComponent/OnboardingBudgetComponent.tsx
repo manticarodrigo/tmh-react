@@ -4,24 +4,24 @@ import { OnboardingStepsComponentProps } from '../OnboardingStepsComponent/Onboa
 
 const questions = [
   {
-    value: 'MYSELF',
-    label: 'Myself',
+    value: '0',
+    label: '$2k or less',
   },
   {
-    value: 'PARTNER',
-    label: 'Partner',
+    value: '1',
+    label: '$2k - $4k',
   },
   {
-    value: 'ROOMMATE',
-    label: 'Roomate(s)',
+    value: '2',
+    label: '$4k - $6k',
   },
   {
-    value: 'FAMILY',
-    label: 'Family',
+    value: '3',
+    label: '$6k or more',
   },
 ];
 
-const OnboardingSharedWithComponent = (props: OnboardingStepsComponentProps) => (
+const OnboardingBudgetComponent = (props: OnboardingStepsComponentProps) => (
   <div className="onboarding__steps__questions">
     <p className="h2 u-margin-hug--top">Who do you share your space with?</p>
     <form className="onboarding__steps__questions__form">
@@ -32,7 +32,7 @@ const OnboardingSharedWithComponent = (props: OnboardingStepsComponentProps) => 
             type="radio"
             value={option.value}
             checked={props.form.shared_with === option.value}
-            onClick={props.handleSharedWithClicked}
+            onClick={props.handleBudgetClicked}
             readOnly
           />
           <label className="u-text-uppercase u-text-bold" htmlFor={option.value}>
@@ -44,4 +44,4 @@ const OnboardingSharedWithComponent = (props: OnboardingStepsComponentProps) => 
   </div>
 );
 
-export default React.memo(OnboardingSharedWithComponent);
+export default React.memo(OnboardingBudgetComponent);
