@@ -11,15 +11,15 @@
       @media (max-width: 750px) { flex-direction: column; }
 
       &__button {
-        box-sizing: content-box;
         border: 5px solid transparent;
-        padding: 0;
         background: transparent;
         background-repeat: no-repeat;
         background-position: center;
         background-size: cover;
+        padding: 0;
         width: 48%;
         height: 50vh;
+        box-sizing: content-box;
 
         @media (max-width: 750px) {
           width: 100%;
@@ -27,7 +27,9 @@
         }
 
         &:focus,
-        &:hover { border: 5px solid color(default, dark); }
+        &:hover {
+          border: 5px solid color(default, dark);
+        }
       }
     }
   }

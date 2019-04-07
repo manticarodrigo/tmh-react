@@ -38,6 +38,7 @@
     "typescript": "^3.4.1"
   },
   "devDependencies": {
+    "sass-lint": "^1.12.1",
     "tslint": "^5.14.0",
     "tslint-react": "^4.0.0"
   }

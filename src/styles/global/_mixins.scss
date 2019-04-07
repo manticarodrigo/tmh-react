@@ -1,12 +1,5 @@
-/*
- * mixins
- *
- ********************************************************************************/
 
-/*
- * typography
- *
- ************************************************************/
+// typography
 
 // font size - unitless - @include font-size(16)
 @mixin font-size($font-size: $base-font-size) {
@@ -28,10 +21,7 @@
   white-space: nowrap;
 }
 
-/*
- * layout
- *
- ************************************************************/
+// layout
 
 @mixin center-content() {
   display: flex;
@@ -40,10 +30,7 @@
   justify-content: center;
 }
 
-/*
- * transitions
- *
- ************************************************************/
+// transitions
 
 // scale down
 @mixin scale-down($time: 1s) {
@@ -56,7 +43,7 @@
   }
 
   50% {
-    transform: scale(0.95);
+    transform: scale(.95);
   }
 
   100% {
@@ -120,8 +107,8 @@
 
 @keyframes slideInDown {
   0% {
-    opacity: 0;
     transform: translateY(-100px);
+    opacity: 0;
   }
 
   75% {
@@ -140,8 +127,8 @@
 
 @keyframes slideInUp {
   0% {
-    opacity: 0;
     transform: translateY(100px);
+    opacity: 0;
   }
 
   75% {
@@ -160,8 +147,8 @@
 
 @keyframes slideInRight {
   0% {
-    opacity: 0;
     transform: translateX(100px);
+    opacity: 0;
   }
 
   75% {
@@ -180,8 +167,8 @@
 
 @keyframes slideInLeft {
   0% {
-    opacity: 0;
     transform: translateX(-100px);
+    opacity: 0;
   }
 
   75% {

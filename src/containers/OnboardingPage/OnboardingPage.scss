@@ -4,17 +4,17 @@
 
   &__container {
     display: flex;
-    width: 100%;
-    min-height: 100%;
     background: url('../../assets/images/layout/onboarding.png') no-repeat top center fixed;
     background-size: cover;
+    width: 100%;
+    min-height: 100%;
 
     &__inner {
       display: flex;
+      background-color: rgba(color(primary, base), .5);
+      padding: 102px 20px 20px;
       width: 100%;
       min-height: 100%;
-      padding: 102px 20px 20px;
-      background-color: rgba(color(primary, base), 0.5);
     }
   }
 
@@ -23,21 +23,21 @@
     margin-right: auto;
     margin-left: auto;
     max-width: 300px;
-    color: color(default, light);
     text-align: center;
+    color: color(default, light);
 
     &__headline {
       font-weight: bold;
     }
 
     &__button {
-      background-color: transparent;
       border: 2px solid color(default, light);
+      background-color: transparent;
 
       &:focus,
       &:hover {
-        background-color: color(default, dark);
         border-color: color(default, dark);
+        background-color: color(default, dark);
       }
     }
   }

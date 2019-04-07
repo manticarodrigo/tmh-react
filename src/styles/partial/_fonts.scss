@@ -1,17 +1,17 @@
-/* Regular */
+// regular
 
 @font-face {
   font-family: 'Raleway';
-  font-style: normal;
   font-weight: 400;
+  font-style: normal;
   src: local('Raleway'), local('Raleway'), url(../assets/fonts/Raleway-Regular.ttf) format('truetype');
 }
 
-/* Light */
+// light
 
 @font-face {
   font-family: 'Raleway-Light';
-  font-style: normal;
   font-weight: 400;
+  font-style: normal;
   src: local('Raleway-Light'), local('Raleway-Light'), url(../assets/fonts/Raleway-Light.ttf) format('truetype');
 }

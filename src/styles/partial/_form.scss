@@ -4,8 +4,8 @@ button {
   @include font-size(16);
 
   margin: 5px 0;
-  padding: 10px;
   border: 0;
+  padding: 10px;
   width: 100%;
   font-family: $base-font;
 }
@@ -16,8 +16,8 @@ textarea {
 }
 
 button {
-  font-weight: bold;
   background-color: color(primary, base);
-  color: color(default, light);
   cursor: pointer;
+  color: color(default, light);
+  font-weight: bold;
 }

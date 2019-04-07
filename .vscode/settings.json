@@ -1,0 +1,4 @@
+{
+  "sasslint.enable": true,
+  "sasslint.configFile": "./sass-lint.yml"
+}

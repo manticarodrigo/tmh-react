@@ -1,12 +1,9 @@
  @import 'global';
 
- /*
- * main sass
- *
- ************************************************************/
+// main
 
- @import 'partial/base';
- @import 'partial/fonts';
- @import 'partial/utility';
- @import 'partial/typography';
- @import 'partial/form';
+@import 'partial/base';
+@import 'partial/fonts';
+@import 'partial/utility';
+@import 'partial/typography';
+@import 'partial/form';
