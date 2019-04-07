@@ -5,6 +5,7 @@ import leftArrow from '../../../assets/images/icons/left-arrow.png';
 
 import { OnboardingForm } from '../OnboardingPage';
 
+import OnboardingAccessComponent from '../OnboardingAccessComponent/OnboardingAccessComponent';
 import OnboardingPackagesComponent from '../OnboardingPackagesComponent/OnboardingPackagesComponent';
 import OnboardingPetsComponent from '../OnboardingPetsComponent/OnboardingPetsComponent';
 import OnboardingQuizComponent from '../OnboardingQuizComponent/OnboardingQuizComponent';
@@ -23,6 +24,7 @@ export interface OnboardingStepsComponentProps {
   handleZipChanged: (e: React.SyntheticEvent<HTMLInputElement>) => void;
   handleSharedWithChanged: (e: React.SyntheticEvent<HTMLInputElement>) => void;
   handlePetsChanged: (e: React.SyntheticEvent<HTMLInputElement>) => void;
+  handleAccessChanged: (e: React.SyntheticEvent<HTMLInputElement>) => void;
 }
 
 const OnboardingStepsComponent = (props: OnboardingStepsComponentProps) => {
@@ -103,6 +105,8 @@ const getFinalStep = (props: OnboardingStepsComponentProps) => {
       return <OnboardingSharedWithComponent {...props} />;
     case 8:
       return <OnboardingPetsComponent {...props} />;
+    case 9:
+      return <OnboardingAccessComponent {...props} />;
     default:
       return <React.Fragment />;
   }
