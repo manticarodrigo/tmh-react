@@ -51,20 +51,37 @@ class DashboardPage extends Component<DashboardPageProps> {
           <span>Project Type</span>
           <span>Last Edited</span>
           <span>Status</span>
-          <span>Time Left</span>
+          <span>Days Left</span>
           <span>Messages</span>
         </div>
         <div className="dashboard__projects">
           {projects!.map((project, index) => (
             <div key={index} className="dashboard__projects__item">
-              <div className="dashboard__projects__item__image">
-                <img src={require(`../../assets/images/onboarding/rooms/${project.room}.png`)} />
-              </div>
+              <span>
+                <div className="dashboard__projects__item__image">
+                  <img src={require(`../../assets/images/onboarding/rooms/${project.room}.png`)} />
+                </div>
+              </span>
               <span>{(new User(project.client as User)).getShortName()}</span>
               <span>{(new Project(project)).getReadableRoom()}</span>
-              <span>{(new Project(project)).getReadableModifiedDate()}</span>
-              <span>{(new Project(project)).getReadableStatus()}</span>
-              <span>{(new Project(project)).getReadableTimeLeft()}</span>
+              <span>
+                {(new Project(project)).getReadableModifiedDate()}
+                <span className="dashboard__projects__item__hint">
+                  Edited
+                </span>
+              </span>
+              <span>
+                {(new Project(project)).getReadableStatus()}
+                <span className="dashboard__projects__item__hint">
+                  Phase
+                </span>
+              </span>
+              <span>
+                {(new Project(project)).getReadableTimeLeft()}
+                <span className="dashboard__projects__item__hint">
+                  Days Left
+                </span>
+              </span>
               <div className="dashboard__projects__item__chat">
                 <img src={require('../../assets/images/utility/chat.png')} />
               </div>
