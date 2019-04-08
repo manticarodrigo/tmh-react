@@ -12,11 +12,21 @@
   &__header {
     display: flex;
     align-items: center;
-    justify-content: space-between;
     background-color: color(primary, base);
     padding: 10px 30px;
     color: color(default, light);
     font-weight: bold;
+
+    & > * {
+      &:not(:first-child) {
+        flex: 1;
+        text-align: center;
+      }
+
+      &:last-child {
+        text-align: right;
+      }
+    }
 
     img {
       max-width: 45px;
@@ -29,13 +39,25 @@
     &__item {
       display: flex;
       align-items: center;
-      justify-content: space-between;
+      justify-content: flex-end;
       transition: box-shadow .5s;
       margin: 10px 0;
       box-shadow: 0 3px 6px rgba(0, 0, 0, .15);
       background-color: color(default, light);
       cursor: pointer;
       padding: 10px 30px;
+      font-weight: bold;
+
+      & > * {
+        &:not(:first-child) {
+          flex: 1;
+          text-align: center;
+        }
+
+        &:last-child {
+          text-align: right;
+        }
+      }
 
       &:hover {
         box-shadow: 0 3px 6px rgba(0, 0, 0, .45);
