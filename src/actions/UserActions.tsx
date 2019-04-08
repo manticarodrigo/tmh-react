@@ -7,6 +7,7 @@ import { CurrentUser, saveUserState, UserState } from '../reducers/UserReducer';
 export enum UserActionTypes {
   LOGIN = 'LOGIN',
   REGISTER = 'REGISTER',
+  LOGOUT = 'LOGOUT',
 }
 
 export interface UserLoginAction {
@@ -19,9 +20,10 @@ export interface UserRegisterAction {
   currentUser: CurrentUser;
 }
 
-export type UserActions = UserLoginAction | UserRegisterAction;
+export interface UserLogoutAction {
+  type: UserActionTypes.LOGOUT;
+}
 
-/* ThunkAction<Promise<Return Type>, State Interface, Type of Param, Type of Action> */
 export const login: ActionCreator<
   ThunkAction<Promise<any>, UserState, void, UserLoginAction>
 > = (username, password) => (async (dispatch: Dispatch) => {
@@ -69,3 +71,10 @@ export const register: ActionCreator<
     return err;
   }
 });
+
+export const logout: ActionCreator<any> = () => ((dispatch: Dispatch) => {
+  saveUserState(undefined);
+  dispatch({ type: UserActionTypes.LOGOUT });
+});
+
+export type UserActions = UserLoginAction | UserRegisterAction | UserLogoutAction;

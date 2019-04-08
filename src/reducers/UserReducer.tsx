@@ -51,7 +51,7 @@ const loadUserState = () => {
   }
 };
 
-export const saveUserState = (currentUser: CurrentUser) => {
+export const saveUserState = (currentUser?: CurrentUser) => {
   try {
     const state = { currentUser };
     const serializedState = JSON.stringify(state);
@@ -70,6 +70,12 @@ export const UserReducer: Reducer<UserState, UserActions> = (
       return {
         ...state,
         currentUser: action.currentUser,
+      };
+    }
+    case UserActionTypes.LOGOUT: {
+      return {
+        ...state,
+        currentUser: undefined,
       };
     }
     default:
