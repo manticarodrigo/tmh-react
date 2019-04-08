@@ -2,13 +2,15 @@ import React, { Component } from 'react';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
 import './DashboardPage.scss';
 
+import headerIcon from '../../assets/images/onboarding/rooms/BEDROOM.png';
+
 import { connect } from 'react-redux';
 import { Action } from 'redux';
 import { ThunkDispatch } from 'redux-thunk';
 
 import { AppState } from '../../store/Store';
 
-import { CurrentUser } from '../../reducers/UserReducer';
+import { CurrentUser, User } from '../../reducers/UserReducer';
 
 import { getProjects } from '../../actions/ProjectActions';
 import { Project } from '../../reducers/ProjectReducer';
@@ -27,7 +29,7 @@ class DashboardPage extends Component<DashboardPageProps> {
   };
 
   async componentDidMount() {
-    const { projects, history } = this.props;
+    const { history } = this.props;
 
     const latest = await this.props.getProjects();
     if (latest && latest.length) {
@@ -38,15 +40,36 @@ class DashboardPage extends Component<DashboardPageProps> {
   }
 
   render() {
-    const { currentUser, projects } = this.props;
+    const { projects } = this.props;
     const { loaded } = this.state;
 
     return loaded ? (
-      <main className="splash">
-        <div className="splash__container">
-          <div className="splash__container__inner">
-            Dashboard Page
-          </div>
+      <main className="dashboard__container">
+        <div className="dashboard__header">
+          <img src={headerIcon} />
+          <span>Client Name</span>
+          <span>Project Type</span>
+          <span>Last Edited</span>
+          <span>Status</span>
+          <span>Time Left</span>
+          <span>Messages</span>
+        </div>
+        <div className="dashboard__projects">
+          {projects!.map((project, index) => (
+            <div key={index} className="dashboard__projects__item">
+              <div className="dashboard__projects__item__image">
+                <img src={require(`../../assets/images/onboarding/rooms/${project.room}.png`)} />
+              </div>
+              <span>{(new User(project.client as User)).getShortName()}</span>
+              <span>{(new Project(project)).getReadableRoom()}</span>
+              <span>{(new Project(project)).getReadableModifiedDate()}</span>
+              <span>{(new Project(project)).getReadableStatus()}</span>
+              <span>{(new Project(project)).getReadableTimeLeft()}</span>
+              <div className="dashboard__projects__item__chat">
+                <img src={require('../../assets/images/utility/chat.png')} />
+              </div>
+            </div>
+          ))}
         </div>
       </main>
     ) : <LoadingComponent />;

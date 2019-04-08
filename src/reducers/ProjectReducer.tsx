@@ -26,6 +26,58 @@ export class Project {
   designer_note!: string;
   final_note!: string;
   revision_count!: string;
+
+  constructor(init?: Partial<User>) {
+    Object.assign(this, init);
+  }
+
+  getReadableModifiedDate = (): string => new Date().toLocaleDateString('en-US');
+
+  getReadableRoom = (): string => {
+    const types: { [index: string]: string } = {
+      BEDROOM: 'Bedroom',
+      LIVING_ROOM: 'Living Room',
+      MULTIPURPOSE_ROOM: 'Multipurpose Room',
+      STUDIO: 'Studio',
+      DINING_ROOM: 'Dining Room',
+      HOME_OFFICE: 'Office',
+    };
+
+    return types[this.room];
+  }
+
+  getReadableStatus = (): string => {
+    const statuses: { [index: string]: string } = {
+      DETAILS: 'Details',
+      DESIGN: 'Design',
+      CONCEPTS: 'Concepts',
+      FLOOR_PLAN: 'Floor Plan',
+      REQUEST_ALTERNATIVES: 'Request Alternatives',
+      ALTERNATIVES_READY: 'Alternatives Ready',
+      FINAL_DELIVERY: 'Final Delivery',
+      SHOPPING_CART: 'Shopping Cart',
+      ESTIMATE_SHIPPING_AND_TAX: 'Estimate Shipping & Tax',
+      CHECKOUT: 'Checkout',
+      ARCHIVED: 'Archived',
+    };
+
+    return statuses[this.status];
+  }
+
+  getReadableTimeLeft = (): string => {
+    if (this.end_date) {
+      const date = new Date(this.end_date);
+      date.setDate(date.getDate());
+      const now = new Date();
+      const seconds = Math.floor((now.getTime() - date.getTime()) / 1000);
+      const interval = Math.floor(seconds / 86400); // days
+      const abs = Math.abs(interval);
+      if (interval <= 0 && abs >= 0) {
+        return abs.toString();
+      }
+    }
+    return 'N/A';
+  }
 }
 
 export enum ProjectStatus {

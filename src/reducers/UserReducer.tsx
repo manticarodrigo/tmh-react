@@ -23,13 +23,12 @@ export class User {
   state?: string;
   key?: string;
 
-  getShortName() {
-    return `${this.first_name} ${this.last_name[0]}`;
+  constructor(init?: Partial<User>) {
+    Object.assign(this, init);
   }
 
-  getFullName() {
-    return `${this.first_name} ${this.last_name}`;
-  }
+  getShortName = (): string => `${this.first_name} ${this.last_name[0]}`;
+  getFullName = (): string => `${this.first_name} ${this.last_name}`;
 }
 
 export interface UserState {
