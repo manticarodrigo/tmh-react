@@ -5,9 +5,9 @@ import {
   UserActionTypes,
 } from '../actions/UserActions';
 
-export class CurrentUser {
-  user!: User;
-  key!: string;
+export interface CurrentUser {
+  user: User;
+  key: string;
 }
 
 export class User {

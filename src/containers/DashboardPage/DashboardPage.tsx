@@ -27,15 +27,14 @@ class DashboardPage extends Component<DashboardPageProps> {
   };
 
   async componentDidMount() {
-    const { currentUser, projects, history } = this.props;
-    if (currentUser && !projects) {
-      const latest = await this.props.getProjects();
-      if (latest && latest.length) {
-        return this.setState({ loaded: true });
-      }
+    const { projects, history } = this.props;
 
-      history.push('/onboarding');
+    const latest = await this.props.getProjects();
+    if (latest && latest.length) {
+      return this.setState({ loaded: true });
     }
+
+    history.push('/onboarding');
   }
 
   render() {

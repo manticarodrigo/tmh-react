@@ -43,7 +43,7 @@ export enum ProjectStatus {
 }
 
 export interface ProjectState {
-  readonly projects?: [Project];
+  readonly projects?: Project[];
 }
 
 const defaultProjectState: ProjectState = {
@@ -59,6 +59,15 @@ export const ProjectReducer: Reducer<ProjectState, ProjectActions> = (
       return {
         ...state,
         projects: action.projects,
+      };
+    }
+    case ProjectActionTypes.CREATE_PROJECT: {
+      return {
+        ...state,
+        projects: [
+          ...(state.projects || []),
+          action.project,
+        ],
       };
     }
     default:

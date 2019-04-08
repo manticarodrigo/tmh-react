@@ -10,7 +10,7 @@ const OnboardingZipComponent = (props: OnboardingStepsComponentProps) => (
       <input
         type="tel"
         placeholder="zip"
-        value={props.form.zip}
+        value={props.form.zipcode}
         maxLength={5}
         pattern="[0-9]*"
         className="u-placeholder-uppercase"
@@ -19,7 +19,7 @@ const OnboardingZipComponent = (props: OnboardingStepsComponentProps) => (
       <button
         type="button"
         className="u-text-uppercase"
-        disabled={props.form.zip.length !== 5}
+        disabled={props.form.zipcode.length !== 5}
         onClick={props.handleStepForward}
       >
         Continue

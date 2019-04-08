@@ -1,7 +1,23 @@
 import React, { Component } from 'react';
 import './OnboardingPage.scss';
 
+import { RouteComponentProps, withRouter } from 'react-router-dom';
+
+import { connect } from 'react-redux';
+import { Action } from 'redux';
+import { ThunkDispatch } from 'redux-thunk';
+
+import { createProject } from '../../actions/ProjectActions';
+import { Project } from '../../reducers/ProjectReducer';
+import { CurrentUser } from '../../reducers/UserReducer';
+import { AppState } from '../../store/Store';
+
 import OnboardingStepsComponent from './OnboardingStepsComponent/OnboardingStepsComponent';
+
+interface OnboardingPageProps extends RouteComponentProps {
+  currentUser?: CurrentUser;
+  createProject: (project: object) => Promise<Project>;
+}
 
 interface OnboardingPageState {
   step: number;
@@ -12,21 +28,21 @@ export interface OnboardingForm {
   room: string;
   styles: object;
   package: string;
-  zip: string;
+  zipcode: string;
   shared_with: string;
   pet_friendly: boolean | undefined;
   limited_access: boolean | undefined;
   budget: string;
 }
 
-class OnboardingPage extends Component<any, OnboardingPageState> {
+class OnboardingPage extends Component<OnboardingPageProps, OnboardingPageState> {
   state = {
-    step: 7,
+    step: 0,
     form: {
       room: '',
       styles: {},
       package: '',
-      zip: '',
+      zipcode: '',
       shared_with: '',
       pet_friendly: undefined,
       limited_access: undefined,
@@ -81,7 +97,7 @@ class OnboardingPage extends Component<any, OnboardingPageState> {
       this.setState({
         form: {
           ...this.state.form,
-          zip: e.currentTarget.value,
+          zipcode: e.currentTarget.value,
         },
       });
     }
@@ -117,15 +133,48 @@ class OnboardingPage extends Component<any, OnboardingPageState> {
     })
   )
 
-  handleBudgetClicked = (e: React.SyntheticEvent<HTMLInputElement>) => (
+  handleBudgetClicked = (e: React.SyntheticEvent<HTMLInputElement>) => {
     this.setState({
       step: this.state.step + 1,
       form: {
         ...this.state.form,
         budget: e.currentTarget.value,
       },
-    })
-  )
+    });
+
+    setTimeout(() => this.handleSubmit());
+  }
+
+  handleSubmit = async () => {
+    const {
+      room,
+      zipcode,
+      shared_with,
+      pet_friendly,
+      limited_access,
+      budget,
+    } = this.state.form;
+
+    const endDate = new Date();
+    endDate.setDate(endDate.getDate() + 15);
+
+    const project = {
+      room,
+      shared_with,
+      budget,
+      zipcode: zipcode!,
+      style: 'Style goes here...',
+      pet_friendly: pet_friendly!,
+      limited_access: limited_access!,
+      status: 'DETAILS',
+      end_date: endDate.toISOString(),
+      client: this.props.currentUser!.user.id,
+    };
+
+    await this.props.createProject(project);
+
+    this.props.history.push('/');
+  }
 
   render() {
     const { step } = this.state;
@@ -165,4 +214,12 @@ class OnboardingPage extends Component<any, OnboardingPageState> {
   }
 }
 
-export default OnboardingPage;
+const mapStateToProps = (store: AppState) => ({
+  currentUser: store.userState.currentUser,
+});
+
+const mapDispatchToProps = (dispatch: ThunkDispatch<AppState, void, Action>) => ({
+  createProject: (project: object) => dispatch(createProject(project)),
+});
+
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(OnboardingPage));
