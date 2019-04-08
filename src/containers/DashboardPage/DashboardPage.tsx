@@ -56,14 +56,21 @@ class DashboardPage extends Component<DashboardPageProps> {
         </div>
         <div className="dashboard__projects">
           {projects!.map((project, index) => (
-            <div key={index} className="dashboard__projects__item">
+            <button key={index} className="dashboard__projects__item">
               <span>
                 <div className="dashboard__projects__item__image">
                   <img src={require(`../../assets/images/onboarding/rooms/${project.room}.png`)} />
                 </div>
               </span>
-              <span>{(new User(project.client as User)).getShortName()}</span>
-              <span>{(new Project(project)).getReadableRoom()}</span>
+              <span>
+                {(new User(project.client as User)).getShortName()}
+                <span className="dashboard__projects__item__mobile">
+                  &apos;s - {(new Project(project)).getReadableRoom()} Project
+                </span>
+              </span>
+              <span className="dashboard__projects__item__desktop">
+                {(new Project(project)).getReadableRoom()}
+              </span>
               <span>
                 {(new Project(project)).getReadableModifiedDate()}
                 <span className="dashboard__projects__item__hint">
@@ -85,7 +92,7 @@ class DashboardPage extends Component<DashboardPageProps> {
               <div className="dashboard__projects__item__chat">
                 <img src={require('../../assets/images/utility/chat.png')} />
               </div>
-            </div>
+            </button>
           ))}
         </div>
       </main>
