@@ -7,6 +7,8 @@ import { Action, Dispatch } from 'redux';
 import { logout } from '../../actions/UserActions';
 import { CurrentUser, User } from '../../reducers/UserReducer';
 
+import { AppRoutes } from '../../containers/App/App';
+
 import userPlaceholder from '../../assets/images/utility/user.png';
 import logo from '../../assets/logo.png';
 
@@ -56,9 +58,9 @@ class HeaderComponent extends Component<HeaderComponentProps, any> {
             </div>
             <hr />
             <ul className="u-list-unstyled u-text-uppercase">
-              <li><Link to="/onboarding" onClick={this.handleMenuClose}>New Project</Link></li>
-              <li><Link to="/" onClick={this.handleMenuClose}>All Projects</Link></li>
-              <li><Link to="/login" onClick={this.handleLogout}>Logout</Link></li>
+              <li><Link to={AppRoutes.ONBOARDING} onClick={this.handleMenuClose}>New Project</Link></li>
+              <li><Link to={AppRoutes.DASHBOARD} onClick={this.handleMenuClose}>All Projects</Link></li>
+              <li><Link to={AppRoutes.LOGIN} onClick={this.handleLogout}>Logout</Link></li>
             </ul>
           </div>
         </nav>
