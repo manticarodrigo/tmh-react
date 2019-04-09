@@ -4,9 +4,9 @@
   
   &__container {
     display: flex;
-    justify-content: space-between;
     align-items: center;
-    padding: 17px;
+    justify-content: space-between;
+    padding: 20px;
 
     &--transparent {
       position: absolute;
@@ -14,17 +14,105 @@
     }
   }
 
+  &__logo {
+    width: 60px;
+  }
+
   &__avatar {
+    border-radius: 5px;
+    padding: 0;
     width: 40px;
     height: 40px;
-    background: url('../../assets/images/utility/user.png') no-repeat center center;
-    background-size: cover;
-    border-radius: 5px;
+    overflow: hidden;
 
     img {
       width: 100%;
       height: 100%;
       object-fit: cover;
+    }
+  }
+
+  &__overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    transition: opacity .5s;
+    opacity: 0;
+    z-index: 998;
+    background-color: rgba(color(primary, base), .5);
+    cursor: pointer;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+
+    &--open {
+      opacity: 1;
+      pointer-events: initial;
+    }
+  }
+
+  &__menu {
+    position: absolute;
+    top: 85px;
+    right: 20px;
+    transition: opacity .25s, height .5s;
+    opacity: 0;
+    z-index: 999;
+    box-shadow: 0 3px 6px rgba(0, 0, 0, .15);
+    background-color: color(default, light);
+    padding: 20px;
+    height: 0;
+    pointer-events: none;
+
+    &::before {
+      position: absolute;
+      top: -15px;
+      right: 0;
+      border-width: 0 0 15px 25px;
+      border-style: solid;
+      border-color: transparent transparent color(default, light);
+      width: 0;
+      height: 0;
+      content: '';
+    }
+
+    &--open {
+      opacity: 1;
+      height: auto;
+      pointer-events: initial;
+    }
+
+    &__inner {
+      opacity: 0;
+
+      .header__menu--open & {
+        opacity: 1;
+      }
+    }
+
+    &__profile {
+
+      img {
+        display: inline-block;
+        margin-top: -10px;
+        border-radius: 8px;
+        width: 60px;
+        height: 60px;
+        object-fit: cover;
+      }
+
+      p {
+        display: inline-block;
+        padding-left: 10px;
+      }
+
+      button {
+        margin-top: 16px;
+      }
+    }
+
+    li {
+      margin-bottom: 10px;
     }
   }
 }

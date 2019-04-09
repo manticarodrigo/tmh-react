@@ -88,5 +88,11 @@ h3,
 // links
 
 a {
-  color: color(default, light);
+  text-decoration: none;
+  color: color(primary, base);
+
+  &:focus,
+  &:hover {
+    text-decoration: underline;
+  }
 }

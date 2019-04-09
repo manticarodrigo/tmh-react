@@ -1,32 +1,74 @@
-import React from 'react';
+import React, { Component } from 'react';
 import { Link, RouteComponentProps, withRouter } from 'react-router-dom';
 import './HeaderComponent.scss';
 
-import { CurrentUser } from '../../reducers/UserReducer';
+import { connect } from 'react-redux';
+import { Action, Dispatch } from 'redux';
+import { logout } from '../../actions/UserActions';
+import { CurrentUser, User } from '../../reducers/UserReducer';
 
+import userPlaceholder from '../../assets/images/utility/user.png';
 import logo from '../../assets/logo.png';
 
 interface HeaderComponentProps extends RouteComponentProps {
   currentUser: CurrentUser;
+  logout: () => void;
 }
 
-const HeaderComponent = (props: HeaderComponentProps) => {
-  const { currentUser, location } = props;
-  const { pathname } = location;
-  return (
-    <header className={`header__container${pathname === '/onboarding' ? ' header__container--transparent' : ''}`}>
-      {true ? (
-        <h1 className="u-margin-hug--vert">
-          <img className="loading__image" src={logo} />
-        </h1>
-      ) : (
-        <Link to="/"><img className="loading__image" src={logo} /></Link>
-      )}
-      <nav className="header__avatar">
-        {currentUser.user.image && (<img src={currentUser.user.image as string} />)}
-      </nav>
-    </header>
-  );
-};
+class HeaderComponent extends Component<HeaderComponentProps, any> {
+  state = {
+    menuOpen: false,
+  };
 
-export default React.memo(withRouter(HeaderComponent));
+  handleMenuOpen = () => this.setState({ menuOpen: true });
+
+  handleMenuClose = () => this.setState({ menuOpen: false });
+
+  handleLogout = () => this.props.logout();
+
+  render() {
+    const { currentUser, location } = this.props;
+    const { menuOpen } = this.state;
+
+    const styleModifiers = location.pathname === '/onboarding' ? ' header__container--transparent' : '';
+
+    return (
+      <header className={`header__container${styleModifiers}`}>
+        {true ? (
+          <h1 className="u-margin-hug--vert"><img className="header__logo" src={logo} /></h1>
+        ) : (
+          <Link to="/"><img className="header__logo" src={logo} /></Link>
+        )}
+        <button className="header__avatar" onClick={this.handleMenuOpen}>
+          <img src={currentUser.user.image ? currentUser.user.image as string : userPlaceholder} />
+        </button>
+        <span className={`header__overlay${menuOpen ? ' header__overlay--open' : ''}`} onClick={this.handleMenuClose} />
+        <nav className={`header__menu${menuOpen ? ' header__menu--open' : ''}`}>
+          <div className="header__menu__inner">
+            <div className="header__menu__profile">
+              <img src={currentUser.user.image ? currentUser.user.image as string : userPlaceholder} />
+              <p>
+                <span className="u-text-bold h3">{new User(currentUser.user).getFullName()}</span>
+                <br />
+                {new User(currentUser.user).email}
+              </p>
+              <button className="u-text-uppercase">View Profile</button>
+            </div>
+            <hr />
+            <ul className="u-list-unstyled u-text-uppercase">
+              <li><Link to="/onboarding">New Project</Link></li>
+              <li><Link to="/">All Projects</Link></li>
+              <li><Link to="/login" onClick={this.handleLogout}>Logout</Link></li>
+            </ul>
+          </div>
+        </nav>
+      </header>
+    );
+  }
+}
+
+const mapDispatchToProps = (dispatch: Dispatch<Action>) => ({
+  logout: () => dispatch(logout()),
+});
+
+export default withRouter(connect(null, mapDispatchToProps)(HeaderComponent));
