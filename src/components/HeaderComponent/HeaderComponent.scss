@@ -18,6 +18,21 @@
     width: 60px;
   }
 
+  &__title {
+
+    h1,
+    h2 {
+      display: inline-block;
+      color: color(default, light);
+    }
+
+    h2 {
+      margin-left: 10px;
+      border-left: 1px solid color(default, light);
+      padding-left: 10px;
+    }
+  }
+
   &__avatar {
     border-radius: 5px;
     padding: 0;

@@ -19,10 +19,19 @@ interface AppProps {
   currentUser?: CurrentUser;
 }
 
-export const AppRoutes = {
-  LOGIN: '/login',
-  DASHBOARD: '/',
-  ONBOARDING: '/onboarding',
+export const appRoutes = {
+  LOGIN: {
+    path: '/login',
+    title: undefined,
+  },
+  DASHBOARD: {
+    path: '/',
+    title: 'Dashboard',
+  },
+  ONBOARDING: {
+    path: '/onboarding',
+    title: undefined,
+  },
 };
 
 class App extends Component<AppProps> {
@@ -31,7 +40,7 @@ class App extends Component<AppProps> {
 
     const defaultProtectedRouteProps: ProtectedRouteProps = {
       isAuthenticated: !!currentUser,
-      authenticationPath: AppRoutes.LOGIN,
+      authenticationPath: appRoutes.LOGIN.path,
     };
 
     return (
@@ -40,22 +49,22 @@ class App extends Component<AppProps> {
           {currentUser && (<HeaderComponent currentUser={currentUser} />)}
           <ProtectedRoute
               isAuthenticated={!currentUser}
-              authenticationPath={AppRoutes.DASHBOARD}
+              authenticationPath={appRoutes.DASHBOARD.path}
               component={LoginPage}
               exact
-              path={AppRoutes.LOGIN}
+              path={appRoutes.LOGIN.path}
           />
           <ProtectedRoute
               {...defaultProtectedRouteProps}
               component={DashboardPage}
               exact
-              path={AppRoutes.DASHBOARD}
+              path={appRoutes.DASHBOARD.path}
           />
           <ProtectedRoute
               {...defaultProtectedRouteProps}
               component={OnboardingPage}
               exact
-              path={AppRoutes.ONBOARDING}
+              path={appRoutes.ONBOARDING.path}
           />
         </Router>
       </div>
