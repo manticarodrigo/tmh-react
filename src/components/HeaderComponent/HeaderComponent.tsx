@@ -38,7 +38,7 @@ class HeaderComponent extends Component<HeaderComponentProps, any> {
     return (
       <header className={`header__container${styleModifiers}`}>
         <div className="header__title">
-          {true ? (
+          {location.pathname === appRoutes.DASHBOARD.path ? (
             <h1 className="u-margin-hug--vert"><img className="header__logo" src={logo} /></h1>
           ) : (
             <Link to="/"><img className="header__logo" src={logo} /></Link>
