@@ -56,8 +56,8 @@ class HeaderComponent extends Component<HeaderComponentProps, any> {
             </div>
             <hr />
             <ul className="u-list-unstyled u-text-uppercase">
-              <li><Link to="/onboarding">New Project</Link></li>
-              <li><Link to="/">All Projects</Link></li>
+              <li><Link to="/onboarding" onClick={this.handleMenuClose}>New Project</Link></li>
+              <li><Link to="/" onClick={this.handleMenuClose}>All Projects</Link></li>
               <li><Link to="/login" onClick={this.handleLogout}>Logout</Link></li>
             </ul>
           </div>
