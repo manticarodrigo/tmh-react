@@ -17,6 +17,8 @@ import { Project } from '../../reducers/ProjectReducer';
 import HeaderComponent from '../../components/HeaderComponent/HeaderComponent';
 import LoadingComponent from '../../components/LoadingComponent/LoadingComponent';
 
+import DetailsInfoComponent from './DetailsInfoComponent/DetailsInfoComponent';
+
 interface MatchParams {
   id: string;
 }
@@ -57,24 +59,7 @@ class DetailsPage extends Component<DetailsPageProps, DetailsPageState> {
       <React.Fragment>
         <HeaderComponent currentUser={currentUser} title="Details" />
         <main className="details__container">
-          <div className="details__info">
-            <h3 className="h1">Project Details</h3>
-            <div className="details__info__box">
-              <div className="details__info__image">
-                <img src={require(`../../assets/images/onboarding/rooms/${project.room}.png`)} />
-              </div>
-              <div className="details__info__details">
-                <p className="h2 u-margin-hug--vert">{new Project(project).getReadableRoom()}</p>
-                <p className="h2 u-margin-hug--vert">{project.budget}</p>
-                <p className="u-color--secondary-darker">Project Notes</p>
-                <p className="u-margin-hug--vert">Style: {project.style}</p>
-                <p className="u-margin-hug--vert">Zip code: {project.zipcode}</p>
-                <p className="u-margin-hug--vert">Shared space with: {project.shared_with}</p>
-                <p className="u-margin-hug--vert">Pet friendly options: {project.pet_friendly}</p>
-                <p className="u-margin-hug--vert">Limited access: {project.limited_access}</p>
-              </div>
-            </div>
-          </div>
+          <DetailsInfoComponent project={project} />
         </main>
       </React.Fragment>
     ) : <LoadingComponent />;
