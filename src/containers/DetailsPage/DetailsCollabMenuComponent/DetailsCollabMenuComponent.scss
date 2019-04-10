@@ -41,10 +41,10 @@
         }
 
         &:not(:last-child) {
-          border-bottom: .5px solid rgba(color(primary, base), .5);
+          border-bottom: .5px solid rgba(color(primary, base), .25);
 
           @media (max-width: $break-md) {
-            border-right: .5px solid rgba(color(primary, base), .5);
+            border-right: .5px solid rgba(color(primary, base), .25);
             border-bottom: 0;
           }
         }
