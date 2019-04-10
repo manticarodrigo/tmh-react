@@ -17,6 +17,7 @@ import { Project } from '../../reducers/ProjectReducer';
 import HeaderComponent from '../../components/HeaderComponent/HeaderComponent';
 import LoadingComponent from '../../components/LoadingComponent/LoadingComponent';
 
+import DetailsCollabMenuComponent from './DetailsCollabMenuComponent/DetailsCollabMenuComponent';
 import DetailsInfoComponent from './DetailsInfoComponent/DetailsInfoComponent';
 
 interface MatchParams {
@@ -30,11 +31,13 @@ interface DetailsPageProps extends RouteComponentProps<MatchParams> {
 
 interface DetailsPageState {
   project?: Project;
+  view: string;
 }
 
 class DetailsPage extends Component<DetailsPageProps, DetailsPageState> {
   state: DetailsPageState = {
     project: undefined,
+    view: 'DRAWING',
   };
 
   async componentDidMount() {
@@ -51,14 +54,26 @@ class DetailsPage extends Component<DetailsPageProps, DetailsPageState> {
     this.props.history.push(appRoutes.DASHBOARD.pathname);
   }
 
+  handleViewChanged = (e: React.SyntheticEvent<HTMLButtonElement>) => {
+    const { view } = e.currentTarget.dataset;
+    this.setState({ view: view as string });
+  }
+
   render() {
     const { currentUser } = this.props;
-    const { project } = this.state;
+    const { project, view } = this.state;
 
     return project ? (
       <React.Fragment>
         <HeaderComponent currentUser={currentUser} title="Details" />
         <main className="details__container">
+          <div className="collab__workzone">
+            <DetailsCollabMenuComponent
+              project={project}
+              view={view}
+              handleViewChanged={this.handleViewChanged}
+            />
+          </div>
           <DetailsInfoComponent project={project} />
         </main>
       </React.Fragment>

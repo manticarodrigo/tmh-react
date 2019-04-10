@@ -4,3 +4,13 @@
   width: 100vw;
   height: 100vh;
 }
+
+.collab {
+
+  &__workzone {
+    position: relative;
+    background: url('../../assets/images/layout/collab_workzone.png') no-repeat center;
+    background-size: cover;
+    min-height: 300px;
+  }
+}
