@@ -16,7 +16,7 @@ export class Project {
   readonly client?: string | User;
   readonly designer?: string | User;
   readonly room!: string;
-  status!: string;
+  status!: ProjectStatus;
   readonly shared_with!: string;
   readonly budget!: string;
   readonly pet_friendly!: boolean;
