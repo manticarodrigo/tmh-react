@@ -27,19 +27,23 @@ const tabs = [
   },
 ];
 
-const checkActiveView = (view: string, tab: string) => view === tab ? ' collab__details__menu__button--active' : '';
+const checkActiveView = (view: string, tab: string) => {
+  return view === tab ?
+    ' details__collab__menu__button details__collab__menu__button--active'
+    : ' details__collab__menu__button';
+};
 
 const DetailsCollabMenuComponent = (props: DetailsCollabMenuComponentProps) => (
   <div className="details__collab__menu">
     {tabs.map((tab) => (
       <button
         key={tab.value}
-        className={`u-text-uppercase details__collab__menu__button${checkActiveView(props.view, tab.value)}`}
+        className={`u-text-uppercase${checkActiveView(props.view, tab.value)}`}
         data-view={tab.value}
         onClick={props.handleViewChanged}
       >
         <img src={tab.image} />
-        {tab.title}
+        <p className="u-margin-hug--vert">{tab.title}</p>
       </button>
     ))}
   </div>
