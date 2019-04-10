@@ -63,7 +63,16 @@ class DetailsPage extends Component<DetailsPageProps, DetailsPageState> {
               <div className="details__info__image">
                 <img src={require(`../../assets/images/onboarding/rooms/${project.room}.png`)} />
               </div>
-              {new Project(project).getReadableRoom()}
+              <div className="details__info__details">
+                <p className="h2 u-margin-hug--vert">{new Project(project).getReadableRoom()}</p>
+                <p className="h2 u-margin-hug--vert">{project.budget}</p>
+                <p className="u-color--secondary-darker">Project Notes</p>
+                <p className="u-margin-hug--vert">Style: {project.style}</p>
+                <p className="u-margin-hug--vert">Zip code: {project.zipcode}</p>
+                <p className="u-margin-hug--vert">Shared space with: {project.shared_with}</p>
+                <p className="u-margin-hug--vert">Pet friendly options: {project.pet_friendly}</p>
+                <p className="u-margin-hug--vert">Limited access: {project.limited_access}</p>
+              </div>
             </div>
           </div>
         </main>

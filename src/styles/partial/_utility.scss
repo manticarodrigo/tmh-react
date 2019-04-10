@@ -28,3 +28,10 @@
   padding-left: 0;
   list-style: none;
 }
+
+.u-color {
+
+  &--secondary-darker {
+    color: color(secondary, darker);
+  }
+}
