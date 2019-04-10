@@ -17,6 +17,7 @@ import { Project } from '../../reducers/ProjectReducer';
 import HeaderComponent from '../../components/HeaderComponent/HeaderComponent';
 import LoadingComponent from '../../components/LoadingComponent/LoadingComponent';
 
+import DetailsCollabAlertComponent from './DetailsCollabAlertComponent/DetailsCollabAlertComponent';
 import DetailsCollabMenuComponent from './DetailsCollabMenuComponent/DetailsCollabMenuComponent';
 import DetailsInfoComponent from './DetailsInfoComponent/DetailsInfoComponent';
 
@@ -59,6 +60,13 @@ class DetailsPage extends Component<DetailsPageProps, DetailsPageState> {
     this.setState({ view: view as string });
   }
 
+  handleFileChanged = (e: React.SyntheticEvent<HTMLInputElement>) => {
+    const { files } = e.currentTarget;
+    if (files) {
+      const file = files[0];
+    }
+  }
+
   render() {
     const { currentUser } = this.props;
     const { project, view } = this.state;
@@ -72,6 +80,11 @@ class DetailsPage extends Component<DetailsPageProps, DetailsPageState> {
               project={project}
               view={view}
               handleViewChanged={this.handleViewChanged}
+            />
+            <DetailsCollabAlertComponent
+              project={project}
+              view={view}
+              handleFileChanged={this.handleFileChanged}
             />
           </div>
           <DetailsInfoComponent project={project} />

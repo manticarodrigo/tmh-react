@@ -8,9 +8,21 @@
 .collab {
 
   &__workzone {
+    display: flex;
     position: relative;
+    align-items: center;
     background: url('../../assets/images/layout/collab_workzone.png') no-repeat center;
     background-size: cover;
-    min-height: 300px;
+    padding: 20px;
+    min-height: 500px;
+  }
+
+  &__alert {
+    margin: 50px auto;
+    box-shadow: $box-shadow;
+    background-color: color(default, light);
+    padding: 20px;
+    max-width: 500px;
+    text-align: center;
   }
 }
