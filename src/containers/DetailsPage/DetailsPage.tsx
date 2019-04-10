@@ -39,12 +39,18 @@ interface DetailsPageProps extends RouteComponentProps<MatchParams> {
 
 interface DetailsPageState {
   project?: Project;
+  drawings?: Detail[];
+  inspirations?: Detail[];
+  furnitures?: Detail[];
   view: string;
 }
 
 class DetailsPage extends Component<DetailsPageProps, DetailsPageState> {
   state: DetailsPageState = {
     project: undefined,
+    drawings: undefined,
+    inspirations: undefined,
+    furnitures: undefined,
     view: 'DRAWING',
   };
 
@@ -60,7 +66,31 @@ class DetailsPage extends Component<DetailsPageProps, DetailsPageState> {
       const data = await promises;
 
       if (data) {
-        return this.setState({ project: data[0] });
+        const drawings = [];
+        const inspirations = [];
+        const furnitures = [];
+
+        for (const detail of data[1]) {
+          switch (detail.type) {
+            case DetailType.DRAWING:
+              drawings.push(detail);
+              break;
+            case DetailType.INSPIRATION:
+              inspirations.push(detail);
+              break;
+            case DetailType.FURNITURE:
+              furnitures.push(detail);
+              break;
+            default:
+              break;
+          }
+        }
+        return this.setState({
+          project: data[0],
+          drawings,
+          inspirations,
+          furnitures,
+        });
       }
     }
 
@@ -75,8 +105,10 @@ class DetailsPage extends Component<DetailsPageProps, DetailsPageState> {
   handleFileChanged = async (e: React.SyntheticEvent<HTMLInputElement>) => {
     const { files } = e.currentTarget;
     const { project } = this.state;
-    if (files && project) {
+
+    if (files && project && project.id) {
       const file = files[0];
+
       switch (this.state.view) {
         case DetailType.DRAWING:
           await this.props.addDetail(project, file, DetailType.DRAWING, DetailStatus.APPROVED);
@@ -90,7 +122,8 @@ class DetailsPage extends Component<DetailsPageProps, DetailsPageState> {
         default:
           break;
       }
-      // this.props.getDetails();
+
+      this.props.getDetails(project.id);
     }
   }
 
