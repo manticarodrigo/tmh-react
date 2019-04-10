@@ -9,9 +9,8 @@ import { CurrentUser } from '../../reducers/UserReducer';
 
 import { ProtectedRoute, ProtectedRouteProps } from '../ProtectedRoute/ProtectedRoute';
 
-import HeaderComponent from '../../components/HeaderComponent/HeaderComponent';
-
 import DashboardPage from '../DashboardPage/DashboardPage';
+import DetailsPage from '../DetailsPage/DetailsPage';
 import LoginPage from '../LoginPage/LoginPage';
 import OnboardingPage from '../OnboardingPage/OnboardingPage';
 
@@ -22,15 +21,23 @@ interface AppProps {
 export const appRoutes = {
   LOGIN: {
     path: '/login',
+    pathname: '/login',
+    title: undefined,
+  },
+  ONBOARDING: {
+    path: '/onboarding',
+    pathname: '/onboarding',
     title: undefined,
   },
   DASHBOARD: {
     path: '/',
+    pathname: '/',
     title: 'Dashboard',
   },
-  ONBOARDING: {
-    path: '/onboarding',
-    title: undefined,
+  DETAILS: {
+    path: '/details',
+    pathname: '/details/:id',
+    title: 'Details',
   },
 };
 
@@ -40,31 +47,36 @@ class App extends Component<AppProps> {
 
     const defaultProtectedRouteProps: ProtectedRouteProps = {
       isAuthenticated: !!currentUser,
-      authenticationPath: appRoutes.LOGIN.path,
+      authenticationPath: appRoutes.LOGIN.pathname,
     };
 
     return (
       <div className="app">
         <Router>
-          {currentUser && (<HeaderComponent currentUser={currentUser} />)}
           <ProtectedRoute
-              isAuthenticated={!currentUser}
-              authenticationPath={appRoutes.DASHBOARD.path}
-              component={LoginPage}
-              exact
-              path={appRoutes.LOGIN.path}
+            isAuthenticated={!currentUser}
+            authenticationPath={appRoutes.DASHBOARD.pathname}
+            component={LoginPage}
+            path={appRoutes.LOGIN.pathname}
+            exact
           />
           <ProtectedRoute
-              {...defaultProtectedRouteProps}
-              component={DashboardPage}
-              exact
-              path={appRoutes.DASHBOARD.path}
+            {...defaultProtectedRouteProps}
+            component={OnboardingPage}
+            path={appRoutes.ONBOARDING.pathname}
+            exact
           />
           <ProtectedRoute
-              {...defaultProtectedRouteProps}
-              component={OnboardingPage}
-              exact
-              path={appRoutes.ONBOARDING.path}
+            {...defaultProtectedRouteProps}
+            component={DashboardPage}
+            path={appRoutes.DASHBOARD.pathname}
+            exact
+          />
+          <ProtectedRoute
+            {...defaultProtectedRouteProps}
+            component={DetailsPage}
+            path={appRoutes.DETAILS.pathname}
+            exact
           />
         </Router>
       </div>

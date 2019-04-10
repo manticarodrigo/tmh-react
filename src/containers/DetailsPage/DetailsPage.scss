@@ -1,0 +1,31 @@
+@import '../../styles/global';
+
+.details {
+
+  &__container {
+    background-color: color(secondary, base);
+    padding: 20px;
+    width: 100%;
+    min-height: 100%;
+  }
+
+  &__info {
+    margin: auto;
+    max-width: 90%;
+
+    &__box {
+      box-shadow: 0 3px 6px rgba(0, 0, 0, .15);
+      background-color: color(default, light);
+      padding: 20px;
+    }
+
+    &__image {
+      background-color: color(secondary, dark);
+      padding: 20px;
+
+      img {
+        filter: brightness(.2);
+      }
+    }
+  }
+}
