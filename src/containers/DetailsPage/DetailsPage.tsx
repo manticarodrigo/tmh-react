@@ -11,7 +11,7 @@ import { appRoutes } from '../App/App';
 
 import { CurrentUser } from '../../reducers/UserReducer';
 
-import { addDetail, getProject } from '../../actions/ProjectActions';
+import { addDetail, getDetails, getProject } from '../../actions/ProjectActions';
 import { Detail, DetailStatus, DetailType, Project } from '../../reducers/ProjectReducer';
 
 import HeaderComponent from '../../components/HeaderComponent/HeaderComponent';
@@ -28,6 +28,7 @@ interface MatchParams {
 interface DetailsPageProps extends RouteComponentProps<MatchParams> {
   currentUser?: CurrentUser;
   getProject: (id: string) => Promise<Project>;
+  getDetails: (id: string) => Promise<Detail[]>;
   addDetail: (
     project: Project,
     file: File,
@@ -51,10 +52,15 @@ class DetailsPage extends Component<DetailsPageProps, DetailsPageState> {
     const { params } = this.props.match;
 
     if (params.id) {
-      const project = await this.props.getProject(params.id);
+      const promises = Promise.all([
+        this.props.getProject(params.id),
+        this.props.getDetails(params.id),
+      ]);
 
-      if (project) {
-        return this.setState({ project });
+      const data = await promises;
+
+      if (data) {
+        return this.setState({ project: data[0] });
       }
     }
 
@@ -121,6 +127,7 @@ const mapStateToProps = (store: AppState) => ({
 
 const mapDispatchToProps = (dispatch: ThunkDispatch<AppState, void, Action>) => ({
   getProject: (id: string) => dispatch(getProject(id)),
+  getDetails: (id: string) => dispatch(getDetails(id)),
   addDetail: (
     project: Project,
     file: File,

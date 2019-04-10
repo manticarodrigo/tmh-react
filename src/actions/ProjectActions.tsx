@@ -9,6 +9,7 @@ export enum ProjectActionTypes {
   GET_PROJECTS = 'GET_PROJECTS',
   GET_PROJECT = 'GET_PROJECT',
   CREATE_PROJECT = 'CREATE_PROJECT',
+  GET_DETAILS = 'GET_DETAILS',
   ADD_DETAIL = 'ADD_DETAIL',
 }
 
@@ -88,6 +89,29 @@ export const createProject: ActionCreator<
   }
 });
 
+export interface ProjectGetDetailsAction {
+  type: ProjectActionTypes.GET_DETAILS;
+  details: Detail[];
+}
+
+export const getDetails: ActionCreator<
+  ThunkAction<Promise<any>, AppState, void, ProjectGetDetailsAction>
+> = (id: string) => (async (dispatch: Dispatch, getState) => {
+  try {
+    const appState = getState();
+    const response = await axios.get(
+      `${process.env.REACT_APP_API_URL}/api/v1/details/project/?project=${id}`,
+      { headers: { Authorization: `Token ${appState.userState.currentUser!.key}` } },
+    );
+
+    dispatch({ type: ProjectActionTypes.GET_DETAILS });
+
+    return response.data;
+  } catch (err) {
+    return err;
+  }
+});
+
 export interface ProjectAddDetailAction {
   type: ProjectActionTypes.ADD_DETAIL;
   detail: Detail;
@@ -123,5 +147,6 @@ export type ProjectActions = (
   ProjectGetProjectsAction |
   ProjectGetProjectAction |
   ProjectCreateProjectAction |
+  ProjectGetDetailsAction |
   ProjectAddDetailAction
 );
