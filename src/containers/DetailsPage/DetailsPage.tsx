@@ -39,18 +39,18 @@ interface DetailsPageProps extends RouteComponentProps<MatchParams> {
 
 interface DetailsPageState {
   project?: Project;
-  drawings?: Detail[];
-  inspirations?: Detail[];
-  furnitures?: Detail[];
+  drawings: Detail[];
+  inspirations: Detail[];
+  furnitures: Detail[];
   view: string;
 }
 
 class DetailsPage extends Component<DetailsPageProps, DetailsPageState> {
   state: DetailsPageState = {
     project: undefined,
-    drawings: undefined,
-    inspirations: undefined,
-    furnitures: undefined,
+    drawings: [],
+    inspirations: [],
+    furnitures: [],
     view: 'DRAWING',
   };
 
@@ -129,7 +129,7 @@ class DetailsPage extends Component<DetailsPageProps, DetailsPageState> {
 
   render() {
     const { currentUser } = this.props;
-    const { project, view } = this.state;
+    const { project, drawings, inspirations, furnitures, view } = this.state;
 
     return project ? (
       <React.Fragment>
@@ -143,6 +143,9 @@ class DetailsPage extends Component<DetailsPageProps, DetailsPageState> {
             />
             <DetailsCollabAlertComponent
               project={project}
+              drawings={drawings}
+              inspirations={inspirations}
+              furnitures={furnitures}
               view={view}
               handleFileChanged={this.handleFileChanged}
             />
