@@ -19,6 +19,8 @@
   }
 
   &__title {
+    display: flex;
+    align-items: center;
 
     h1,
     h2 {
