@@ -7,6 +7,7 @@ import { AppState } from '../store/Store';
 
 export enum ProjectActionTypes {
   GET_PROJECTS = 'GET_PROJECTS',
+  GET_PROJECT = 'GET_PROJECT',
   CREATE_PROJECT = 'CREATE_PROJECT',
 }
 
@@ -15,7 +16,6 @@ export interface ProjectGetProjectsAction {
   projects: Project[];
 }
 
-/* ThunkAction<Promise<Return Type>, State Interface, Type of Param, Type of Action> */
 export const getProjects: ActionCreator<
   ThunkAction<Promise<any>, AppState, void, ProjectGetProjectsAction>
 > = () => (async (dispatch: Dispatch, getState) => {
@@ -37,12 +37,34 @@ export const getProjects: ActionCreator<
   }
 });
 
+export interface ProjectGetProjectAction {
+  type: ProjectActionTypes.GET_PROJECT;
+  project: Project;
+}
+
+export const getProject: ActionCreator<
+  ThunkAction<Promise<any>, AppState, void, ProjectGetProjectAction>
+> = (id: string) => (async (dispatch: Dispatch, getState) => {
+  try {
+    const appState = getState();
+    const response = await axios.get(
+      `${process.env.REACT_APP_API_URL}/api/v1/projects/${id}/`,
+      { headers: { Authorization: `Token ${appState.userState.currentUser!.key}` } },
+    );
+
+    dispatch({ type: ProjectActionTypes.GET_PROJECT });
+
+    return response.data;
+  } catch (err) {
+    return err;
+  }
+});
+
 export interface ProjectCreateProjectAction {
   type: ProjectActionTypes.CREATE_PROJECT;
   project: Project;
 }
 
-/* ThunkAction<Promise<Return Type>, State Interface, Type of Param, Type of Action> */
 export const createProject: ActionCreator<
   ThunkAction<Promise<any>, AppState, void, ProjectCreateProjectAction>
 > = (project) => (async (dispatch: Dispatch, getState) => {
@@ -65,4 +87,4 @@ export const createProject: ActionCreator<
   }
 });
 
-export type ProjectActions = ProjectGetProjectsAction | ProjectCreateProjectAction;
+export type ProjectActions = ProjectGetProjectsAction | ProjectGetProjectAction | ProjectCreateProjectAction;
