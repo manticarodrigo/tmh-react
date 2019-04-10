@@ -11,8 +11,8 @@ import { appRoutes } from '../App/App';
 
 import { CurrentUser } from '../../reducers/UserReducer';
 
-import { getProject } from '../../actions/ProjectActions';
-import { Project } from '../../reducers/ProjectReducer';
+import { addDetail, getProject } from '../../actions/ProjectActions';
+import { Detail, DetailStatus, DetailType, Project } from '../../reducers/ProjectReducer';
 
 import HeaderComponent from '../../components/HeaderComponent/HeaderComponent';
 import LoadingComponent from '../../components/LoadingComponent/LoadingComponent';
@@ -28,6 +28,12 @@ interface MatchParams {
 interface DetailsPageProps extends RouteComponentProps<MatchParams> {
   currentUser?: CurrentUser;
   getProject: (id: string) => Promise<Project>;
+  addDetail: (
+    project: Project,
+    file: File,
+    type: DetailType,
+    status: DetailStatus,
+  ) => Promise<Detail>;
 }
 
 interface DetailsPageState {
@@ -60,10 +66,25 @@ class DetailsPage extends Component<DetailsPageProps, DetailsPageState> {
     this.setState({ view: view as string });
   }
 
-  handleFileChanged = (e: React.SyntheticEvent<HTMLInputElement>) => {
+  handleFileChanged = async (e: React.SyntheticEvent<HTMLInputElement>) => {
     const { files } = e.currentTarget;
-    if (files) {
+    const { project } = this.state;
+    if (files && project) {
       const file = files[0];
+      switch (this.state.view) {
+        case DetailType.DRAWING:
+          await this.props.addDetail(project, file, DetailType.DRAWING, DetailStatus.APPROVED);
+          break;
+        case DetailType.INSPIRATION:
+          await this.props.addDetail(project, file, DetailType.INSPIRATION, DetailStatus.APPROVED);
+          break;
+        case DetailType.FURNITURE:
+          await this.props.addDetail(project, file, DetailType.FURNITURE, DetailStatus.APPROVED);
+          break;
+        default:
+          break;
+      }
+      // this.props.getDetails();
     }
   }
 
@@ -100,6 +121,12 @@ const mapStateToProps = (store: AppState) => ({
 
 const mapDispatchToProps = (dispatch: ThunkDispatch<AppState, void, Action>) => ({
   getProject: (id: string) => dispatch(getProject(id)),
+  addDetail: (
+    project: Project,
+    file: File,
+    type: DetailType,
+    status: DetailStatus,
+  ) => dispatch(addDetail(project, file, type, status)),
 });
 
 export default withRouter(connect(mapStateToProps, mapDispatchToProps)(DetailsPage));

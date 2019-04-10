@@ -94,6 +94,32 @@ export enum ProjectStatus {
   ARCHIVED = 'ARCHIVED',
 }
 
+export interface Detail {
+  readonly id?: string;
+  readonly created_date?: string;
+  readonly modified_date?: string;
+  readonly project: string | Project;
+  parent?: string | Detail;
+  image: string | File;
+  status: DetailStatus;
+  type: DetailType;
+}
+
+export enum DetailStatus {
+  APPROVED = 'APPROVED',
+  PENDING = 'PENDING',
+  SUBMITTED = 'SUBMITTED',
+}
+
+export enum DetailType {
+  DRAWING = 'DRAWING',
+  INSPIRATION = 'INSPIRATION',
+  FURNITURE = 'FURNITURE',
+  CONCEPT = 'CONCEPT',
+  FLOOR_PLAN = 'FLOOR_PLAN',
+  FINAL_SNAPSHOT = 'FINAL_SNAPSHOT',
+}
+
 export interface ProjectState {
   readonly projects?: Project[];
 }

@@ -2,13 +2,14 @@ import axios from 'axios';
 import { ActionCreator, Dispatch } from 'redux';
 import { ThunkAction } from 'redux-thunk';
 
-import { Project } from '../reducers/ProjectReducer';
+import { Detail, Project } from '../reducers/ProjectReducer';
 import { AppState } from '../store/Store';
 
 export enum ProjectActionTypes {
   GET_PROJECTS = 'GET_PROJECTS',
   GET_PROJECT = 'GET_PROJECT',
   CREATE_PROJECT = 'CREATE_PROJECT',
+  ADD_DETAIL = 'ADD_DETAIL',
 }
 
 export interface ProjectGetProjectsAction {
@@ -87,4 +88,40 @@ export const createProject: ActionCreator<
   }
 });
 
-export type ProjectActions = ProjectGetProjectsAction | ProjectGetProjectAction | ProjectCreateProjectAction;
+export interface ProjectAddDetailAction {
+  type: ProjectActionTypes.ADD_DETAIL;
+  detail: Detail;
+}
+
+export const addDetail: ActionCreator<
+  ThunkAction<Promise<any>, AppState, void, ProjectAddDetailAction>
+> = (project, file, type, status) => (async (dispatch: Dispatch, getState) => {
+  try {
+    const appState = getState();
+    const formData = new FormData();
+
+    formData.append('image', file);
+    formData.append('type', type);
+    formData.append('project', project.id);
+    formData.append('status', status);
+
+    const response = await axios.post(
+      `${process.env.REACT_APP_API_URL}/api/v1/details/`,
+      formData,
+      { headers: { Authorization: `Token ${appState.userState.currentUser!.key}` } },
+    );
+
+    dispatch({ type: ProjectActionTypes.ADD_DETAIL });
+
+    return response.data;
+  } catch (err) {
+    return err;
+  }
+});
+
+export type ProjectActions = (
+  ProjectGetProjectsAction |
+  ProjectGetProjectAction |
+  ProjectCreateProjectAction |
+  ProjectAddDetailAction
+);
