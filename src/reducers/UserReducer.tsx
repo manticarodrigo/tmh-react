@@ -72,6 +72,12 @@ export const UserReducer: Reducer<UserState, UserActions> = (
         currentUser: action.currentUser,
       };
     }
+    case UserActionTypes.REGISTER: {
+      return {
+        ...state,
+        currentUser: action.currentUser,
+      };
+    }
     case UserActionTypes.LOGOUT: {
       return {
         ...state,

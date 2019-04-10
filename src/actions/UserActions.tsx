@@ -15,15 +15,6 @@ export interface UserLoginAction {
   currentUser: CurrentUser;
 }
 
-export interface UserRegisterAction {
-  type: UserActionTypes.REGISTER;
-  currentUser: CurrentUser;
-}
-
-export interface UserLogoutAction {
-  type: UserActionTypes.LOGOUT;
-}
-
 export const login: ActionCreator<
   ThunkAction<Promise<any>, UserState, void, UserLoginAction>
 > = (username, password) => (async (dispatch: Dispatch) => {
@@ -40,6 +31,11 @@ export const login: ActionCreator<
     return err;
   }
 });
+
+export interface UserRegisterAction {
+  type: UserActionTypes.REGISTER;
+  currentUser: CurrentUser;
+}
 
 export const register: ActionCreator<
   ThunkAction<Promise<any>, UserState, void, UserRegisterAction>
@@ -71,6 +67,10 @@ export const register: ActionCreator<
     return err;
   }
 });
+
+export interface UserLogoutAction {
+  type: UserActionTypes.LOGOUT;
+}
 
 export const logout: ActionCreator<any> = () => ((dispatch: Dispatch) => {
   saveUserState(undefined);
