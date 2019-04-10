@@ -1,7 +1,16 @@
 @import '../../styles/global';
 
 .loading {
-  
+  width: 100%;
+  height: 100%;
+
+  &__container {
+    @include center-content();
+
+    width: 100%;
+    min-height: 100%;
+  }
+
   &__content {
     text-align: center;
   }
