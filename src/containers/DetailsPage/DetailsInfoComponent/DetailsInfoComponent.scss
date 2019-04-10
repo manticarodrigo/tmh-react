@@ -8,7 +8,7 @@
 
     &__box {
       display: flex;
-      box-shadow: 0 3px 6px rgba(0, 0, 0, .15);
+      box-shadow: $box-shadow;
       background-color: color(default, light);
       padding: 20px;
     }

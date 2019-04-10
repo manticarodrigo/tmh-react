@@ -89,7 +89,7 @@ h3,
 
 a {
   text-decoration: none;
-  color: color(primary, base);
+  color: $text-color;
 
   &:focus,
   &:hover {

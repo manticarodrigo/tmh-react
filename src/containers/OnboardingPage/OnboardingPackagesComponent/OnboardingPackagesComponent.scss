@@ -30,7 +30,7 @@
 
           &:hover {
             background-color: color(default, light);
-            color: color(primary, base);
+            color: $text-color;
 
             img {
               filter: invert(100%);

@@ -53,7 +53,7 @@
     &__toggle {
       border: 2px solid color(primary, base);
       background-color: color(default, light);
-      color: color(primary, base);
+      color: $text-color;
     }
   }
 }

@@ -47,7 +47,7 @@
       justify-content: flex-end;
       transition: box-shadow .5s;
       margin: 10px 0;
-      box-shadow: 0 3px 6px rgba(0, 0, 0, .15);
+      box-shadow: $box-shadow;
       background-color: color(default, light);
       padding: 10px 30px;
       font-weight: bold;
@@ -58,7 +58,7 @@
       }
 
       &:hover {
-        box-shadow: 0 3px 6px rgba(0, 0, 0, .45);
+        box-shadow: $box-shadow-dark;
         text-decoration: none;
       }
 
