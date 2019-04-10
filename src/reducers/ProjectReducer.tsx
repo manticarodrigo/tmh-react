@@ -31,7 +31,7 @@ export class Project {
     Object.assign(this, init);
   }
 
-  getReadableModifiedDate = (): string => new Date().toLocaleDateString('en-US');
+  getReadableModifiedDate = (): string => new Date(this.modified_date!).toLocaleDateString('en-US');
 
   getReadableRoom = (): string => {
     const types: { [index: string]: string } = {
