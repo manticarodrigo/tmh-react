@@ -66,35 +66,40 @@ class DetailsPage extends Component<DetailsPageProps, DetailsPageState> {
       const data = await promises;
 
       if (data) {
-        const drawings = [];
-        const inspirations = [];
-        const furnitures = [];
+        this.setState({ project: data[0] });
 
-        for (const detail of data[1]) {
-          switch (detail.type) {
-            case DetailType.DRAWING:
-              drawings.push(detail);
-              break;
-            case DetailType.INSPIRATION:
-              inspirations.push(detail);
-              break;
-            case DetailType.FURNITURE:
-              furnitures.push(detail);
-              break;
-            default:
-              break;
-          }
-        }
-        return this.setState({
-          project: data[0],
-          drawings,
-          inspirations,
-          furnitures,
-        });
+        return this.setDetails(data[1]);
       }
     }
 
     this.props.history.push(appRoutes.DASHBOARD.pathname);
+  }
+
+  setDetails(details: Detail[]) {
+    const drawings = [];
+    const inspirations = [];
+    const furnitures = [];
+
+    for (const detail of details) {
+      switch (detail.type) {
+        case DetailType.DRAWING:
+          drawings.push(detail);
+          break;
+        case DetailType.INSPIRATION:
+          inspirations.push(detail);
+          break;
+        case DetailType.FURNITURE:
+          furnitures.push(detail);
+          break;
+        default:
+          break;
+      }
+    }
+    return this.setState({
+      drawings,
+      inspirations,
+      furnitures,
+    });
   }
 
   handleViewChanged = (e: React.SyntheticEvent<HTMLButtonElement>) => {
@@ -123,7 +128,8 @@ class DetailsPage extends Component<DetailsPageProps, DetailsPageState> {
           break;
       }
 
-      this.props.getDetails(project.id);
+      const details = await this.props.getDetails(project.id);
+      this.setDetails(details);
     }
   }
 
