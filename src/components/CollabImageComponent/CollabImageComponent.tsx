@@ -25,7 +25,12 @@ const CollabImageComponent = (props: CollabImageComponentProps) => {
             style={{ backgroundImage: `url('${detail.image}')` }}
             className={`collab__image__thumb${props.index === index ? ' collab__image__thumb--selected' : ''}`}
             onClick={props.handleThumbClicked}
-          />
+          >
+            <div
+              className="collab__image__thumb--delete"
+              // onClick={props.handleDeleteClicked}
+            />
+          </div>
         ))}
           <div className="collab__image__thumb collab__image__thumb--upload" onClick={handleClickFileInput} />
           <input
