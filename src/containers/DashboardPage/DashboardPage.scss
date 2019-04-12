@@ -1,13 +1,10 @@
 @import '../../styles/global';
 
 .dashboard {
-
-  &__container {
-    background-color: color(secondary, base);
-    padding: 20px;
-    width: 100%;
-    min-height: 100%;
-  }
+  background-color: color(secondary, base);
+  padding: 20px;
+  width: 100%;
+  min-height: 100vh;
 
   &__header {
     display: flex;

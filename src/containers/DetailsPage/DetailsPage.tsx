@@ -17,7 +17,7 @@ import { Detail, DetailStatus, DetailType, Project } from '../../reducers/Projec
 import HeaderComponent from '../../components/HeaderComponent/HeaderComponent';
 import LoadingComponent from '../../components/LoadingComponent/LoadingComponent';
 
-import DetailsCollabAlertComponent from './DetailsCollabAlertComponent/DetailsCollabAlertComponent';
+import DetailsCollabAlertComponent from './DetailsCollabComponent/DetailsCollabComponent';
 import DetailsCollabMenuComponent from './DetailsCollabMenuComponent/DetailsCollabMenuComponent';
 import DetailsInfoComponent from './DetailsInfoComponent/DetailsInfoComponent';
 
@@ -140,7 +140,7 @@ class DetailsPage extends Component<DetailsPageProps, DetailsPageState> {
     return project ? (
       <React.Fragment>
         <HeaderComponent currentUser={currentUser} title="Details" />
-        <main className="details__container">
+        <main className="details">
           <div className="collab__workzone">
             <DetailsCollabMenuComponent
               project={project}

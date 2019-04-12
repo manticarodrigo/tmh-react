@@ -1,17 +1,14 @@
 @import '../../styles/global';
 
 .header {
-  
-  &__container {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px;
 
-    &--transparent {
-      position: absolute;
-      width: 100%;
-    }
+  &--transparent {
+    position: absolute;
+    width: 100%;
   }
 
   &__logo {

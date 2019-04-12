@@ -98,38 +98,34 @@ class LoginPage extends Component<LoginPageProps, LoginPageState> {
     const getBtnText = (isLogin: boolean) => isLogin ? 'LOG IN' : 'SIGN UP';
 
     return (
-      <main className="splash">
-        <div className="splash__container">
-          <div className="splash__container__inner">
-            <div className="login__container">
-              <img className="login__logo" src={logo} />
-              <form className="login__form" onSubmit={this.handleSubmit}>
-                <div className="login__form__fields">
-                  {Object.keys(form).map((key) => (
-                    <TextInput
-                      isRegistration={isRegistration}
-                      key={key}
-                      name={key}
-                      value={form[key]}
-                      fieldErrors={fieldErrors}
-                      onChange={this.handleInputChange}
-                    />
-                  ))}
-                </div>
-                <button>{getBtnText(!isRegistration)}</button>
-                <p className="login__form__divider">or</p>
-                <button
-                  type="button"
-                  className="login__form__toggle"
-                  onClick={this.toggleAuthType}>
-                  {getBtnText(isRegistration)}
-                </button>
-                {nonFieldErrors && nonFieldErrors.map((err, index) => (
-                  <p key={index}>{err}</p>
-                ))}
-              </form>
+      <main className="login">
+        <div className="login__container">
+          <img className="login__logo" src={logo} />
+          <form className="login__form" onSubmit={this.handleSubmit}>
+            <div className="login__form__fields">
+              {Object.keys(form).map((key) => (
+                <TextInput
+                  isRegistration={isRegistration}
+                  key={key}
+                  name={key}
+                  value={form[key]}
+                  fieldErrors={fieldErrors}
+                  onChange={this.handleInputChange}
+                />
+              ))}
             </div>
-          </div>
+            <button>{getBtnText(!isRegistration)}</button>
+            <p className="login__form__divider">or</p>
+            <button
+              type="button"
+              className="login__form__toggle"
+              onClick={this.toggleAuthType}>
+              {getBtnText(isRegistration)}
+            </button>
+            {nonFieldErrors && nonFieldErrors.map((err, index) => (
+              <p key={index}>{err}</p>
+            ))}
+          </form>
         </div>
       </main>
     );

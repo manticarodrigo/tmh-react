@@ -1,0 +1,32 @@
+@import '../../styles/global';
+
+.collab {
+
+  &__image {
+    
+    &__selected {
+      border: 5px solid color(primary, base);
+    }
+
+    &__thumbs {
+      display: table;
+      position: relative;
+      margin: auto;
+      table-layout: fixed;
+    }
+
+    &__thumb {
+      display: table-cell;
+      position: relative;
+
+      img {
+        display: inline-block;
+        margin: 10px;
+        background-color: color(default, light);
+        width: 75px;
+        height: 75px;
+        object-fit: cover;
+      }
+    }
+  }
+}

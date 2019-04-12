@@ -1,21 +1,18 @@
 @import '../../styles/global';
 
 .onboarding {
+  display: flex;
+  background: url('../../assets/images/layout/onboarding.png') no-repeat top center fixed;
+  background-size: cover;
+  width: 100%;
+  min-height: 100vh;
 
   &__container {
     display: flex;
-    background: url('../../assets/images/layout/onboarding.png') no-repeat top center fixed;
-    background-size: cover;
+    background-color: rgba(color(primary, base), .5);
+    padding: 102px 20px 20px;
     width: 100%;
     min-height: 100%;
-
-    &__inner {
-      display: flex;
-      background-color: rgba(color(primary, base), .5);
-      padding: 102px 20px 20px;
-      width: 100%;
-      min-height: 100%;
-    }
   }
 
   &__welcome {

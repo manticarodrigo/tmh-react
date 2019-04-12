@@ -184,8 +184,8 @@ class OnboardingPage extends Component<OnboardingPageProps, OnboardingPageState>
     return (
       <React.Fragment>
         <HeaderComponent currentUser={currentUser} />
-        <main className="onboarding__container">
-          <div className="onboarding__container__inner">
+        <main className="onboarding">
+          <div className="onboarding__container">
             {step === 0 && (
               <div className="onboarding__welcome">
                 <h1 className="onboarding__welcome__headline">WELCOME TO<br />THE MAN HOME</h1>

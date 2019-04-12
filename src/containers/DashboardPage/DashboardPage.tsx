@@ -48,7 +48,7 @@ class DashboardPage extends Component<DashboardPageProps> {
     return loaded ? (
       <React.Fragment>
         <HeaderComponent currentUser={currentUser} title="Dashboard" />
-        <main className="dashboard__container">
+        <main className="dashboard">
           <div className="dashboard__header">
             <img src={headerIcon} />
             <span>Client Name</span>

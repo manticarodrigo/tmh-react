@@ -33,10 +33,10 @@ class HeaderComponent extends Component<HeaderComponentProps, any> {
     const { currentUser, location, title } = this.props;
     const { menuOpen } = this.state;
 
-    const styleModifiers = location.pathname === appRoutes.ONBOARDING.path ? ' header__container--transparent' : '';
+    const styleModifiers = location.pathname === appRoutes.ONBOARDING.path ? ' header--transparent' : '';
 
     return (
-      <header className={`header__container${styleModifiers}`}>
+      <header className={`header${styleModifiers}`}>
         <div className="header__title">
           {location.pathname === appRoutes.DASHBOARD.pathname ? (
             <h1 className="u-margin-hug--vert"><img className="header__logo" src={logo} /></h1>

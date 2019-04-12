@@ -51,7 +51,7 @@ class App extends Component<AppProps> {
     };
 
     return (
-      <div className="app">
+      <React.Fragment>
         <Router>
           <ProtectedRoute
             isAuthenticated={!currentUser}
@@ -79,7 +79,7 @@ class App extends Component<AppProps> {
             exact
           />
         </Router>
-      </div>
+      </React.Fragment>
     );
   }
 }

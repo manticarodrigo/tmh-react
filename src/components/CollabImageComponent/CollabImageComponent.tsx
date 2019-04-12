@@ -1,12 +1,13 @@
 import React from 'react';
+import './CollabImageComponent.scss';
 
-import { Detail } from '../../../reducers/ProjectReducer';
+import { Detail } from '../../reducers/ProjectReducer';
 
-interface DetailsCollabImageComponentProps {
+interface CollabImageComponentProps {
   details: Detail[];
 }
 
-const DetailsCollabImageComponent = (props: DetailsCollabImageComponentProps) => (
+const CollabImageComponent = (props: CollabImageComponentProps) => (
   <div className="collab__image">
     <img className="collab__image__selected" src={props.details[0].image as string} />
     <div className="collab__image__thumbs">
@@ -19,4 +20,4 @@ const DetailsCollabImageComponent = (props: DetailsCollabImageComponentProps) =>
   </div>
 );
 
-export default React.memo(DetailsCollabImageComponent);
+export default React.memo(CollabImageComponent);
