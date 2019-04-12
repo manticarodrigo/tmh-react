@@ -3,6 +3,7 @@
 .collab {
 
   &__image {
+    @include fade-in(.5s);
     
     &__selected {
       border: 5px solid color(primary, base);

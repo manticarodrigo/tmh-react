@@ -3,6 +3,8 @@
 .collab {
 
   &__alert {
+    @include fade-in(.5s);
+
     box-shadow: $box-shadow;
     background-color: color(default, light);
     padding: 20px;
