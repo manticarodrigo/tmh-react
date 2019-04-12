@@ -17,7 +17,7 @@ import { Detail, DetailStatus, DetailType, Project } from '../../reducers/Projec
 import HeaderComponent from '../../components/HeaderComponent/HeaderComponent';
 import LoadingComponent from '../../components/LoadingComponent/LoadingComponent';
 
-import DetailsCollabAlertComponent from './DetailsCollabComponent/DetailsCollabComponent';
+import DetailsCollabComponent from './DetailsCollabComponent/DetailsCollabComponent';
 import DetailsCollabMenuComponent from './DetailsCollabMenuComponent/DetailsCollabMenuComponent';
 import DetailsInfoComponent from './DetailsInfoComponent/DetailsInfoComponent';
 
@@ -42,6 +42,7 @@ interface DetailsPageState {
   drawings: Detail[];
   inspirations: Detail[];
   furnitures: Detail[];
+  selectedIndex: number;
   view: string;
 }
 
@@ -51,6 +52,7 @@ class DetailsPage extends Component<DetailsPageProps, DetailsPageState> {
     drawings: [],
     inspirations: [],
     furnitures: [],
+    selectedIndex: 0,
     view: 'DRAWING',
   };
 
@@ -135,7 +137,14 @@ class DetailsPage extends Component<DetailsPageProps, DetailsPageState> {
 
   render() {
     const { currentUser } = this.props;
-    const { project, drawings, inspirations, furnitures, view } = this.state;
+    const {
+      project,
+      drawings,
+      inspirations,
+      furnitures,
+      selectedIndex,
+      view,
+    } = this.state;
 
     return project ? (
       <React.Fragment>
@@ -147,11 +156,12 @@ class DetailsPage extends Component<DetailsPageProps, DetailsPageState> {
               view={view}
               handleViewChanged={this.handleViewChanged}
             />
-            <DetailsCollabAlertComponent
+            <DetailsCollabComponent
               project={project}
               drawings={drawings}
               inspirations={inspirations}
               furnitures={furnitures}
+              selectedIndex={selectedIndex}
               view={view}
               handleFileChanged={this.handleFileChanged}
             />
