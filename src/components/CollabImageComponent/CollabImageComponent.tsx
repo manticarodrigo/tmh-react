@@ -8,6 +8,7 @@ interface CollabImageComponentProps {
   index: number;
   handleThumbClicked: (e: React.SyntheticEvent<HTMLElement>) => void;
   handleFileChanged?: (e: React.SyntheticEvent<HTMLInputElement>) => void;
+  handleDeleteClicked?: (e: React.SyntheticEvent<HTMLElement>) => void;
 }
 
 const CollabImageComponent = (props: CollabImageComponentProps) => {
@@ -26,20 +27,27 @@ const CollabImageComponent = (props: CollabImageComponentProps) => {
             className={`collab__image__thumb${props.index === index ? ' collab__image__thumb--selected' : ''}`}
             onClick={props.handleThumbClicked}
           >
-            <div
-              className="collab__image__thumb--delete"
-              // onClick={props.handleDeleteClicked}
-            />
+            {props.handleDeleteClicked && (
+              <div
+                className="collab__image__thumb--delete"
+                data-id={detail.id}
+                onClick={props.handleDeleteClicked}
+              />
+            )}
           </div>
         ))}
-          <div className="collab__image__thumb collab__image__thumb--upload" onClick={handleClickFileInput} />
-          <input
-            ref={(input: HTMLInputElement) => { fileInput = input; }}
-            type="file"
-            accept="image/*"
-            className="u-spaceless"
-            onChange={props.handleFileChanged}
-          />
+        {props.handleFileChanged && (
+          <React.Fragment>
+            <div className="collab__image__thumb collab__image__thumb--upload" onClick={handleClickFileInput} />
+            <input
+              ref={(input: HTMLInputElement) => { fileInput = input; }}
+              type="file"
+              accept="image/*"
+              className="u-spaceless"
+              onChange={props.handleFileChanged}
+            />
+          </React.Fragment>
+        )}
       </div>
     </div>
   );

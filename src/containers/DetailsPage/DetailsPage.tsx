@@ -11,7 +11,7 @@ import { appRoutes } from '../App/App';
 
 import { CurrentUser } from '../../reducers/UserReducer';
 
-import { addDetail, getDetails, getProject } from '../../actions/ProjectActions';
+import { addDetail, deleteDetail, getDetails, getProject } from '../../actions/ProjectActions';
 import { Detail, DetailStatus, DetailType, Project } from '../../reducers/ProjectReducer';
 
 import HeaderComponent from '../../components/HeaderComponent/HeaderComponent';
@@ -35,6 +35,7 @@ interface DetailsPageProps extends RouteComponentProps<MatchParams> {
     type: DetailType,
     status: DetailStatus,
   ) => Promise<Detail>;
+  deleteDetail: (id: string) => Promise<void>;
 }
 
 interface DetailsPageState {
@@ -140,6 +141,15 @@ class DetailsPage extends Component<DetailsPageProps, DetailsPageState> {
     this.setState({ selectedIndex: parseInt(index as string, 10) });
   }
 
+  handleDeleteClicked = async (e: React.SyntheticEvent<HTMLElement>) => {
+    const { id } = e.currentTarget.dataset;
+    await this.props.deleteDetail(id as string);
+
+    const details = await this.props.getDetails(this.state.project!.id!);
+    this.setState({ selectedIndex: 0 });
+    this.setDetails(details);
+  }
+
   render() {
     const { currentUser } = this.props;
     const {
@@ -170,6 +180,7 @@ class DetailsPage extends Component<DetailsPageProps, DetailsPageState> {
               view={view}
               handleFileChanged={this.handleFileChanged}
               handleThumbClicked={this.handleThumbClicked}
+              handleDeleteClicked={this.handleDeleteClicked}
             />
           </div>
           <DetailsInfoComponent project={project} />
@@ -192,6 +203,7 @@ const mapDispatchToProps = (dispatch: ThunkDispatch<AppState, void, Action>) => 
     type: DetailType,
     status: DetailStatus,
   ) => dispatch(addDetail(project, file, type, status)),
+  deleteDetail: (id: string) => dispatch(deleteDetail(id)),
 });
 
 export default withRouter(connect(mapStateToProps, mapDispatchToProps)(DetailsPage));

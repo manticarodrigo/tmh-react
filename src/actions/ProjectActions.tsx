@@ -151,11 +151,11 @@ export interface ProjectDeleteDetailAction {
 
 export const deleteDetail: ActionCreator<
   ThunkAction<Promise<any>, AppState, void, ProjectDeleteDetailAction>
-> = (detail) => (async (dispatch: Dispatch, getState) => {
+> = (id) => (async (dispatch: Dispatch, getState) => {
   try {
     const appState = getState();
     const response = await axios.delete(
-      `${process.env.REACT_APP_API_URL}/api/v1/details/${detail.id}/`,
+      `${process.env.REACT_APP_API_URL}/api/v1/details/${id}/`,
       { headers: { Authorization: `Token ${appState.userState.currentUser!.key}` } },
     );
 

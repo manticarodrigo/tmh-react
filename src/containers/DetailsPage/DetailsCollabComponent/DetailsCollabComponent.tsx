@@ -14,6 +14,7 @@ interface DetailsCollabComponentProps {
   view: string;
   handleFileChanged: (e: React.SyntheticEvent<HTMLInputElement>) => void;
   handleThumbClicked: (e: React.SyntheticEvent<HTMLElement>) => void;
+  handleDeleteClicked: (e: React.SyntheticEvent<HTMLElement>) => void;
 }
 
 const DetailsCollabComponent = (props: DetailsCollabComponentProps) => {
@@ -25,6 +26,7 @@ const DetailsCollabComponent = (props: DetailsCollabComponentProps) => {
           index={props.selectedIndex}
           handleFileChanged={props.handleFileChanged}
           handleThumbClicked={props.handleThumbClicked}
+          handleDeleteClicked={props.handleDeleteClicked}
         />
       ) : (
         <CollabAlertComponent handleFileChanged={props.handleFileChanged}>
@@ -41,6 +43,7 @@ const DetailsCollabComponent = (props: DetailsCollabComponentProps) => {
           index={props.selectedIndex}
           handleFileChanged={props.handleFileChanged}
           handleThumbClicked={props.handleThumbClicked}
+          handleDeleteClicked={props.handleDeleteClicked}
         />
       ) : (
         <CollabAlertComponent handleFileChanged={props.handleFileChanged}>
@@ -54,6 +57,7 @@ const DetailsCollabComponent = (props: DetailsCollabComponentProps) => {
           index={props.selectedIndex}
           handleFileChanged={props.handleFileChanged}
           handleThumbClicked={props.handleThumbClicked}
+          handleDeleteClicked={props.handleDeleteClicked}
         />
       ) : (
         <CollabAlertComponent handleFileChanged={props.handleFileChanged}>
