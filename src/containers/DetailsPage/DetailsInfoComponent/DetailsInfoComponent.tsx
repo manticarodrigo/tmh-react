@@ -12,7 +12,7 @@ const DetailsInfoComponent = (props: DetailsInfoComponentProps) => (
     <h3 className="h1">Project Details</h3>
     <div className="details__info__box">
       <div className="details__info__image">
-        <img src={require(`../../../assets/images/onboarding/rooms/${props.project.room}.png`)} />
+        <img src={require(`../../../assets/images/rooms/${props.project.room}.png`)} />
       </div>
       <div className="details__info__details">
         <p className="h2 u-margin-hug--vert"><b>{new Project(props.project).getReadableRoom()}</b></p>

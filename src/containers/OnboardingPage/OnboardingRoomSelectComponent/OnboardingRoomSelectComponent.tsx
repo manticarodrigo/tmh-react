@@ -48,7 +48,7 @@ const OnboardingRoomSelectComponent = (props: OnboardingStepsComponentProps) => 
           readOnly
         />
         <label className="onboarding__steps__rooms__item" htmlFor={room.type}>
-          <img src={require(`../../../assets/images/onboarding/rooms/${room.type}.png`)} />
+          <img src={require(`../../../assets/images/rooms/${room.type}.png`)} />
           <p className="u-margin-hug--bottom">{room.title}</p>
         </label>
       </div>

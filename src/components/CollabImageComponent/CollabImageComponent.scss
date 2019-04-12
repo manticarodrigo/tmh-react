@@ -11,27 +11,32 @@
     }
 
     &__thumbs {
-      display: table;
+      display: flex;
       position: relative;
+      flex-wrap: flex;
+      justify-content: center;
       margin: auto;
-      table-layout: fixed;
     }
 
     &__thumb {
-      display: table-cell;
+      display: inline-block;
       position: relative;
       margin: 10px;
+      background-color: color(default, light);
+      background-size: cover;
+      cursor: pointer;
+      width: 80px;
+      height: 80px;
+      overflow: hidden;
 
-      &--selected {
+      &--selected,
+      &--upload {
         border: 5px solid color(primary, base);
       }
 
-      img {
-        display: inline-block;
-        background-color: color(default, light);
-        width: 75px;
-        height: 75px;
-        object-fit: cover;
+      &--upload {
+        background: color(default, light) url('../../assets/images/utility/add.png') no-repeat center;
+        background-size: 40%;
       }
     }
   }

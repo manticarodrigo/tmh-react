@@ -1,7 +1,7 @@
 import React from 'react';
 import './OnboardingStepsComponent.scss';
 
-import leftArrow from '../../../assets/images/icons/left-arrow.png';
+import leftArrow from '../../../assets/images/utility/left-arrow.png';
 
 import { OnboardingForm } from '../OnboardingPage';
 

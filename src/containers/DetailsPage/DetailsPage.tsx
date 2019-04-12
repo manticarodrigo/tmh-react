@@ -135,6 +135,11 @@ class DetailsPage extends Component<DetailsPageProps, DetailsPageState> {
     }
   }
 
+  handleThumbClicked = (e: React.SyntheticEvent<HTMLElement>) => {
+    const { index } = e.currentTarget.dataset;
+    this.setState({ selectedIndex: parseInt(index as string, 10) });
+  }
+
   render() {
     const { currentUser } = this.props;
     const {
@@ -164,6 +169,7 @@ class DetailsPage extends Component<DetailsPageProps, DetailsPageState> {
               selectedIndex={selectedIndex}
               view={view}
               handleFileChanged={this.handleFileChanged}
+              handleThumbClicked={this.handleThumbClicked}
             />
           </div>
           <DetailsInfoComponent project={project} />

@@ -17,7 +17,7 @@ import { Project } from '../../reducers/ProjectReducer';
 import HeaderComponent from '../../components/HeaderComponent/HeaderComponent';
 import LoadingComponent from '../../components/LoadingComponent/LoadingComponent';
 
-import headerIcon from '../../assets/images/onboarding/rooms/BEDROOM.png';
+import headerIcon from '../../assets/images/rooms/BEDROOM.png';
 
 interface DashboardPageProps extends RouteComponentProps {
   currentUser?: CurrentUser;
@@ -63,7 +63,7 @@ class DashboardPage extends Component<DashboardPageProps> {
               <Link to={`${appRoutes.DETAILS.path}/${project.id}`} key={index} className="dashboard__projects__item">
                 <span>
                   <div className="dashboard__projects__item__image">
-                    <img src={require(`../../assets/images/onboarding/rooms/${project.room}.png`)} />
+                    <img src={require(`../../assets/images/rooms/${project.room}.png`)} />
                   </div>
                 </span>
                 <span>
