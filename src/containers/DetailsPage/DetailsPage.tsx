@@ -11,8 +11,15 @@ import { AppRoutes } from '../App/App';
 
 import { CurrentUser } from '../../reducers/UserReducer';
 
-import { addDetail, deleteDetail, getDetails, getLatestProject, getProject } from '../../actions/ProjectActions';
-import { Detail, DetailStatus, DetailType, Project } from '../../reducers/ProjectReducer';
+import {
+  addDetail,
+  deleteDetail,
+  getDetails,
+  getLatestProject,
+  getProject,
+  updateProject,
+} from '../../actions/ProjectActions';
+import { Detail, DetailStatus, DetailType, Project, ProjectStatus } from '../../reducers/ProjectReducer';
 
 import HeaderComponent from '../../components/HeaderComponent/HeaderComponent';
 import LoadingComponent from '../../components/LoadingComponent/LoadingComponent';
@@ -30,6 +37,7 @@ interface DetailsPageProps extends RouteComponentProps<MatchParams> {
   currentUser?: CurrentUser;
   getLatestProject: () => Promise<Project>;
   getProject: (id: string) => Promise<Project>;
+  updateProject: (project: Partial<Project>) => Promise<Project>;
   getDetails: (id: string) => Promise<Detail[]>;
   addDetail: (
     project: Project,
@@ -166,6 +174,10 @@ class DetailsPage extends Component<DetailsPageProps, DetailsPageState> {
     this.setDetails(details);
   }
 
+  handleSubmitClicked = async (project: Project) => {
+    await this.props.updateProject({ id: project.id, status: ProjectStatus.DESIGN });
+  }
+
   render() {
     const { currentUser } = this.props;
     const {
@@ -197,6 +209,7 @@ class DetailsPage extends Component<DetailsPageProps, DetailsPageState> {
               handleFileChanged={this.handleFileChanged}
               handleThumbClicked={this.handleThumbClicked}
               handleDeleteClicked={this.handleDeleteClicked}
+              handleSubmitClicked={this.handleSubmitClicked}
             />
           </div>
           <DetailsInfoComponent project={project} />
@@ -213,6 +226,7 @@ const mapStateToProps = (store: AppState) => ({
 const mapDispatchToProps = (dispatch: ThunkDispatch<AppState, void, Action>) => ({
   getLatestProject: () => dispatch(getLatestProject()),
   getProject: (id: string) => dispatch(getProject(id)),
+  updateProject: (project: Partial<Project>) => dispatch(updateProject(project)),
   getDetails: (id: string) => dispatch(getDetails(id)),
   addDetail: (
     project: Project,

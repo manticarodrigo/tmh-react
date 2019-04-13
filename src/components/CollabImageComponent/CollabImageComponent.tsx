@@ -1,9 +1,10 @@
-import React from 'react';
+import React, { ReactNode } from 'react';
 import './CollabImageComponent.scss';
 
 import { Detail } from '../../reducers/ProjectReducer';
 
 interface CollabImageComponentProps {
+  children?: ReactNode;
   details: Detail[];
   index: number;
   handleThumbClicked: (e: React.SyntheticEvent<HTMLElement>) => void;
@@ -16,11 +17,9 @@ const CollabImageComponent = (props: CollabImageComponentProps) => {
   const handleClickFileInput = () => fileInput.click();
 
   return (
-    <div
-      key={props.details[props.index].image as string}
-      className="collab__image"
-    >
+    <div className="collab__image">
       <img
+        key={props.details[props.index].image as string}
         src={props.details[props.index].image as string}
         className="collab__image__selected"
       />
@@ -58,6 +57,7 @@ const CollabImageComponent = (props: CollabImageComponentProps) => {
           </React.Fragment>
         )}
       </div>
+      {props.children}
     </div>
   );
 };

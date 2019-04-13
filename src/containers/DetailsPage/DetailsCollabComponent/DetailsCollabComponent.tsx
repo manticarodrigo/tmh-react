@@ -3,7 +3,7 @@ import { Route, Switch } from 'react-router-dom';
 
 import { AppRoutes } from '../../App/App';
 
-import { Detail, DetailType, Project } from '../../../reducers/ProjectReducer';
+import { Detail, DetailType, Project, ProjectStatus } from '../../../reducers/ProjectReducer';
 
 import CollabAlertComponent from '../../../components/CollabAlertComponent/CollabAlertComponent';
 import CollabImageComponent from '../../../components/CollabImageComponent/CollabImageComponent';
@@ -18,6 +18,7 @@ interface DetailsCollabComponentProps {
   handleFileChanged: (e: React.SyntheticEvent<HTMLInputElement>) => void;
   handleThumbClicked: (e: React.SyntheticEvent<HTMLElement>) => void;
   handleDeleteClicked: (e: React.SyntheticEvent<HTMLElement>) => void;
+  handleSubmitClicked: (project: Project) => void;
 }
 
 const DetailsCollabComponent = (props: DetailsCollabComponentProps) => {
@@ -39,6 +40,13 @@ const DetailsCollabComponent = (props: DetailsCollabComponentProps) => {
 };
 
 const DetailsClientCollabComponent = (props: DetailsCollabComponentProps) => {
+  const isReady: boolean = (
+    props.project.status === ProjectStatus.DETAILS &&
+    !!props.drawings.length &&
+    !!props.inspirations.length
+  );
+
+  const handleSubmit = () => props.handleSubmitClicked(props.project);
   switch (props.view) {
     case DetailType.DRAWING:
       return props.drawings.length ? (
@@ -48,7 +56,9 @@ const DetailsClientCollabComponent = (props: DetailsCollabComponentProps) => {
           handleFileChanged={props.handleFileChanged}
           handleThumbClicked={props.handleThumbClicked}
           handleDeleteClicked={props.handleDeleteClicked}
-        />
+        >
+          {isReady && (<button onClick={handleSubmit}>SUBMIT TO DESIGNER</button>)}
+        </CollabImageComponent>
       ) : (
         <CollabAlertComponent handleFileChanged={props.handleFileChanged}>
           <p className="h1 u-text-uppercase u-margin-hug--top">Welcome to your Design Studio!</p>
@@ -65,7 +75,9 @@ const DetailsClientCollabComponent = (props: DetailsCollabComponentProps) => {
           handleFileChanged={props.handleFileChanged}
           handleThumbClicked={props.handleThumbClicked}
           handleDeleteClicked={props.handleDeleteClicked}
-        />
+        >
+          {isReady && (<button onClick={handleSubmit}>SUBMIT TO DESIGNER</button>)}
+        </CollabImageComponent>
       ) : (
         <CollabAlertComponent handleFileChanged={props.handleFileChanged}>
           <p>Upload inspiration images that you would like your designer to reference for your space.</p>
@@ -79,7 +91,9 @@ const DetailsClientCollabComponent = (props: DetailsCollabComponentProps) => {
           handleFileChanged={props.handleFileChanged}
           handleThumbClicked={props.handleThumbClicked}
           handleDeleteClicked={props.handleDeleteClicked}
-        />
+        >
+          {isReady && (<button onClick={handleSubmit}>SUBMIT TO DESIGNER</button>)}
+        </CollabImageComponent>
       ) : (
         <CollabAlertComponent handleFileChanged={props.handleFileChanged}>
           <p>Upload pictures and note measurements of any existing furniture that you would like the designer to incorporate into their designs.</p>

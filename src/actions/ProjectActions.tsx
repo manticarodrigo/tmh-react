@@ -10,6 +10,7 @@ export enum ProjectActionTypes {
   GET_PROJECT = 'GET_PROJECT',
   GET_LATEST_PROJECT = 'GET_LATEST_PROJECT',
   CREATE_PROJECT = 'CREATE_PROJECT',
+  UPDATE_PROJECT = 'UPDATE_PROJECT',
   GET_DETAILS = 'GET_DETAILS',
   ADD_DETAIL = 'ADD_DETAIL',
   DELETE_DETAIL = 'DELETE_DETAIL',
@@ -119,6 +120,33 @@ export const createProject: ActionCreator<
   }
 });
 
+export interface ProjectUpdateProjectAction {
+  type: ProjectActionTypes.UPDATE_PROJECT;
+  project: Project;
+}
+
+export const updateProject: ActionCreator<
+  ThunkAction<Promise<any>, AppState, void, ProjectUpdateProjectAction>
+> = (project) => (async (dispatch: Dispatch, getState) => {
+  try {
+    const appState = getState();
+    const response = await axios.patch(
+      `${process.env.REACT_APP_API_URL}/api/v1/projects/${project.id}/`,
+      project,
+      { headers: { Authorization: `Token ${appState.userState.currentUser!.key}` } },
+    );
+
+    dispatch({
+      project: response.data,
+      type: ProjectActionTypes.UPDATE_PROJECT,
+    });
+
+    return response.data;
+  } catch (err) {
+    return err;
+  }
+});
+
 export interface ProjectGetDetailsAction {
   type: ProjectActionTypes.GET_DETAILS;
   details: Detail[];
@@ -201,6 +229,7 @@ export type ProjectActions = (
   ProjectGetProjectAction |
   ProjectGetLatestProjectAction |
   ProjectCreateProjectAction |
+  ProjectUpdateProjectAction |
   ProjectGetDetailsAction |
   ProjectAddDetailAction |
   ProjectDeleteDetailAction
