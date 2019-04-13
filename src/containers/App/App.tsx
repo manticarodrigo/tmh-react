@@ -7,7 +7,10 @@ import { AppState } from '../../store/Store';
 
 import { CurrentUser } from '../../reducers/UserReducer';
 
-import { ProtectedRoute, ProtectedRouteProps } from '../ProtectedRoute/ProtectedRoute';
+import {
+  ProtectedRoute,
+  ProtectedRouteProps,
+} from '../../components/ProtectedRoute/ProtectedRoute';
 
 import DashboardPage from '../DashboardPage/DashboardPage';
 import DetailsPage from '../DetailsPage/DetailsPage';
@@ -59,7 +62,7 @@ class App extends Component<AppProps> {
           <ProtectedRoute
             {...defaultProtectedRouteProps}
             component={DetailsPage}
-            path={`${AppRoutes.DETAILS}/:projectId?`}
+            path={`${AppRoutes.DETAILS}/:view?/:projectId?`}
           />
         </Router>
       </React.Fragment>

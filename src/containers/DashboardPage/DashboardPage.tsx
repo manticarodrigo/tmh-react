@@ -45,7 +45,18 @@ class DashboardPage extends Component<DashboardPageProps> {
     const { projects, currentUser } = this.props;
     const { loaded } = this.state;
 
-    return loaded ? (
+    const view = (user: User, project: Project) => {
+      switch (true) {
+        case project.designer && project.designer.id === user.id:
+          return 'designer';
+        case project.client.id === user.id:
+          return 'client';
+        default:
+          return 'public';
+      }
+    };
+
+    return currentUser && loaded ? (
       <React.Fragment>
         <HeaderComponent currentUser={currentUser} title="Dashboard" />
         <main className="dashboard">
@@ -60,7 +71,11 @@ class DashboardPage extends Component<DashboardPageProps> {
           </div>
           <div className="dashboard__projects">
             {projects!.map((project, index) => (
-              <Link to={`${AppRoutes.DETAILS}/${project.id}`} key={index} className="dashboard__projects__item">
+              <Link
+                key={index}
+                to={`${AppRoutes.DETAILS}/${view(currentUser.user, project)}/${project.id}`}
+                className="dashboard__projects__item"
+              >
                 <span>
                   <div className="dashboard__projects__item__image">
                     <img src={require(`../../assets/images/rooms/${project.room}.png`)} />

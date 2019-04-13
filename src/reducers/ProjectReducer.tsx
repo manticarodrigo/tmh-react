@@ -8,13 +8,13 @@ import {
 import { User } from './UserReducer';
 
 export class Project {
-  readonly id?: string;
-  readonly created_date?: string;
-  readonly modified_date?: string;
-  readonly start_date?: string;
-  readonly end_date?: string;
-  readonly client?: string | User;
-  readonly designer?: string | User;
+  readonly id!: string;
+  readonly created_date!: string;
+  readonly modified_date!: string;
+  readonly start_date!: string;
+  readonly end_date!: string;
+  readonly client!: User;
+  readonly designer?: User;
   readonly room!: string;
   status!: ProjectStatus;
   readonly shared_with!: string;

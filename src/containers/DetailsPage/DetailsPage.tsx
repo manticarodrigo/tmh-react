@@ -23,6 +23,7 @@ import DetailsInfoComponent from './DetailsInfoComponent/DetailsInfoComponent';
 
 interface MatchParams {
   projectId: string;
+  view: string;
 }
 
 interface DetailsPageProps extends RouteComponentProps<MatchParams> {
@@ -59,9 +60,11 @@ class DetailsPage extends Component<DetailsPageProps, DetailsPageState> {
   };
 
   async componentDidMount() {
-    const { params } = this.props.match;
+    const { currentUser, match } = this.props;
+    const { params } = match;
 
-    if (params.projectId) {
+    if (params.view && params.projectId) {
+      // TODO: Check designer permissions
       const promises = Promise.all([
         this.props.getProject(params.projectId),
         this.props.getDetails(params.projectId),
@@ -69,20 +72,23 @@ class DetailsPage extends Component<DetailsPageProps, DetailsPageState> {
 
       const data = await promises;
 
-      if (data) {
-        this.setState({ project: data[0] });
+      this.setState({ project: data[0] });
+      this.setDetails(data[1]);
 
-        return this.setDetails(data[1]);
-      }
+      return;
     }
 
     const project = await this.props.getLatestProject();
 
     if (project && project.id) {
-      this.props.history.replace(`${AppRoutes.DETAILS}/${project.id}`);
+      const isDesigner = project.designer && project.designer.id === currentUser!.user.id;
+      const view = isDesigner ? 'designer' : 'client';
+      this.props.history.replace(`${AppRoutes.DETAILS}/${view}/${project.id}`);
       const details = await this.props.getDetails(project.id);
       this.setState({ project });
-      return this.setDetails(details);
+      this.setDetails(details);
+
+      return;
     }
 
     this.props.history.push(AppRoutes.DASHBOARD);
