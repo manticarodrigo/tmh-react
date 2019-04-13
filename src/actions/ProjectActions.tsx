@@ -8,6 +8,7 @@ import { AppState } from '../store/Store';
 export enum ProjectActionTypes {
   GET_PROJECTS = 'GET_PROJECTS',
   GET_PROJECT = 'GET_PROJECT',
+  GET_LATEST_PROJECT = 'GET_LATEST_PROJECT',
   CREATE_PROJECT = 'CREATE_PROJECT',
   GET_DETAILS = 'GET_DETAILS',
   ADD_DETAIL = 'ADD_DETAIL',
@@ -56,6 +57,34 @@ export const getProject: ActionCreator<
     );
 
     dispatch({ type: ProjectActionTypes.GET_PROJECT });
+
+    return response.data;
+  } catch (err) {
+    return err;
+  }
+});
+
+export interface ProjectCreateProjectAction {
+  type: ProjectActionTypes.CREATE_PROJECT;
+  project: Project;
+}
+
+export interface ProjectGetLatestProjectAction {
+  type: ProjectActionTypes.GET_LATEST_PROJECT;
+  project: Project;
+}
+
+export const getLatestProject: ActionCreator<
+  ThunkAction<Promise<any>, AppState, void, ProjectGetLatestProjectAction>
+> = () => (async (dispatch: Dispatch, getState) => {
+  try {
+    const appState = getState();
+    const response = await axios.get(
+      `${process.env.REACT_APP_API_URL}/api/v1/projects/latest/`,
+      { headers: { Authorization: `Token ${appState.userState.currentUser!.key}` } },
+    );
+
+    dispatch({ type: ProjectActionTypes.GET_LATEST_PROJECT });
 
     return response.data;
   } catch (err) {
@@ -170,6 +199,7 @@ export const deleteDetail: ActionCreator<
 export type ProjectActions = (
   ProjectGetProjectsAction |
   ProjectGetProjectAction |
+  ProjectGetLatestProjectAction |
   ProjectCreateProjectAction |
   ProjectGetDetailsAction |
   ProjectAddDetailAction |

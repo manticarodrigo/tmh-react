@@ -11,7 +11,7 @@ import { AppRoutes } from '../App/App';
 
 import { CurrentUser } from '../../reducers/UserReducer';
 
-import { addDetail, deleteDetail, getDetails, getProject } from '../../actions/ProjectActions';
+import { addDetail, deleteDetail, getDetails, getLatestProject, getProject } from '../../actions/ProjectActions';
 import { Detail, DetailStatus, DetailType, Project } from '../../reducers/ProjectReducer';
 
 import HeaderComponent from '../../components/HeaderComponent/HeaderComponent';
@@ -22,11 +22,12 @@ import DetailsCollabMenuComponent from './DetailsCollabMenuComponent/DetailsColl
 import DetailsInfoComponent from './DetailsInfoComponent/DetailsInfoComponent';
 
 interface MatchParams {
-  id: string;
+  projectId: string;
 }
 
 interface DetailsPageProps extends RouteComponentProps<MatchParams> {
   currentUser?: CurrentUser;
+  getLatestProject: () => Promise<Project>;
   getProject: (id: string) => Promise<Project>;
   getDetails: (id: string) => Promise<Detail[]>;
   addDetail: (
@@ -60,10 +61,10 @@ class DetailsPage extends Component<DetailsPageProps, DetailsPageState> {
   async componentDidMount() {
     const { params } = this.props.match;
 
-    if (params.id) {
+    if (params.projectId) {
       const promises = Promise.all([
-        this.props.getProject(params.id),
-        this.props.getDetails(params.id),
+        this.props.getProject(params.projectId),
+        this.props.getDetails(params.projectId),
       ]);
 
       const data = await promises;
@@ -73,6 +74,15 @@ class DetailsPage extends Component<DetailsPageProps, DetailsPageState> {
 
         return this.setDetails(data[1]);
       }
+    }
+
+    const project = await this.props.getLatestProject();
+
+    if (project && project.id) {
+      this.props.history.replace(`${AppRoutes.DETAILS}/${project.id}`);
+      const details = await this.props.getDetails(project.id);
+      this.setState({ project });
+      return this.setDetails(details);
     }
 
     this.props.history.push(AppRoutes.DASHBOARD);
@@ -195,6 +205,7 @@ const mapStateToProps = (store: AppState) => ({
 });
 
 const mapDispatchToProps = (dispatch: ThunkDispatch<AppState, void, Action>) => ({
+  getLatestProject: () => dispatch(getLatestProject()),
   getProject: (id: string) => dispatch(getProject(id)),
   getDetails: (id: string) => dispatch(getDetails(id)),
   addDetail: (

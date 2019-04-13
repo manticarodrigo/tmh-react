@@ -59,8 +59,7 @@ class App extends Component<AppProps> {
           <ProtectedRoute
             {...defaultProtectedRouteProps}
             component={DetailsPage}
-            path={`${AppRoutes.DETAILS}/:id`}
-            exact
+            path={`${AppRoutes.DETAILS}/:projectId?`}
           />
         </Router>
       </React.Fragment>
