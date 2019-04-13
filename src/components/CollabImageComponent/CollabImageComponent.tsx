@@ -16,35 +16,44 @@ const CollabImageComponent = (props: CollabImageComponentProps) => {
   const handleClickFileInput = () => fileInput.click();
 
   return (
-    <div className="collab__image">
-      <img className="collab__image__selected" src={props.details[props.index].image as string} />
+    <div
+      key={props.details[props.index].image as string}
+      className="collab__image"
+    >
+      <img
+        src={props.details[props.index].image as string}
+        className="collab__image__selected"
+      />
       <div className="collab__image__thumbs">
         {props.details.map((detail, index) => (
           <div
             key={detail.id}
             data-index={index}
+            onClick={props.handleThumbClicked}
             style={{ backgroundImage: `url('${detail.image}')` }}
             className={`collab__image__thumb${props.index === index ? ' collab__image__thumb--selected' : ''}`}
-            onClick={props.handleThumbClicked}
           >
             {props.handleDeleteClicked && (
               <div
-                className="collab__image__thumb--delete"
                 data-id={detail.id}
                 onClick={props.handleDeleteClicked}
+                className="collab__image__thumb--delete"
               />
             )}
           </div>
         ))}
         {props.handleFileChanged && (
           <React.Fragment>
-            <div className="collab__image__thumb collab__image__thumb--upload" onClick={handleClickFileInput} />
+            <div
+              onClick={handleClickFileInput}
+              className="collab__image__thumb collab__image__thumb--upload"
+            />
             <input
               ref={(input: HTMLInputElement) => { fileInput = input; }}
               type="file"
               accept="image/*"
-              className="u-spaceless"
               onChange={props.handleFileChanged}
+              className="u-spaceless"
             />
           </React.Fragment>
         )}
