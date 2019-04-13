@@ -28,7 +28,7 @@ export const getProjects: ActionCreator<
     const appState = getState();
     const response = await axios.get(
       `${process.env.REACT_APP_API_URL}/api/v1/projects/me/`,
-      { headers: { Authorization: `Token ${appState.userState.currentUser!.key}` } },
+      { headers: { Authorization: `Token ${appState.userState.auth!.key}` } },
     );
 
     dispatch({
@@ -54,7 +54,7 @@ export const getProject: ActionCreator<
     const appState = getState();
     const response = await axios.get(
       `${process.env.REACT_APP_API_URL}/api/v1/projects/${id}/`,
-      { headers: { Authorization: `Token ${appState.userState.currentUser!.key}` } },
+      { headers: { Authorization: `Token ${appState.userState.auth!.key}` } },
     );
 
     dispatch({ type: ProjectActionTypes.GET_PROJECT });
@@ -82,7 +82,7 @@ export const getLatestProject: ActionCreator<
     const appState = getState();
     const response = await axios.get(
       `${process.env.REACT_APP_API_URL}/api/v1/projects/latest/`,
-      { headers: { Authorization: `Token ${appState.userState.currentUser!.key}` } },
+      { headers: { Authorization: `Token ${appState.userState.auth!.key}` } },
     );
 
     dispatch({ type: ProjectActionTypes.GET_LATEST_PROJECT });
@@ -106,7 +106,7 @@ export const createProject: ActionCreator<
     const response = await axios.post(
       `${process.env.REACT_APP_API_URL}/api/v1/projects/`,
       project,
-      { headers: { Authorization: `Token ${appState.userState.currentUser!.key}` } },
+      { headers: { Authorization: `Token ${appState.userState.auth!.key}` } },
     );
 
     dispatch({
@@ -133,7 +133,7 @@ export const updateProject: ActionCreator<
     const response = await axios.patch(
       `${process.env.REACT_APP_API_URL}/api/v1/projects/${project.id}/`,
       project,
-      { headers: { Authorization: `Token ${appState.userState.currentUser!.key}` } },
+      { headers: { Authorization: `Token ${appState.userState.auth!.key}` } },
     );
 
     dispatch({
@@ -159,7 +159,7 @@ export const getDetails: ActionCreator<
     const appState = getState();
     const response = await axios.get(
       `${process.env.REACT_APP_API_URL}/api/v1/details/project/?project=${id}`,
-      { headers: { Authorization: `Token ${appState.userState.currentUser!.key}` } },
+      { headers: { Authorization: `Token ${appState.userState.auth!.key}` } },
     );
 
     dispatch({ type: ProjectActionTypes.GET_DETAILS });
@@ -190,7 +190,7 @@ export const addDetail: ActionCreator<
     const response = await axios.post(
       `${process.env.REACT_APP_API_URL}/api/v1/details/`,
       formData,
-      { headers: { Authorization: `Token ${appState.userState.currentUser!.key}` } },
+      { headers: { Authorization: `Token ${appState.userState.auth!.key}` } },
     );
 
     dispatch({ type: ProjectActionTypes.ADD_DETAIL });
@@ -213,7 +213,7 @@ export const deleteDetail: ActionCreator<
     const appState = getState();
     const response = await axios.delete(
       `${process.env.REACT_APP_API_URL}/api/v1/details/${id}/`,
-      { headers: { Authorization: `Token ${appState.userState.currentUser!.key}` } },
+      { headers: { Authorization: `Token ${appState.userState.auth!.key}` } },
     );
 
     dispatch({ type: ProjectActionTypes.DELETE_DETAIL });

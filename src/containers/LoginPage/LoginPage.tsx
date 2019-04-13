@@ -11,7 +11,7 @@ import { User, UserState } from '../../reducers/UserReducer';
 import logo from '../../assets/logo.png';
 
 interface LoginPageProps {
-  currentUser?: User;
+  auth?: User;
   login: (username: string, password: string) => Promise<User>;
   register: (formData: RegisterForm) => Promise<User>;
 }

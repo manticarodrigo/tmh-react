@@ -5,7 +5,7 @@ import './HeaderComponent.scss';
 import { connect } from 'react-redux';
 import { Action, Dispatch } from 'redux';
 import { logout } from '../../actions/UserActions';
-import { CurrentUser, User } from '../../reducers/UserReducer';
+import { CurrentAuth, User } from '../../reducers/UserReducer';
 
 import { AppRoutes } from '../../containers/App/App';
 
@@ -13,7 +13,7 @@ import userPlaceholder from '../../assets/images/utility/user.png';
 import logo from '../../assets/logo.png';
 
 interface HeaderComponentProps extends RouteComponentProps {
-  currentUser?: CurrentUser;
+  auth?: CurrentAuth;
   title?: string;
   logout: () => void;
 }
@@ -30,7 +30,7 @@ class HeaderComponent extends Component<HeaderComponentProps, any> {
   handleLogout = () => this.props.logout();
 
   render() {
-    const { currentUser, location, title } = this.props;
+    const { auth, location, title } = this.props;
     const { menuOpen } = this.state;
 
     const styleModifiers = location.pathname === AppRoutes.ONBOARDING ? ' header--transparent' : '';
@@ -45,10 +45,10 @@ class HeaderComponent extends Component<HeaderComponentProps, any> {
           )}
           {title && (<h2 className="u-margin-hug--vert">{title}</h2>)}
         </div>
-        {currentUser && (
+        {auth && (
           <React.Fragment>
             <button className="header__avatar" onClick={this.handleMenuOpen}>
-              <img src={currentUser.user.image ? currentUser.user.image as string : userPlaceholder} />
+              <img src={auth.user.image ? auth.user.image as string : userPlaceholder} />
             </button>
             <span
               className={`header__overlay${menuOpen ? ' header__overlay--open' : ''}`}
@@ -57,11 +57,11 @@ class HeaderComponent extends Component<HeaderComponentProps, any> {
             <nav className={`header__menu${menuOpen ? ' header__menu--open' : ''}`}>
               <div className="header__menu__inner">
                 <div className="header__menu__profile">
-                  <img src={currentUser.user.image ? currentUser.user.image as string : userPlaceholder} />
+                  <img src={auth.user.image ? auth.user.image as string : userPlaceholder} />
                   <p>
-                    <span className="u-text-bold h3">{new User(currentUser.user).getFullName()}</span>
+                    <span className="u-text-bold h3">{new User(auth.user).getFullName()}</span>
                     <br />
-                    {new User(currentUser.user).email}
+                    {new User(auth.user).email}
                   </p>
                   <button className="u-text-uppercase">View Profile</button>
                 </div>

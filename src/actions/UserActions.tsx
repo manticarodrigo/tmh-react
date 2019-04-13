@@ -2,7 +2,7 @@ import axios from 'axios';
 import { ActionCreator, Dispatch } from 'redux';
 import { ThunkAction } from 'redux-thunk';
 
-import { CurrentUser, saveUserState, UserState } from '../reducers/UserReducer';
+import { CurrentAuth, saveUserState, UserState } from '../reducers/UserReducer';
 
 export enum UserActionTypes {
   LOGIN = 'LOGIN',
@@ -12,7 +12,7 @@ export enum UserActionTypes {
 
 export interface UserLoginAction {
   type: UserActionTypes.LOGIN;
-  currentUser: CurrentUser;
+  auth: CurrentAuth;
 }
 
 export const login: ActionCreator<
@@ -24,7 +24,7 @@ export const login: ActionCreator<
     saveUserState(response.data);
 
     dispatch({
-      currentUser: response.data,
+      auth: response.data,
       type: UserActionTypes.LOGIN,
     });
   } catch (err) {
@@ -34,7 +34,7 @@ export const login: ActionCreator<
 
 export interface UserRegisterAction {
   type: UserActionTypes.REGISTER;
-  currentUser: CurrentUser;
+  auth: CurrentAuth;
 }
 
 export const register: ActionCreator<
@@ -60,7 +60,7 @@ export const register: ActionCreator<
     saveUserState(response.data);
 
     dispatch({
-      currentUser: response.data,
+      auth: response.data,
       type: UserActionTypes.LOGIN,
     });
   } catch (err) {

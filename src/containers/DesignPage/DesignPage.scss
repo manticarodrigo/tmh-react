@@ -1,0 +1,17 @@
+@import '../../styles/global';
+
+.details {
+  background-color: color(secondary, base);
+  width: 100%;
+  min-height: 100vh;
+
+  .collab {
+
+    &__workzone {
+  
+      @media (max-width: $break-md) {
+        padding-bottom: 90px;
+      }
+    }
+  }
+}

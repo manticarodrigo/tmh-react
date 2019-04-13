@@ -5,7 +5,7 @@ import {
   UserActionTypes,
 } from '../actions/UserActions';
 
-export interface CurrentUser {
+export interface CurrentAuth {
   user: User;
   key: string;
 }
@@ -32,11 +32,11 @@ export class User {
 }
 
 export interface UserState {
-  readonly currentUser?: CurrentUser;
+  readonly auth?: CurrentAuth;
 }
 
 const defaultUserState: UserState = {
-  currentUser: undefined,
+  auth: undefined,
 };
 
 const loadUserState = () => {
@@ -51,9 +51,9 @@ const loadUserState = () => {
   }
 };
 
-export const saveUserState = (currentUser?: CurrentUser) => {
+export const saveUserState = (auth?: CurrentAuth) => {
   try {
-    const state = { currentUser };
+    const state = { auth };
     const serializedState = JSON.stringify(state);
     localStorage.setItem('initialUserState', serializedState);
   } catch {
@@ -69,19 +69,19 @@ export const UserReducer: Reducer<UserState, UserActions> = (
     case UserActionTypes.LOGIN: {
       return {
         ...state,
-        currentUser: action.currentUser,
+        auth: action.auth,
       };
     }
     case UserActionTypes.REGISTER: {
       return {
         ...state,
-        currentUser: action.currentUser,
+        auth: action.auth,
       };
     }
     case UserActionTypes.LOGOUT: {
       return {
         ...state,
-        currentUser: undefined,
+        auth: undefined,
       };
     }
     default:

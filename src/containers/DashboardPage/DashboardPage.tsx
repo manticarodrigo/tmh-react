@@ -9,7 +9,7 @@ import { ThunkDispatch } from 'redux-thunk';
 import { AppState } from '../../store/Store';
 import { AppRoutes } from '../App/App';
 
-import { CurrentUser, User } from '../../reducers/UserReducer';
+import { CurrentAuth, User } from '../../reducers/UserReducer';
 
 import { getProjects } from '../../actions/ProjectActions';
 import { Project } from '../../reducers/ProjectReducer';
@@ -20,7 +20,7 @@ import LoadingComponent from '../../components/LoadingComponent/LoadingComponent
 import headerIcon from '../../assets/images/rooms/BEDROOM.png';
 
 interface DashboardPageProps extends RouteComponentProps {
-  currentUser?: CurrentUser;
+  auth?: CurrentAuth;
   projects?: Project[];
   getProjects: () => Promise<Project[]>;
 }
@@ -42,7 +42,7 @@ class DashboardPage extends Component<DashboardPageProps> {
   }
 
   render() {
-    const { projects, currentUser } = this.props;
+    const { projects, auth } = this.props;
     const { loaded } = this.state;
 
     const view = (user: User, project: Project) => {
@@ -56,9 +56,9 @@ class DashboardPage extends Component<DashboardPageProps> {
       }
     };
 
-    return currentUser && loaded ? (
+    return auth && loaded ? (
       <React.Fragment>
-        <HeaderComponent currentUser={currentUser} title="Dashboard" />
+        <HeaderComponent auth={auth} title="Dashboard" />
         <main className="dashboard">
           <div className="dashboard__header">
             <img src={headerIcon} />
@@ -73,7 +73,7 @@ class DashboardPage extends Component<DashboardPageProps> {
             {projects!.map((project, index) => (
               <Link
                 key={index}
-                to={`${AppRoutes.DETAILS}/${view(currentUser.user, project)}/${project.id}`}
+                to={`${AppRoutes.DETAILS}/${view(auth.user, project)}/${project.id}`}
                 className="dashboard__projects__item"
               >
                 <span>
@@ -121,7 +121,7 @@ class DashboardPage extends Component<DashboardPageProps> {
 }
 
 const mapStateToProps = (store: AppState) => ({
-  currentUser: store.userState.currentUser,
+  auth: store.userState.auth,
   projects: store.projectState.projects,
 });
 

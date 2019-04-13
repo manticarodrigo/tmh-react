@@ -9,14 +9,14 @@ import { ThunkDispatch } from 'redux-thunk';
 
 import { createProject } from '../../actions/ProjectActions';
 import { Project } from '../../reducers/ProjectReducer';
-import { CurrentUser } from '../../reducers/UserReducer';
+import { CurrentAuth } from '../../reducers/UserReducer';
 import { AppState } from '../../store/Store';
 
 import HeaderComponent from '../../components/HeaderComponent/HeaderComponent';
 import OnboardingStepsComponent from './OnboardingStepsComponent/OnboardingStepsComponent';
 
 interface OnboardingPageProps extends RouteComponentProps {
-  currentUser?: CurrentUser;
+  auth?: CurrentAuth;
   createProject: (project: object) => Promise<Project>;
 }
 
@@ -169,7 +169,7 @@ class OnboardingPage extends Component<OnboardingPageProps, OnboardingPageState>
       limited_access: limited_access!,
       status: 'DETAILS',
       end_date: endDate.toISOString(),
-      client: this.props.currentUser!.user.id,
+      client: this.props.auth!.user.id,
     };
 
     await this.props.createProject(project);
@@ -178,12 +178,12 @@ class OnboardingPage extends Component<OnboardingPageProps, OnboardingPageState>
   }
 
   render() {
-    const { currentUser } = this.props;
+    const { auth } = this.props;
     const { step } = this.state;
 
     return (
       <React.Fragment>
-        <HeaderComponent currentUser={currentUser} />
+        <HeaderComponent auth={auth} />
         <main className="onboarding">
           <div className="onboarding__container">
             {step === 0 && (
@@ -221,7 +221,7 @@ class OnboardingPage extends Component<OnboardingPageProps, OnboardingPageState>
 }
 
 const mapStateToProps = (store: AppState) => ({
-  currentUser: store.userState.currentUser,
+  auth: store.userState.auth,
 });
 
 const mapDispatchToProps = (dispatch: ThunkDispatch<AppState, void, Action>) => ({

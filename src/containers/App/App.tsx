@@ -5,7 +5,7 @@ import './App.scss';
 
 import { AppState } from '../../store/Store';
 
-import { CurrentUser } from '../../reducers/UserReducer';
+import { CurrentAuth } from '../../reducers/UserReducer';
 
 import {
   ProtectedRoute,
@@ -18,7 +18,7 @@ import LoginPage from '../LoginPage/LoginPage';
 import OnboardingPage from '../OnboardingPage/OnboardingPage';
 
 interface AppProps {
-  currentUser?: CurrentUser;
+  auth?: CurrentAuth;
 }
 
 export enum AppRoutes {
@@ -30,10 +30,10 @@ export enum AppRoutes {
 
 class App extends Component<AppProps> {
   render() {
-    const { currentUser } = this.props;
+    const { auth } = this.props;
 
     const defaultProtectedRouteProps: ProtectedRouteProps = {
-      isAuthenticated: !!currentUser,
+      isAuthenticated: !!auth,
       authenticationPath: AppRoutes.LOGIN,
     };
 
@@ -41,7 +41,7 @@ class App extends Component<AppProps> {
       <React.Fragment>
         <Router>
           <ProtectedRoute
-            isAuthenticated={!currentUser}
+            isAuthenticated={!auth}
             authenticationPath={AppRoutes.DASHBOARD}
             component={LoginPage}
             path={AppRoutes.LOGIN}
@@ -71,7 +71,7 @@ class App extends Component<AppProps> {
 }
 
 const mapStateToProps = (store: AppState) => ({
-  currentUser: store.userState.currentUser,
+  auth: store.userState.auth,
 });
 
 export default connect(mapStateToProps)(App);
