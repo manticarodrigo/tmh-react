@@ -7,7 +7,7 @@ import { Action } from 'redux';
 import { ThunkDispatch } from 'redux-thunk';
 
 import { AppState } from '../../store/Store';
-import { appRoutes } from '../App/App';
+import { AppRoutes } from '../App/App';
 
 import { CurrentUser, User } from '../../reducers/UserReducer';
 
@@ -38,7 +38,7 @@ class DashboardPage extends Component<DashboardPageProps> {
       return this.setState({ loaded: true });
     }
 
-    history.push(appRoutes.ONBOARDING.pathname);
+    history.push(AppRoutes.ONBOARDING);
   }
 
   render() {
@@ -60,7 +60,7 @@ class DashboardPage extends Component<DashboardPageProps> {
           </div>
           <div className="dashboard__projects">
             {projects!.map((project, index) => (
-              <Link to={`${appRoutes.DETAILS.path}/${project.id}`} key={index} className="dashboard__projects__item">
+              <Link to={`${AppRoutes.DETAILS}/${project.id}`} key={index} className="dashboard__projects__item">
                 <span>
                   <div className="dashboard__projects__item__image">
                     <img src={require(`../../assets/images/rooms/${project.room}.png`)} />

@@ -18,28 +18,12 @@ interface AppProps {
   currentUser?: CurrentUser;
 }
 
-export const appRoutes = {
-  LOGIN: {
-    path: '/login',
-    pathname: '/login',
-    title: undefined,
-  },
-  ONBOARDING: {
-    path: '/onboarding',
-    pathname: '/onboarding',
-    title: undefined,
-  },
-  DASHBOARD: {
-    path: '/',
-    pathname: '/',
-    title: 'Dashboard',
-  },
-  DETAILS: {
-    path: '/details',
-    pathname: '/details/:id',
-    title: 'Details',
-  },
-};
+export enum AppRoutes {
+  LOGIN = '/login',
+  ONBOARDING = '/onboarding',
+  DASHBOARD = '/',
+  DETAILS = '/details',
+}
 
 class App extends Component<AppProps> {
   render() {
@@ -47,7 +31,7 @@ class App extends Component<AppProps> {
 
     const defaultProtectedRouteProps: ProtectedRouteProps = {
       isAuthenticated: !!currentUser,
-      authenticationPath: appRoutes.LOGIN.pathname,
+      authenticationPath: AppRoutes.LOGIN,
     };
 
     return (
@@ -55,27 +39,27 @@ class App extends Component<AppProps> {
         <Router>
           <ProtectedRoute
             isAuthenticated={!currentUser}
-            authenticationPath={appRoutes.DASHBOARD.pathname}
+            authenticationPath={AppRoutes.DASHBOARD}
             component={LoginPage}
-            path={appRoutes.LOGIN.pathname}
+            path={AppRoutes.LOGIN}
             exact
           />
           <ProtectedRoute
             {...defaultProtectedRouteProps}
             component={OnboardingPage}
-            path={appRoutes.ONBOARDING.pathname}
+            path={AppRoutes.ONBOARDING}
             exact
           />
           <ProtectedRoute
             {...defaultProtectedRouteProps}
             component={DashboardPage}
-            path={appRoutes.DASHBOARD.pathname}
+            path={AppRoutes.DASHBOARD}
             exact
           />
           <ProtectedRoute
             {...defaultProtectedRouteProps}
             component={DetailsPage}
-            path={appRoutes.DETAILS.pathname}
+            path={`${AppRoutes.DETAILS}/:id`}
             exact
           />
         </Router>

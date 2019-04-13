@@ -7,7 +7,7 @@ import { Action, Dispatch } from 'redux';
 import { logout } from '../../actions/UserActions';
 import { CurrentUser, User } from '../../reducers/UserReducer';
 
-import { appRoutes } from '../../containers/App/App';
+import { AppRoutes } from '../../containers/App/App';
 
 import userPlaceholder from '../../assets/images/utility/user.png';
 import logo from '../../assets/logo.png';
@@ -33,12 +33,12 @@ class HeaderComponent extends Component<HeaderComponentProps, any> {
     const { currentUser, location, title } = this.props;
     const { menuOpen } = this.state;
 
-    const styleModifiers = location.pathname === appRoutes.ONBOARDING.path ? ' header--transparent' : '';
+    const styleModifiers = location.pathname === AppRoutes.ONBOARDING ? ' header--transparent' : '';
 
     return (
       <header className={`header${styleModifiers}`}>
         <div className="header__title">
-          {location.pathname === appRoutes.DASHBOARD.pathname ? (
+          {location.pathname === AppRoutes.DASHBOARD ? (
             <h1 className="u-margin-hug--vert"><img className="header__logo" src={logo} /></h1>
           ) : (
             <Link to="/"><img className="header__logo" src={logo} /></Link>
@@ -67,9 +67,9 @@ class HeaderComponent extends Component<HeaderComponentProps, any> {
                 </div>
                 <hr />
                 <ul className="u-list-unstyled u-text-uppercase">
-                  <li><Link to={appRoutes.ONBOARDING.path} onClick={this.handleMenuClose}>New Project</Link></li>
-                  <li><Link to={appRoutes.DASHBOARD.path} onClick={this.handleMenuClose}>All Projects</Link></li>
-                  <li><Link to={appRoutes.LOGIN.path} onClick={this.handleLogout}>Logout</Link></li>
+                  <li><Link to={AppRoutes.ONBOARDING} onClick={this.handleMenuClose}>New Project</Link></li>
+                  <li><Link to={AppRoutes.DASHBOARD} onClick={this.handleMenuClose}>All Projects</Link></li>
+                  <li><Link to={AppRoutes.LOGIN} onClick={this.handleLogout}>Logout</Link></li>
                 </ul>
               </div>
             </nav>

@@ -7,7 +7,7 @@ import { Action } from 'redux';
 import { ThunkDispatch } from 'redux-thunk';
 
 import { AppState } from '../../store/Store';
-import { appRoutes } from '../App/App';
+import { AppRoutes } from '../App/App';
 
 import { CurrentUser } from '../../reducers/UserReducer';
 
@@ -75,7 +75,7 @@ class DetailsPage extends Component<DetailsPageProps, DetailsPageState> {
       }
     }
 
-    this.props.history.push(appRoutes.DASHBOARD.pathname);
+    this.props.history.push(AppRoutes.DASHBOARD);
   }
 
   setDetails(details: Detail[]) {
