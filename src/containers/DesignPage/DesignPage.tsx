@@ -115,8 +115,10 @@ class DesignPage extends Component<DesignPageProps, DesignPageState> {
       switch (type) {
         case DetailType.CONCEPT:
           await this.props.addDetail(project, file, DetailType.CONCEPT, DetailStatus.PENDING);
+          break;
         case DetailType.FLOOR_PLAN:
           await this.props.addDetail(project, file, DetailType.FLOOR_PLAN, DetailStatus.PENDING);
+          break;
       }
 
       const details = await this.props.getDetails(project.id);

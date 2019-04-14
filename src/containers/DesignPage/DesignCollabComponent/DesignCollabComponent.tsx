@@ -115,7 +115,7 @@ const DesignDesignerCollabComponent = (props: DesignCollabComponentProps) => {
   );
 
   switch (true) {
-    case !props.conceptboards:
+    case !props.conceptboards || !props.conceptboards.length:
       return (
         <CollabAlertComponent
           type={DetailType.CONCEPT}
@@ -136,7 +136,7 @@ const DesignDesignerCollabComponent = (props: DesignCollabComponentProps) => {
           handleThumbClicked={props.handleThumbClicked}
           handleDeleteClicked={props.handleDeleteClicked}
         >
-          {(props.conceptboards!.length < 2 || !hasSubmittedDetails(props.conceptboards!)) && (
+          {(!(props.conceptboards!.length < 2) && !hasSubmittedDetails(props.conceptboards!)) && (
             <button onClick={handleSubmitConceptboards} className="u-text-uppercase">
               Submit Concepts
             </button>
