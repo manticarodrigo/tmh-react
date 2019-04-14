@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
-import './DetailsPage.scss';
+import './DesignPage.scss';
 
 import { connect } from 'react-redux';
 import { Action } from 'redux';
@@ -24,16 +24,14 @@ import { Detail, DetailStatus, DetailType, Project, ProjectStatus } from '../../
 import HeaderComponent from '../../components/HeaderComponent/HeaderComponent';
 import LoadingComponent from '../../components/LoadingComponent/LoadingComponent';
 
-import DetailsCollabComponent from './DetailsCollabComponent/DetailsCollabComponent';
-import DetailsCollabMenuComponent from './DetailsCollabMenuComponent/DetailsCollabMenuComponent';
-import DetailsInfoComponent from './DetailsInfoComponent/DetailsInfoComponent';
+import DesignCollabComponent from './DesignCollabComponent/DesignCollabComponent';
 
 interface MatchParams {
   projectId: string;
   view: string;
 }
 
-interface DetailsPageProps extends RouteComponentProps<MatchParams> {
+interface DesignPageProps extends RouteComponentProps<MatchParams> {
   auth?: CurrentAuth;
   getLatestProject: () => Promise<Project>;
   getProject: (id: string) => Promise<Project>;
@@ -48,23 +46,19 @@ interface DetailsPageProps extends RouteComponentProps<MatchParams> {
   deleteDetail: (id: string) => Promise<void>;
 }
 
-interface DetailsPageState {
+interface DesignPageState {
   project?: Project;
-  drawings: Detail[];
-  inspirations: Detail[];
-  furnitures: Detail[];
+  floorplan?: Detail;
+  conceptboard?: Detail;
   selectedIndex: number;
-  view: string;
 }
 
-class DetailsPage extends Component<DetailsPageProps, DetailsPageState> {
-  state: DetailsPageState = {
+class DesignPage extends Component<DesignPageProps, DesignPageState> {
+  state: DesignPageState = {
     project: undefined,
-    drawings: [],
-    inspirations: [],
-    furnitures: [],
+    floorplan: undefined,
+    conceptboard: undefined,
     selectedIndex: 0,
-    view: 'DRAWING',
   };
 
   async componentDidMount() {
@@ -103,35 +97,9 @@ class DetailsPage extends Component<DetailsPageProps, DetailsPageState> {
   }
 
   setDetails(details: Detail[]) {
-    const drawings = [];
-    const inspirations = [];
-    const furnitures = [];
+    const floorplan = details.find((detail) => detail.type === DetailType.FLOOR_PLAN);
 
-    for (const detail of details) {
-      switch (detail.type) {
-        case DetailType.DRAWING:
-          drawings.push(detail);
-          break;
-        case DetailType.INSPIRATION:
-          inspirations.push(detail);
-          break;
-        case DetailType.FURNITURE:
-          furnitures.push(detail);
-          break;
-        default:
-          break;
-      }
-    }
-    return this.setState({
-      drawings,
-      inspirations,
-      furnitures,
-    });
-  }
-
-  handleViewChanged = (e: React.SyntheticEvent<HTMLButtonElement>) => {
-    const { view } = e.currentTarget.dataset;
-    this.setState({ view: view as string });
+    return this.setState({ floorplan });
   }
 
   handleFileChanged = async (e: React.SyntheticEvent<HTMLInputElement>) => {
@@ -141,19 +109,7 @@ class DetailsPage extends Component<DetailsPageProps, DetailsPageState> {
     if (files && project && project.id) {
       const file = files[0];
 
-      switch (this.state.view) {
-        case DetailType.DRAWING:
-          await this.props.addDetail(project, file, DetailType.DRAWING, DetailStatus.APPROVED);
-          break;
-        case DetailType.INSPIRATION:
-          await this.props.addDetail(project, file, DetailType.INSPIRATION, DetailStatus.APPROVED);
-          break;
-        case DetailType.FURNITURE:
-          await this.props.addDetail(project, file, DetailType.FURNITURE, DetailStatus.APPROVED);
-          break;
-        default:
-          break;
-      }
+      await this.props.addDetail(project, file, DetailType.FLOOR_PLAN, DetailStatus.APPROVED);
 
       const details = await this.props.getDetails(project.id);
       this.setDetails(details);
@@ -182,11 +138,8 @@ class DetailsPage extends Component<DetailsPageProps, DetailsPageState> {
     const { auth } = this.props;
     const {
       project,
-      drawings,
-      inspirations,
-      furnitures,
+      floorplan,
       selectedIndex,
-      view,
     } = this.state;
 
     return project ? (
@@ -194,25 +147,16 @@ class DetailsPage extends Component<DetailsPageProps, DetailsPageState> {
         <HeaderComponent auth={auth} title="Details" />
         <main className="details">
           <div className="collab__workzone">
-            <DetailsCollabMenuComponent
+            <DesignCollabComponent
               project={project}
-              view={view}
-              handleViewChanged={this.handleViewChanged}
-            />
-            <DetailsCollabComponent
-              project={project}
-              drawings={drawings}
-              inspirations={inspirations}
-              furnitures={furnitures}
+              floorplan={floorplan}
               selectedIndex={selectedIndex}
-              view={view}
               handleFileChanged={this.handleFileChanged}
               handleThumbClicked={this.handleThumbClicked}
               handleDeleteClicked={this.handleDeleteClicked}
               handleSubmitClicked={this.handleSubmitClicked}
             />
           </div>
-          <DetailsInfoComponent project={project} />
         </main>
       </React.Fragment>
     ) : <LoadingComponent />;
@@ -237,4 +181,4 @@ const mapDispatchToProps = (dispatch: ThunkDispatch<AppState, void, Action>) => 
   deleteDetail: (id: string) => dispatch(deleteDetail(id)),
 });
 
-export default withRouter(connect(mapStateToProps, mapDispatchToProps)(DetailsPage));
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(DesignPage));

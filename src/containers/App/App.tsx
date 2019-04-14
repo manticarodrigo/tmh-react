@@ -13,6 +13,7 @@ import {
 } from '../../components/ProtectedRoute/ProtectedRoute';
 
 import DashboardPage from '../DashboardPage/DashboardPage';
+import DesignPage from '../DesignPage/DesignPage';
 import DetailsPage from '../DetailsPage/DetailsPage';
 import LoginPage from '../LoginPage/LoginPage';
 import OnboardingPage from '../OnboardingPage/OnboardingPage';
@@ -26,6 +27,8 @@ export enum AppRoutes {
   ONBOARDING = '/onboarding',
   DASHBOARD = '/',
   DETAILS = '/details',
+  DESIGN = '/design',
+  FINAL_DELIVERY = '/final-delivery',
 }
 
 class App extends Component<AppProps> {
@@ -63,6 +66,11 @@ class App extends Component<AppProps> {
             {...defaultProtectedRouteProps}
             component={DetailsPage}
             path={`${AppRoutes.DETAILS}/:view?/:projectId?`}
+          />
+          <ProtectedRoute
+            {...defaultProtectedRouteProps}
+            component={DesignPage}
+            path={`${AppRoutes.DESIGN}/:view?/:projectId?`}
           />
         </Router>
       </React.Fragment>

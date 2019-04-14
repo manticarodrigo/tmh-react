@@ -12,7 +12,7 @@ import { AppRoutes } from '../App/App';
 import { CurrentAuth, User } from '../../reducers/UserReducer';
 
 import { getProjects } from '../../actions/ProjectActions';
-import { Project } from '../../reducers/ProjectReducer';
+import { Project, ProjectStatus } from '../../reducers/ProjectReducer';
 
 import HeaderComponent from '../../components/HeaderComponent/HeaderComponent';
 import LoadingComponent from '../../components/LoadingComponent/LoadingComponent';
@@ -56,6 +56,26 @@ class DashboardPage extends Component<DashboardPageProps> {
       }
     };
 
+    const linkTo = (user: User, project: Project) => {
+      switch (project.status) {
+        case ProjectStatus.DETAILS:
+          return `${AppRoutes.DETAILS}/${view(user, project)}/${project.id}`;
+        case ProjectStatus.DESIGN:
+        case ProjectStatus.CONCEPTS:
+        case ProjectStatus.FLOOR_PLAN:
+        case ProjectStatus.REQUEST_ALTERNATIVES:
+          return `${AppRoutes.DESIGN}/${view(user, project)}/${project.id}`;
+        case ProjectStatus.FINAL_DELIVERY:
+        case ProjectStatus.SHOPPING_CART:
+        case ProjectStatus.ESTIMATE_SHIPPING_AND_TAX:
+        case ProjectStatus.CHECKOUT:
+        case ProjectStatus.ARCHIVED:
+          return `${AppRoutes.FINAL_DELIVERY}/${view(user, project)}/${project.id}`;
+        default:
+          return '';
+      }
+    };
+
     return auth && loaded ? (
       <React.Fragment>
         <HeaderComponent auth={auth} title="Dashboard" />
@@ -73,7 +93,7 @@ class DashboardPage extends Component<DashboardPageProps> {
             {projects!.map((project, index) => (
               <Link
                 key={index}
-                to={`${AppRoutes.DETAILS}/${view(auth.user, project)}/${project.id}`}
+                to={linkTo(auth.user, project)}
                 className="dashboard__projects__item"
               >
                 <span>

@@ -175,7 +175,22 @@ class DetailsPage extends Component<DetailsPageProps, DetailsPageState> {
   }
 
   handleSubmitClicked = async (project: Project) => {
+    const { user } = this.props.auth!;
     await this.props.updateProject({ id: project.id, status: ProjectStatus.DESIGN });
+
+    let view = 'public';
+    switch (true) {
+      case project.designer && project.designer.id === user.id:
+        view = 'designer';
+        break;
+      case project.client.id === user.id:
+        view = 'client';
+        break;
+      default:
+        break;
+    }
+
+    this.props.history.push(`${AppRoutes.DESIGN}/${view}/${project.id}`);
   }
 
   render() {
