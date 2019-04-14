@@ -9,6 +9,7 @@ interface ModalComponentProps {
   role?: string;
   triggerText: string;
   ariaLabel: string;
+  centered?: boolean;
 }
 
 class ModalComponent extends Component<ModalComponentProps, any> {
@@ -30,7 +31,7 @@ class ModalComponent extends Component<ModalComponentProps, any> {
 
   render() {
     const { isOpen } = this.state;
-    const { ariaLabel, children, triggerText, role } = this.props;
+    const { ariaLabel, children, triggerText, role, centered } = this.props;
 
     const modalRef = (node: HTMLElement) => this.modalNode = node;
     const openButtonRef = (node: HTMLButtonElement) => this.openButtonNode = node;
@@ -51,6 +52,7 @@ class ModalComponent extends Component<ModalComponentProps, any> {
             content={children}
             onClose={this.onClose}
             role={role}
+            centered={centered}
           />
         }
       </Fragment>

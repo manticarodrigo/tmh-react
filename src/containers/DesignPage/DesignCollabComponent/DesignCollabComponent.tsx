@@ -8,6 +8,8 @@ import { Detail, DetailStatus, DetailType, Project } from '../../../reducers/Pro
 import CollabAlertComponent from '../../../components/CollabAlertComponent/CollabAlertComponent';
 import CollabImageComponent from '../../../components/CollabImageComponent/CollabImageComponent';
 
+import ModalComponent from '../../../components/ModalComponent/ModalComponent';
+
 interface DesignCollabComponentProps {
   project: Project;
   conceptboards?: Detail[];
@@ -74,9 +76,17 @@ const DesignClientCollabComponent = (props: DesignCollabComponentProps) => {
           index={props.selectedIndex}
           handleThumbClicked={props.handleThumbClicked}
         >
-          <button onClick={handleApproveConceptboards} className="u-text-uppercase">
-            Approve Concepts
-          </button>
+          <ModalComponent
+            triggerText="Approve Concepts"
+            ariaLabel="Approve Concepts Confirmation"
+            centered
+          >
+            <img src={require('../../../assets/images/utility/confirm.png')} />
+            <p>By selecting the confimation below, you are approving the conceptboards.</p>
+            <button onClick={handleApproveConceptboards} className="u-text-uppercase">
+              Approve &amp; Submit
+            </button>
+          </ModalComponent>
         </CollabImageComponent>
       );
     case !props.floorplan || !hasFinishedDetails([props.floorplan]):
@@ -93,9 +103,17 @@ const DesignClientCollabComponent = (props: DesignCollabComponentProps) => {
           index={props.selectedIndex}
           handleThumbClicked={props.handleThumbClicked}
         >
-          <button onClick={handleApproveFloorplan} className="u-text-uppercase">
-            Approve Floorplan
-          </button>
+          <ModalComponent
+            triggerText="Approve Floorplan"
+            ariaLabel="Approve Floorplan Confirmation"
+            centered
+          >
+            <img src={require('../../../assets/images/utility/confirm.png')} />
+            <p>By selecting the confimation below, you are approving the floorplan.</p>
+            <button onClick={handleApproveFloorplan} className="u-text-uppercase">
+              Approve &amp; Submit
+            </button>
+          </ModalComponent>
         </CollabImageComponent>
       );
     default:
@@ -137,9 +155,17 @@ const DesignDesignerCollabComponent = (props: DesignCollabComponentProps) => {
           handleDeleteClicked={props.handleDeleteClicked}
         >
           {(!(props.conceptboards!.length < 2) && !hasSubmittedDetails(props.conceptboards!)) && (
-            <button onClick={handleSubmitConceptboards} className="u-text-uppercase">
-              Submit Concepts
-            </button>
+            <ModalComponent
+              triggerText="Submit Concepts"
+              ariaLabel="Submit Concepts Confirmation"
+              centered
+            >
+              <img src={require('../../../assets/images/utility/confirm.png')} />
+              <p>By selecting the confimation below, the concept boards will be submitted to your client.</p>
+              <button onClick={handleSubmitConceptboards} className="u-text-uppercase">
+                Approve	&amp; Submit
+              </button>
+            </ModalComponent>
           )}
         </CollabImageComponent>
       );
@@ -165,9 +191,17 @@ const DesignDesignerCollabComponent = (props: DesignCollabComponentProps) => {
           handleDeleteClicked={props.handleDeleteClicked}
         >
           {!hasSubmittedDetails([props.floorplan!]) && (
-            <button onClick={handleSubmitFloorplan} className="u-text-uppercase">
-              Submit Floorplan
-            </button>
+            <ModalComponent
+              triggerText="Submit Floorplan"
+              ariaLabel="Submit Floorplan Confirmation"
+              centered
+            >
+              <img src={require('../../../assets/images/utility/confirm.png')} />
+              <p>By selecting the confimation below, the floorplan will be submitted to your client.</p>
+              <button onClick={handleSubmitFloorplan} className="u-text-uppercase">
+                Approve	&amp; Submit
+              </button>
+            </ModalComponent>
           )}
         </CollabImageComponent>
       );

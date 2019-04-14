@@ -10,6 +10,7 @@ interface ModalContentProps {
   modalRef: (node: HTMLElement) => void;
   onClose: () => void;
   role?: string;
+  centered?: boolean;
 }
 
 const ModalContent = ({
@@ -19,6 +20,7 @@ const ModalContent = ({
   modalRef,
   onClose,
   role = 'dialog',
+  centered,
 }: ModalContentProps) => {
   return ReactDOM.createPortal(
     (
@@ -33,7 +35,7 @@ const ModalContent = ({
           aria-modal="true"
           className="modal"
         >
-          <div className="modal__inner">
+          <div className={`modal__inner${centered ? ' modal__inner--centered' : ''}`}>
             <button className="modal__close" aria-labelledby="close-modal" onClick={onClose} ref={buttonRef}>
               <span id="close-modal" className="u-hide-visually">Close Modal</span>
             </button>
