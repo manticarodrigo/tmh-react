@@ -213,7 +213,7 @@ export const updateDetail: ActionCreator<
   try {
     const appState = getState();
     const response = await axios.patch(
-      `${process.env.REACT_APP_API_URL}/api/v1/details/${detail.id}`,
+      `${process.env.REACT_APP_API_URL}/api/v1/details/${detail.id}/`,
       detail,
       { headers: { Authorization: `Token ${appState.userState.auth!.key}` } },
     );
