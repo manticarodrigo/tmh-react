@@ -3,6 +3,7 @@ import './CollabAlertComponent.scss';
 
 interface CollabAlertComponentProps {
   children: ReactNode;
+  type?: string;
   handleFileChanged?: (e: React.SyntheticEvent<HTMLInputElement>) => void;
 }
 const CollabAlertComponent = (props: CollabAlertComponentProps) => {
@@ -13,6 +14,7 @@ const CollabAlertComponent = (props: CollabAlertComponentProps) => {
     <div className="collab__alert">
       <input
         ref={(input: HTMLInputElement) => { fileInput = input; }}
+        data-type={props.type}
         type="file"
         accept="image/*"
         className="u-spaceless"

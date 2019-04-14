@@ -5,6 +5,7 @@ import { Detail } from '../../reducers/ProjectReducer';
 
 interface CollabImageComponentProps {
   children?: ReactNode;
+  type?: string;
   details: Detail[];
   index: number;
   handleThumbClicked: (e: React.SyntheticEvent<HTMLElement>) => void;
@@ -49,6 +50,7 @@ const CollabImageComponent = (props: CollabImageComponentProps) => {
             />
             <input
               ref={(input: HTMLInputElement) => { fileInput = input; }}
+              data-type={props.type}
               type="file"
               accept="image/*"
               onChange={props.handleFileChanged}
