@@ -42,3 +42,19 @@
   width: 0;
   height: 0;
 }
+
+.u-hide-visually {
+  position: absolute;
+  margin: -1px;
+  border: 0;
+  padding: 0;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  white-space: nowrap;
+  clip: rect(0 0 0 0);
+}
+
+.u-lock-scroll {
+  overflow: hidden;
+}

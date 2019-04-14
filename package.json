@@ -27,6 +27,7 @@
     "@types/react-router": "^4.4.5",
     "@types/react-router-dom": "^4.3.1",
     "axios": "^0.18.0",
+    "focus-trap-react": "^6.0.0",
     "node-sass": "^4.11.0",
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
