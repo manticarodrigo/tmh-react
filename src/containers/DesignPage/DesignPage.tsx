@@ -17,9 +17,10 @@ import {
   getDetails,
   getLatestProject,
   getProject,
+  updateDetail,
   updateProject,
 } from '../../actions/ProjectActions';
-import { Detail, DetailStatus, DetailType, Project, ProjectStatus } from '../../reducers/ProjectReducer';
+import { Detail, DetailStatus, DetailType, Project } from '../../reducers/ProjectReducer';
 
 import HeaderComponent from '../../components/HeaderComponent/HeaderComponent';
 import LoadingComponent from '../../components/LoadingComponent/LoadingComponent';
@@ -27,8 +28,8 @@ import LoadingComponent from '../../components/LoadingComponent/LoadingComponent
 import DesignCollabComponent from './DesignCollabComponent/DesignCollabComponent';
 
 interface MatchParams {
-  projectId: string;
   view: string;
+  projectId: string;
 }
 
 interface DesignPageProps extends RouteComponentProps<MatchParams> {
@@ -43,21 +44,22 @@ interface DesignPageProps extends RouteComponentProps<MatchParams> {
     type: DetailType,
     status: DetailStatus,
   ) => Promise<Detail>;
+  updateDetail: (detail: Partial<Detail>) => Promise<void>;
   deleteDetail: (id: string) => Promise<void>;
 }
 
 interface DesignPageState {
   project?: Project;
+  conceptboards?: Detail[];
   floorplan?: Detail;
-  conceptboard?: Detail;
   selectedIndex: number;
 }
 
 class DesignPage extends Component<DesignPageProps, DesignPageState> {
   state: DesignPageState = {
     project: undefined,
+    conceptboards: undefined,
     floorplan: undefined,
-    conceptboard: undefined,
     selectedIndex: 0,
   };
 
@@ -98,18 +100,24 @@ class DesignPage extends Component<DesignPageProps, DesignPageState> {
 
   setDetails(details: Detail[]) {
     const floorplan = details.find((detail) => detail.type === DetailType.FLOOR_PLAN);
+    const conceptboards = details.filter((detail) => detail.type === DetailType.CONCEPT);
 
-    return this.setState({ floorplan });
+    return this.setState({ conceptboards, floorplan });
   }
 
   handleFileChanged = async (e: React.SyntheticEvent<HTMLInputElement>) => {
     const { files } = e.currentTarget;
+    const { type } = e.currentTarget.dataset;
     const { project } = this.state;
 
     if (files && project && project.id) {
       const file = files[0];
-
-      await this.props.addDetail(project, file, DetailType.FLOOR_PLAN, DetailStatus.APPROVED);
+      switch (type) {
+        case DetailType.CONCEPT:
+          await this.props.addDetail(project, file, DetailType.CONCEPT, DetailStatus.PENDING);
+        case DetailType.FLOOR_PLAN:
+          await this.props.addDetail(project, file, DetailType.FLOOR_PLAN, DetailStatus.PENDING);
+      }
 
       const details = await this.props.getDetails(project.id);
       this.setDetails(details);
@@ -130,14 +138,27 @@ class DesignPage extends Component<DesignPageProps, DesignPageState> {
     this.setDetails(details);
   }
 
-  handleSubmitClicked = async (project: Project) => {
-    await this.props.updateProject({ id: project.id, status: ProjectStatus.DESIGN });
+  handleSubmitDetailClicked = async (detail: Detail) => {
+    // TODO: Modal confirmation
+    await this.props.updateDetail({ id: detail.id, status: DetailStatus.SUBMITTED });
+
+    const details = await this.props.getDetails(this.state.project!.id);
+    this.setDetails(details);
+  }
+
+  handleApproveDetailClicked = async (detail: Detail) => {
+    // TODO: Modal confirmation
+    await this.props.updateDetail({ id: detail.id, status: DetailStatus.APPROVED });
+
+    const details = await this.props.getDetails(this.state.project!.id);
+    this.setDetails(details);
   }
 
   render() {
     const { auth } = this.props;
     const {
       project,
+      conceptboards,
       floorplan,
       selectedIndex,
     } = this.state;
@@ -149,12 +170,14 @@ class DesignPage extends Component<DesignPageProps, DesignPageState> {
           <div className="collab__workzone">
             <DesignCollabComponent
               project={project}
+              conceptboards={conceptboards}
               floorplan={floorplan}
               selectedIndex={selectedIndex}
               handleFileChanged={this.handleFileChanged}
               handleThumbClicked={this.handleThumbClicked}
               handleDeleteClicked={this.handleDeleteClicked}
-              handleSubmitClicked={this.handleSubmitClicked}
+              handleSubmitDetailClicked={this.handleSubmitDetailClicked}
+              handleApproveDetailClicked={this.handleApproveDetailClicked}
             />
           </div>
         </main>
@@ -178,6 +201,7 @@ const mapDispatchToProps = (dispatch: ThunkDispatch<AppState, void, Action>) => 
     type: DetailType,
     status: DetailStatus,
   ) => dispatch(addDetail(project, file, type, status)),
+  updateDetail: (detail: Partial<Detail>) => dispatch(updateDetail(detail)),
   deleteDetail: (id: string) => dispatch(deleteDetail(id)),
 });
 

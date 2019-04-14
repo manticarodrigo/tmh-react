@@ -21,7 +21,11 @@ const CollabAlertComponent = (props: CollabAlertComponentProps) => {
         onChange={props.handleFileChanged}
       />
       {props.children}
-      {props.handleFileChanged && (<button onClick={handleClickFileInput}>Upload</button>)}
+      {props.handleFileChanged && (
+        <button onClick={handleClickFileInput} className="u-text-uppercase">
+          Upload
+        </button>
+      )}
     </div>
   );
 };

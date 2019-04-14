@@ -29,8 +29,8 @@ import DetailsCollabMenuComponent from './DetailsCollabMenuComponent/DetailsColl
 import DetailsInfoComponent from './DetailsInfoComponent/DetailsInfoComponent';
 
 interface MatchParams {
-  projectId: string;
   view: string;
+  projectId: string;
 }
 
 interface DetailsPageProps extends RouteComponentProps<MatchParams> {
@@ -117,8 +117,6 @@ class DetailsPage extends Component<DetailsPageProps, DetailsPageState> {
           break;
         case DetailType.FURNITURE:
           furnitures.push(detail);
-          break;
-        default:
           break;
       }
     }

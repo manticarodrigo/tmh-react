@@ -47,6 +47,7 @@ const DetailsClientCollabComponent = (props: DetailsCollabComponentProps) => {
   );
 
   const handleSubmit = () => props.handleSubmitClicked(props.project);
+
   switch (props.view) {
     case DetailType.DRAWING:
       return props.drawings.length ? (
@@ -57,7 +58,14 @@ const DetailsClientCollabComponent = (props: DetailsCollabComponentProps) => {
           handleThumbClicked={props.handleThumbClicked}
           handleDeleteClicked={props.handleDeleteClicked}
         >
-          {isReady && (<button onClick={handleSubmit}>SUBMIT TO DESIGNER</button>)}
+          {isReady && (
+            <button
+              onClick={handleSubmit}
+              className="u-text-uppercase"
+            >
+              Submit to Designer
+            </button>
+          )}
         </CollabImageComponent>
       ) : (
         <CollabAlertComponent handleFileChanged={props.handleFileChanged}>
@@ -76,7 +84,14 @@ const DetailsClientCollabComponent = (props: DetailsCollabComponentProps) => {
           handleThumbClicked={props.handleThumbClicked}
           handleDeleteClicked={props.handleDeleteClicked}
         >
-          {isReady && (<button onClick={handleSubmit}>SUBMIT TO DESIGNER</button>)}
+          {isReady && (
+            <button
+              onClick={handleSubmit}
+              className="u-text-uppercase"
+            >
+              Submit to Designer
+            </button>
+          )}
         </CollabImageComponent>
       ) : (
         <CollabAlertComponent handleFileChanged={props.handleFileChanged}>
@@ -92,7 +107,14 @@ const DetailsClientCollabComponent = (props: DetailsCollabComponentProps) => {
           handleThumbClicked={props.handleThumbClicked}
           handleDeleteClicked={props.handleDeleteClicked}
         >
-          {isReady && (<button onClick={handleSubmit}>SUBMIT TO DESIGNER</button>)}
+          {isReady && (
+            <button
+              onClick={handleSubmit}
+              className="u-text-uppercase"
+            >
+              Submit to Designer
+            </button>
+          )}
         </CollabImageComponent>
       ) : (
         <CollabAlertComponent handleFileChanged={props.handleFileChanged}>
