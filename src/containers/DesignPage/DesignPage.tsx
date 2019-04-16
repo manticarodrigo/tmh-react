@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, ReactElement } from 'react';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
 import './DesignPage.scss';
 
@@ -22,6 +22,7 @@ import {
 } from '../../actions/ProjectActions';
 import { Detail, DetailStatus, DetailType, Project } from '../../reducers/ProjectReducer';
 
+import CollabWorkzoneComponent from '../../components/CollabWorkzoneComponent/CollabWorkzoneComponent';
 import HeaderComponent from '../../components/HeaderComponent/HeaderComponent';
 import LoadingComponent from '../../components/LoadingComponent/LoadingComponent';
 
@@ -50,6 +51,7 @@ interface DesignPageProps extends RouteComponentProps<MatchParams> {
 
 interface DesignPageState {
   project?: Project;
+  workzoneRef?: HTMLDivElement;
   conceptboards?: Detail[];
   floorplan?: Detail;
   selectedIndex: number;
@@ -58,6 +60,7 @@ interface DesignPageState {
 class DesignPage extends Component<DesignPageProps, DesignPageState> {
   state: DesignPageState = {
     project: undefined,
+    workzoneRef: undefined,
     conceptboards: undefined,
     floorplan: undefined,
     selectedIndex: 0,
@@ -97,6 +100,8 @@ class DesignPage extends Component<DesignPageProps, DesignPageState> {
 
     this.props.history.push(AppRoutes.DASHBOARD);
   }
+
+  handleWorkzoneRef = (workzoneRef: HTMLDivElement) => this.setState({ workzoneRef });
 
   setDetails(details: Detail[]) {
     const floorplan = details.find((detail) => detail.type === DetailType.FLOOR_PLAN);
@@ -141,7 +146,6 @@ class DesignPage extends Component<DesignPageProps, DesignPageState> {
   }
 
   handleSubmitDetailClicked = async (detail: Detail) => {
-    // TODO: Modal confirmation
     await this.props.updateDetail({ id: detail.id, status: DetailStatus.SUBMITTED });
 
     const details = await this.props.getDetails(this.state.project!.id);
@@ -149,7 +153,6 @@ class DesignPage extends Component<DesignPageProps, DesignPageState> {
   }
 
   handleApproveDetailClicked = async (detail: Detail) => {
-    // TODO: Modal confirmation
     await this.props.updateDetail({ id: detail.id, status: DetailStatus.APPROVED });
 
     const details = await this.props.getDetails(this.state.project!.id);
@@ -160,6 +163,7 @@ class DesignPage extends Component<DesignPageProps, DesignPageState> {
     const { auth } = this.props;
     const {
       project,
+      workzoneRef,
       conceptboards,
       floorplan,
       selectedIndex,
@@ -169,9 +173,10 @@ class DesignPage extends Component<DesignPageProps, DesignPageState> {
       <React.Fragment>
         <HeaderComponent auth={auth} title="Details" />
         <main className="details">
-          <div className="collab__workzone">
+          <CollabWorkzoneComponent ref={this.handleWorkzoneRef}>
             <DesignCollabComponent
               project={project}
+              workzoneRef={workzoneRef}
               conceptboards={conceptboards}
               floorplan={floorplan}
               selectedIndex={selectedIndex}
@@ -181,7 +186,7 @@ class DesignPage extends Component<DesignPageProps, DesignPageState> {
               handleSubmitDetailClicked={this.handleSubmitDetailClicked}
               handleApproveDetailClicked={this.handleApproveDetailClicked}
             />
-          </div>
+          </CollabWorkzoneComponent>
         </main>
       </React.Fragment>
     ) : <LoadingComponent />;

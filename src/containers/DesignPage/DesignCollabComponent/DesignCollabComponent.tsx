@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { ReactElement } from 'react';
 import { Route, Switch } from 'react-router-dom';
 
 import { AppRoutes } from '../../App/App';
@@ -13,6 +13,7 @@ import ModalComponent from '../../../components/ModalComponent/ModalComponent';
 
 interface DesignCollabComponentProps {
   project: Project;
+  workzoneRef?: HTMLDivElement;
   conceptboards?: Detail[];
   floorplan?: Detail;
   selectedIndex: number;
@@ -117,9 +118,9 @@ const DesignClientCollabComponent = (props: DesignCollabComponentProps) => {
           </ModalComponent>
         </CollabImageComponent>
       );
-    case !!props.floorplan:
+    case !!props.floorplan && !!props.workzoneRef:
         return (
-          <CollabMapComponent floorplan={props.floorplan!} />
+          <CollabMapComponent workzoneRef={props.workzoneRef!} floorplan={props.floorplan!} />
         );
     default:
       return <React.Fragment />;
