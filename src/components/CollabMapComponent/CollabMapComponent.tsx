@@ -7,18 +7,12 @@ import '../../../node_modules/leaflet/dist/leaflet.css';
 
 import { Detail } from '../../reducers/ProjectReducer';
 
-interface Position {
-  lat: number;
-  lng: number;
-}
-
 interface CollabMapComponentProps {
   workzoneRef: HTMLDivElement;
   floorplan: Detail;
 }
 
 interface CollabMapComponentState {
-  modelRef?: HTMLImageElement;
   mapRef?: Map;
   width: number;
   height: number;
@@ -27,14 +21,20 @@ interface CollabMapComponentState {
 
 export default class CollabMapComponent extends Component<CollabMapComponentProps, CollabMapComponentState> {
   state: CollabMapComponentState = {
-    modelRef: undefined,
     mapRef: undefined,
     width: 0,
     height: 0,
     bounds: new LatLngBounds([0, 0], [0, 0]),
   };
 
-  handleModelRef = (modelRef: HTMLImageElement) => this.setState({ modelRef });
+  componentDidMount = () => {
+    const { floorplan } = this.props;
+    if (floorplan) {
+      const img = new Image();
+      img.src = floorplan.image;
+      img.onload = () => this.setBounds(img.width, img.height);
+    }
+  }
 
   handleMapInit = (mapRef: Map) => {
     this.setState({ mapRef });
@@ -44,22 +44,17 @@ export default class CollabMapComponent extends Component<CollabMapComponentProp
     mapEl.on('dblclick', (event: LeafletEvent) => console.log('clicked map', (event as LeafletMouseEvent).latlng));
   }
 
-  calculateBounds = () => {
-    const { modelRef, mapRef } = this.state;
-    setTimeout(() => {
-      if (modelRef && mapRef) {
-        const mapEl = mapRef!.leafletElement;
+  setBounds = (width: number, height: number) => {
+    const { mapRef } = this.state;
 
-        // dimensions of the image
-        const width = modelRef.offsetWidth;
-        const height = modelRef.offsetHeight;
+    setTimeout(() => {
+      if (mapRef) {
+        const mapEl = mapRef!.leafletElement;
 
         // calculate the edges of the image, in coordinate space
         const southWest = mapEl.unproject([0, height], 0);
         const northEast = mapEl.unproject([width, 0], 0);
         const bounds = new LatLngBounds(southWest, northEast);
-
-        // mapEl.setMaxBounds(bounds);
 
         this.setState({ width, height, bounds });
       }
@@ -72,12 +67,6 @@ export default class CollabMapComponent extends Component<CollabMapComponentProp
 
     return (
       <Fragment>
-        <img
-          ref={this.handleModelRef}
-          src={floorplan.image}
-          onLoad={this.calculateBounds}
-          className="collab__map__model"
-        />
         <Map
           ref={this.handleMapInit}
           center={[0, 0]}
