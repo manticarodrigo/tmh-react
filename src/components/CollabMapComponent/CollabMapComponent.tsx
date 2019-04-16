@@ -1,7 +1,7 @@
 import React, { Component, Fragment } from 'react';
 import './CollabMapComponent.scss';
 
-import { CRS, LatLngBounds } from 'leaflet';
+import { CRS, LatLngBounds, LeafletEvent, LeafletMouseEvent } from 'leaflet';
 import { ImageOverlay, Map, Marker, Popup } from 'react-leaflet';
 import '../../../node_modules/leaflet/dist/leaflet.css';
 
@@ -36,7 +36,13 @@ export default class CollabMapComponent extends Component<CollabMapComponentProp
 
   handleModelRef = (modelRef: HTMLImageElement) => this.setState({ modelRef });
 
-  handleMapRef = (mapRef: Map) => this.setState({ mapRef });
+  handleMapInit = (mapRef: Map) => {
+    this.setState({ mapRef });
+
+    const mapEl = mapRef.leafletElement;
+
+    mapEl.on('dblclick', (event: LeafletEvent) => console.log('clicked map', (event as LeafletMouseEvent).latlng));
+  }
 
   calculateBounds = () => {
     const { modelRef, mapRef } = this.state;
@@ -73,14 +79,15 @@ export default class CollabMapComponent extends Component<CollabMapComponentProp
           className="collab__map__model"
         />
         <Map
-          ref={this.handleMapRef}
+          ref={this.handleMapInit}
           center={[0, 0]}
           zoom={0}
           maxZoom={0}
           attributionControl={false}
           zoomControl={true}
-          doubleClickZoom={true}
-          scrollWheelZoom={true}
+          doubleClickZoom={false}
+          scrollWheelZoom={false}
+          boxZoom={true}
           dragging={true}
           animate={true}
           easeLinearity={0.35}
