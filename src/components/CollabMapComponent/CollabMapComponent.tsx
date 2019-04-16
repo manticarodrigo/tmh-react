@@ -18,73 +18,87 @@ interface CollabMapComponentProps {
 }
 
 interface CollabMapComponentState {
+  modelRef?: HTMLImageElement;
   mapRef?: Map;
+  width: number;
+  height: number;
+  bounds: LatLngBounds;
 }
 
 export default class CollabMapComponent extends Component<CollabMapComponentProps, CollabMapComponentState> {
   state: CollabMapComponentState = {
+    modelRef: undefined,
     mapRef: undefined,
+    width: 0,
+    height: 0,
+    bounds: new LatLngBounds([0, 0], [0, 0]),
   };
+
+  handleModelRef = (modelRef: HTMLImageElement) => this.setState({ modelRef });
 
   handleMapRef = (mapRef: Map) => this.setState({ mapRef });
 
   calculateBounds = () => {
-    const { workzoneRef } = this.props;
-    const { mapRef } = this.state;
+    const { modelRef, mapRef } = this.state;
+    setTimeout(() => {
+      if (modelRef && mapRef) {
+        const mapEl = mapRef!.leafletElement;
 
-    // dimensions of the image
-    const width = workzoneRef.offsetWidth - 20;
-    const height = workzoneRef.offsetHeight - 20;
-    let bounds = new LatLngBounds([[0, 0], [0, 0]]);
+        // dimensions of the image
+        const width = modelRef.offsetWidth;
+        const height = modelRef.offsetHeight;
 
-    if (mapRef) {
-      const mapEl = mapRef!.leafletElement;
+        // calculate the edges of the image, in coordinate space
+        const southWest = mapEl.unproject([0, height], 0);
+        const northEast = mapEl.unproject([width, 0], 0);
+        const bounds = new LatLngBounds(southWest, northEast);
 
-      // calculate the edges of the image, in coordinate space
-      const southWest = mapEl.unproject([0, height], mapEl.getMaxZoom() - 1);
-      const northEast = mapEl.unproject([width, 0], mapEl.getMaxZoom() - 1);
-      bounds = new LatLngBounds(southWest, northEast);
+        // mapEl.setMaxBounds(bounds);
 
-      return { width, height, bounds };
-    }
-
-    return { width, height, bounds };
+        this.setState({ width, height, bounds });
+      }
+    });
   }
 
   render() {
-    const { workzoneRef, floorplan } = this.props;
+    const { floorplan } = this.props;
+    const { width, height, bounds } = this.state;
 
-    const { width, height, bounds } = this.calculateBounds();
-
-    return workzoneRef ? (
-      <Map
-        ref={this.handleMapRef}
-        bounds={bounds}
-        center={[0, 0]}
-        zoom={1}
-        minZoom={-2}
-        maxZoom={5}
-        attributionControl={false}
-        zoomControl={true}
-        doubleClickZoom={true}
-        scrollWheelZoom={true}
-        dragging={true}
-        animate={true}
-        easeLinearity={0.35}
-        className="collab__map"
-        crs={CRS.Simple}
-        style={{ width, height }}
-      >
-        <ImageOverlay
-          url={floorplan.image}
-          bounds={bounds}
+    return (
+      <Fragment>
+        <img
+          ref={this.handleModelRef}
+          src={floorplan.image}
+          onLoad={this.calculateBounds}
+          className="collab__map__model"
         />
-        <Marker position={[50, 10]}>
-          <Popup>
-            Popup for any custom information.
-          </Popup>
-        </Marker>
-      </Map>
-    ) : <Fragment />;
+        <Map
+          ref={this.handleMapRef}
+          center={[0, 0]}
+          zoom={0}
+          maxZoom={0}
+          attributionControl={false}
+          zoomControl={true}
+          doubleClickZoom={true}
+          scrollWheelZoom={true}
+          dragging={true}
+          animate={true}
+          easeLinearity={0.35}
+          className="collab__map"
+          crs={CRS.Simple}
+          style={{ width, height }}
+        >
+          <ImageOverlay
+            url={floorplan.image}
+            bounds={bounds}
+          />
+          <Marker position={[50, 10]}>
+            <Popup>
+              Popup for any custom information.
+            </Popup>
+          </Marker>
+        </Map>
+      </Fragment>
+    );
   }
 }
