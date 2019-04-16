@@ -1,7 +1,7 @@
 import React, { Component, Fragment } from 'react';
 import './CollabMapComponent.scss';
 
-import Leaflet, { LatLngBounds } from 'leaflet';
+import { CRS, LatLngBounds } from 'leaflet';
 import { ImageOverlay, Map, Marker, Popup } from 'react-leaflet';
 import '../../../node_modules/leaflet/dist/leaflet.css';
 
@@ -32,33 +32,39 @@ export default class CollabMapComponent extends Component<CollabMapComponentProp
     const { workzoneRef } = this.props;
     const { mapRef } = this.state;
 
+    // dimensions of the image
+    const width = workzoneRef.offsetWidth - 20;
+    const height = workzoneRef.offsetHeight - 20;
+    let bounds = new LatLngBounds([[0, 0], [0, 0]]);
+
     if (mapRef) {
       const mapEl = mapRef!.leafletElement;
 
-      // dimensions of the image
-      const w = workzoneRef.offsetWidth;
-      const h = workzoneRef.offsetHeight;
-
       // calculate the edges of the image, in coordinate space
-      const southWest = mapEl.unproject([0, h], mapEl.getMaxZoom() - 1);
-      const northEast = mapEl.unproject([w, 0], mapEl.getMaxZoom() - 1);
-      return new LatLngBounds(southWest, northEast);
+      const southWest = mapEl.unproject([0, height], mapEl.getMaxZoom() - 1);
+      const northEast = mapEl.unproject([width, 0], mapEl.getMaxZoom() - 1);
+      bounds = new LatLngBounds(southWest, northEast);
+
+      return { width, height, bounds };
     }
 
-    return new LatLngBounds([[0, 0], [0, 0]]);
+    return { width, height, bounds };
   }
 
   render() {
     const { workzoneRef, floorplan } = this.props;
-    const { mapRef } = this.state;
+
+    const { width, height, bounds } = this.calculateBounds();
 
     return workzoneRef ? (
       <Map
         ref={this.handleMapRef}
-        center={[50, 10]}
-        zoom={6}
-        maxZoom={10}
-        attributionControl={true}
+        bounds={bounds}
+        center={[0, 0]}
+        zoom={1}
+        minZoom={-2}
+        maxZoom={5}
+        attributionControl={false}
         zoomControl={true}
         doubleClickZoom={true}
         scrollWheelZoom={true}
@@ -66,12 +72,12 @@ export default class CollabMapComponent extends Component<CollabMapComponentProp
         animate={true}
         easeLinearity={0.35}
         className="collab__map"
-        style={{ width: workzoneRef.offsetWidth, height: workzoneRef.offsetHeight }}
-        bounds={this.calculateBounds()}
+        crs={CRS.Simple}
+        style={{ width, height }}
       >
         <ImageOverlay
           url={floorplan.image}
-          bounds={this.calculateBounds()}
+          bounds={bounds}
         />
         <Marker position={[50, 10]}>
           <Popup>
