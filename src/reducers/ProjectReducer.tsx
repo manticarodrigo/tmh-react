@@ -100,7 +100,7 @@ export interface Detail {
   readonly modified_date?: string;
   readonly project: string | Project;
   parent?: string | Detail;
-  image: string | File;
+  image: string;
   status: DetailStatus;
   type: DetailType;
 }

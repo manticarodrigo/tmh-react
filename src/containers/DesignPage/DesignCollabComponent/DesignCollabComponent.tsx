@@ -7,6 +7,7 @@ import { Detail, DetailStatus, DetailType, Project } from '../../../reducers/Pro
 
 import CollabAlertComponent from '../../../components/CollabAlertComponent/CollabAlertComponent';
 import CollabImageComponent from '../../../components/CollabImageComponent/CollabImageComponent';
+import CollabMapComponent from '../../../components/CollabMapComponent/CollabMapComponent';
 
 import ModalComponent from '../../../components/ModalComponent/ModalComponent';
 
@@ -116,6 +117,10 @@ const DesignClientCollabComponent = (props: DesignCollabComponentProps) => {
           </ModalComponent>
         </CollabImageComponent>
       );
+    case !!props.floorplan:
+        return (
+          <CollabMapComponent floorplan={props.floorplan!} />
+        );
     default:
       return <React.Fragment />;
   }
