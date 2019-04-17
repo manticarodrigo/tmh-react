@@ -1,7 +1,7 @@
 import React, { Component, Fragment } from 'react';
 import './CollabMapComponent.scss';
 
-import { CRS, LatLngBounds, LeafletEvent, LeafletMouseEvent } from 'leaflet';
+import { CRS, LatLngBounds, LeafletEvent, LeafletMouseEvent, LatLng } from 'leaflet';
 import { ImageOverlay, Map, Marker, Popup } from 'react-leaflet';
 import '../../../node_modules/leaflet/dist/leaflet.css';
 
@@ -14,18 +14,13 @@ interface CollabMapComponentProps {
 
 interface CollabMapComponentState {
   mapRef?: Map;
-  width: number;
-  height: number;
-  bounds: LatLngBounds;
+  width?: number;
+  height?: number;
+  bounds?: LatLngBounds;
 }
 
 export default class CollabMapComponent extends Component<CollabMapComponentProps, CollabMapComponentState> {
-  state: CollabMapComponentState = {
-    mapRef: undefined,
-    width: 0,
-    height: 0,
-    bounds: new LatLngBounds([0, 0], [0, 0]),
-  };
+  state: CollabMapComponentState = {};
 
   componentDidMount = () => {
     const { floorplan } = this.props;
@@ -36,12 +31,22 @@ export default class CollabMapComponent extends Component<CollabMapComponentProp
     }
   }
 
+  componentWillUnmount = () => {
+    const { mapRef } = this.state;
+
+    if (mapRef) {
+      const mapEl = mapRef.leafletElement;
+      mapEl.removeEventListener('dblclick');
+    }
+  }
+
   handleMapInit = (mapRef: Map) => {
     this.setState({ mapRef });
 
-    const mapEl = mapRef.leafletElement;
-
-    mapEl.on('dblclick', (event: LeafletEvent) => console.log('clicked map', (event as LeafletMouseEvent).latlng));
+    if (mapRef) {
+      const mapEl = mapRef.leafletElement;
+      mapEl.on('dblclick', (event: LeafletEvent) => console.log('clicked map', (event as LeafletMouseEvent).latlng));
+    }
   }
 
   setBounds = (width: number, height: number) => {
@@ -56,7 +61,7 @@ export default class CollabMapComponent extends Component<CollabMapComponentProp
         const northEast = mapEl.unproject([width, 0], 0);
         const bounds = new LatLngBounds(southWest, northEast);
 
-        this.setState({ width, height, bounds });
+        this.setState({ width, height, bounds }, () => mapEl.invalidateSize());
       }
     });
   }
@@ -71,7 +76,8 @@ export default class CollabMapComponent extends Component<CollabMapComponentProp
           ref={this.handleMapInit}
           center={[0, 0]}
           zoom={0}
-          maxZoom={0}
+          maxZoom={1}
+          minZoom={-1}
           attributionControl={false}
           zoomControl={true}
           doubleClickZoom={false}
@@ -80,14 +86,17 @@ export default class CollabMapComponent extends Component<CollabMapComponentProp
           dragging={true}
           animate={true}
           easeLinearity={0.35}
-          className="collab__map"
           crs={CRS.Simple}
-          style={{ width, height }}
+          maxBounds={bounds || [[0, 0], [0, 0]]}
+          style={{ width: width || 0, height: height || 0 }}
+          className="collab__map"
         >
-          <ImageOverlay
-            url={floorplan.image}
-            bounds={bounds}
-          />
+          {bounds && (
+            <ImageOverlay
+              url={floorplan.image}
+              bounds={bounds}
+            />
+          )}
           <Marker position={[50, 10]}>
             <Popup>
               Popup for any custom information.
