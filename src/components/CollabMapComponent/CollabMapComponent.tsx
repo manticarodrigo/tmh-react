@@ -95,13 +95,8 @@ export default class CollabMapComponent extends Component<CollabMapComponentProp
           maxZoom={1}
           minZoom={-1}
           attributionControl={false}
-          zoomControl={true}
           doubleClickZoom={false}
           scrollWheelZoom={false}
-          boxZoom={true}
-          dragging={true}
-          animate={true}
-          easeLinearity={0.35}
           crs={CRS.Simple}
           maxBounds={bounds || [[0, 0], [0, 0]]}
           style={{ width, height }}
