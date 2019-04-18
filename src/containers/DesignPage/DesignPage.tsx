@@ -51,7 +51,6 @@ interface DesignPageProps extends RouteComponentProps<MatchParams> {
 
 interface DesignPageState {
   project?: Project;
-  workzoneRef?: HTMLDivElement;
   conceptboards?: Detail[];
   floorplan?: Detail;
   selectedIndex: number;
@@ -60,7 +59,6 @@ interface DesignPageState {
 class DesignPage extends Component<DesignPageProps, DesignPageState> {
   state: DesignPageState = {
     project: undefined,
-    workzoneRef: undefined,
     conceptboards: undefined,
     floorplan: undefined,
     selectedIndex: 0,
@@ -100,8 +98,6 @@ class DesignPage extends Component<DesignPageProps, DesignPageState> {
 
     this.props.history.push(AppRoutes.DASHBOARD);
   }
-
-  handleWorkzoneRef = (workzoneRef: HTMLDivElement) => this.setState({ workzoneRef });
 
   setDetails(details: Detail[]) {
     const floorplan = details.find((detail) => detail.type === DetailType.FLOOR_PLAN);
@@ -163,7 +159,6 @@ class DesignPage extends Component<DesignPageProps, DesignPageState> {
     const { auth } = this.props;
     const {
       project,
-      workzoneRef,
       conceptboards,
       floorplan,
       selectedIndex,
@@ -173,10 +168,9 @@ class DesignPage extends Component<DesignPageProps, DesignPageState> {
       <React.Fragment>
         <HeaderComponent auth={auth} title="Details" />
         <main className="details">
-          <CollabWorkzoneComponent ref={this.handleWorkzoneRef}>
+          <CollabWorkzoneComponent>
             <DesignCollabComponent
               project={project}
-              workzoneRef={workzoneRef}
               conceptboards={conceptboards}
               floorplan={floorplan}
               selectedIndex={selectedIndex}

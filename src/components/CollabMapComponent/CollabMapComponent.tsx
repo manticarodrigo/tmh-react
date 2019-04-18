@@ -8,13 +8,12 @@ import '../../../node_modules/leaflet/dist/leaflet.css';
 import { Detail } from '../../reducers/ProjectReducer';
 
 interface CollabMapComponentProps {
-  workzoneRef: HTMLDivElement;
   floorplan: Detail;
 }
 
 interface CollabMapComponentState {
   mapRef?: Map;
-  imageHeight?: number;
+  height?: number;
   bounds?: LatLngBounds;
 }
 
@@ -23,6 +22,7 @@ export default class CollabMapComponent extends Component<CollabMapComponentProp
 
   componentDidMount = () => {
     const { floorplan } = this.props;
+
     if (floorplan) {
       const img = new Image();
       img.src = floorplan.image;
@@ -39,22 +39,6 @@ export default class CollabMapComponent extends Component<CollabMapComponentProp
     }
   }
 
-  getWorkzoneDimensions = () => {
-    const { workzoneRef } = this.props;
-    const { imageHeight } = this.state;
-
-    let workzoneWidth = 0;
-    let minHeight = 0;
-
-    const workzoneStyle = window.getComputedStyle(workzoneRef, null);
-    workzoneWidth = parseFloat(workzoneStyle.getPropertyValue('width'));
-    workzoneWidth -= parseFloat(workzoneStyle.paddingLeft!) + parseFloat(workzoneStyle.paddingRight!);
-
-    minHeight = Math.max(imageHeight || 0, workzoneRef.clientHeight);
-
-    return { width: workzoneWidth, height: minHeight };
-  }
-
   handleMapInit = (mapRef: Map) => {
     this.setState({ mapRef });
 
@@ -64,17 +48,13 @@ export default class CollabMapComponent extends Component<CollabMapComponentProp
     }
   }
 
-  setMapBounds = (width: number, height: number) => {
-    const bounds = new LatLngBounds(new LatLng(-height, 0), new LatLng(0, width));
-
-    this.setState({ imageHeight: height, bounds });
-  }
+  setMapBounds = (width: number, height: number) => (
+    this.setState({ height, bounds: new LatLngBounds(new LatLng(-height, 0), new LatLng(0, width)) })
+  )
 
   render() {
     const { floorplan } = this.props;
-    const { bounds } = this.state;
-
-    const { width, height } = this.getWorkzoneDimensions();
+    const { bounds, height } = this.state;
 
     return (
       <Fragment>
@@ -90,7 +70,7 @@ export default class CollabMapComponent extends Component<CollabMapComponentProp
             scrollWheelZoom={false}
             crs={CRS.Simple}
             maxBounds={bounds || [[0, 0], [0, 0]]}
-            style={{ width, height }}
+            style={{ minHeight: height }}
             className="collab__map"
           >
               <ImageOverlay

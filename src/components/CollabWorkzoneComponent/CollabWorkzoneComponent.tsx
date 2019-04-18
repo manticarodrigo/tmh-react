@@ -1,14 +1,12 @@
-import React, { ReactNode, Ref } from 'react';
+import React, { ReactNode } from 'react';
 import './CollabWorkzoneComponent.scss';
 
 interface CollabWorkzoneComponentProps {
   children?: ReactNode;
 }
 
-const CollabWorkzoneComponent = (props: CollabWorkzoneComponentProps, ref: Ref<HTMLDivElement>) => (
-    <div className="collab__workzone" ref={ref}>
-      {props.children}
-    </div>
+const CollabWorkzoneComponent = (props: CollabWorkzoneComponentProps) => (
+  <div className="collab__workzone">{props.children}</div>
 );
 
-export default React.forwardRef(CollabWorkzoneComponent);
+export default React.memo(CollabWorkzoneComponent);
