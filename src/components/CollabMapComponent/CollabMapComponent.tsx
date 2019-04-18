@@ -1,7 +1,7 @@
 import React, { Component, Fragment } from 'react';
 import './CollabMapComponent.scss';
 
-import { CRS, LatLngBounds, LeafletEvent, LeafletMouseEvent } from 'leaflet';
+import { CRS, DivIcon, LatLngBounds, LeafletEvent, LeafletMouseEvent } from 'leaflet';
 import { ImageOverlay, Map, Marker, Popup } from 'react-leaflet';
 import '../../../node_modules/leaflet/dist/leaflet.css';
 
@@ -108,7 +108,7 @@ export default class CollabMapComponent extends Component<CollabMapComponentProp
               bounds={bounds}
             />
           )}
-          <Marker position={[50, 10]}>
+          <Marker icon={markerDivIcon()} position={[-300, 400]}>
             <Popup>
               Popup for any custom information.
             </Popup>
@@ -118,3 +118,7 @@ export default class CollabMapComponent extends Component<CollabMapComponentProp
     );
   }
 }
+
+const markerDivIcon = (): DivIcon => new DivIcon({
+  html: `<div class="collab__map__marker">1</div>`,
+});
