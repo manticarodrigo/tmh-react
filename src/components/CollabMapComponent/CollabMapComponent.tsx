@@ -1,7 +1,7 @@
 import React, { Component, Fragment } from 'react';
 import './CollabMapComponent.scss';
 
-import { CRS, DivIcon, LatLngBounds, LeafletEvent, LeafletMouseEvent } from 'leaflet';
+import { CRS, DivIcon, LatLng, LatLngBounds, LeafletEvent, LeafletMouseEvent } from 'leaflet';
 import { ImageOverlay, Map, Marker, Popup } from 'react-leaflet';
 import '../../../node_modules/leaflet/dist/leaflet.css';
 
@@ -14,7 +14,6 @@ interface CollabMapComponentProps {
 
 interface CollabMapComponentState {
   mapRef?: Map;
-  imageWidth?: number;
   imageHeight?: number;
   bounds?: LatLngBounds;
 }
@@ -65,19 +64,10 @@ export default class CollabMapComponent extends Component<CollabMapComponentProp
     }
   }
 
-  setMapBounds = (imageWidth: number, imageHeight: number) => {
-    const { mapRef } = this.state;
+  setMapBounds = (width: number, height: number) => {
+    const bounds = new LatLngBounds(new LatLng(-height, 0), new LatLng(0, width));
 
-    if (mapRef) {
-      const mapEl = mapRef.leafletElement;
-
-      // calculate the edges of the image, in coordinate space
-      const southWest = mapEl.unproject([0, imageHeight], 0);
-      const northEast = mapEl.unproject([imageWidth, 0], 0);
-      const bounds = new LatLngBounds(southWest, northEast);
-
-      this.setState({ imageWidth, imageHeight, bounds }, () => mapEl.invalidateSize());
-    }
+    this.setState({ imageHeight: height, bounds });
   }
 
   render() {
@@ -88,32 +78,33 @@ export default class CollabMapComponent extends Component<CollabMapComponentProp
 
     return (
       <Fragment>
-        <Map
-          ref={this.handleMapInit}
-          center={[0, 0]}
-          zoom={0}
-          maxZoom={1}
-          minZoom={-1}
-          attributionControl={false}
-          doubleClickZoom={false}
-          scrollWheelZoom={false}
-          crs={CRS.Simple}
-          maxBounds={bounds || [[0, 0], [0, 0]]}
-          style={{ width, height }}
-          className="collab__map"
-        >
-          {bounds && (
-            <ImageOverlay
-              url={floorplan.image}
-              bounds={bounds}
-            />
-          )}
-          <Marker icon={markerDivIcon()} position={[-300, 400]}>
-            <Popup>
-              Popup for any custom information.
-            </Popup>
-          </Marker>
-        </Map>
+        {bounds && (
+          <Map
+            ref={this.handleMapInit}
+            center={[0, 0]}
+            zoom={0}
+            maxZoom={1}
+            minZoom={-1}
+            attributionControl={false}
+            doubleClickZoom={false}
+            scrollWheelZoom={false}
+            crs={CRS.Simple}
+            maxBounds={bounds || [[0, 0], [0, 0]]}
+            style={{ width, height }}
+            className="collab__map"
+          >
+              <ImageOverlay
+                url={floorplan.image}
+                bounds={bounds}
+              />
+            )}
+            <Marker icon={markerDivIcon()} position={[-300, 400]}>
+              <Popup>
+                Popup for any custom information.
+              </Popup>
+            </Marker>
+          </Map>
+        )}
       </Fragment>
     );
   }
