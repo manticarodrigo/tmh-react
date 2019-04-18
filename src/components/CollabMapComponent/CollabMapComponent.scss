@@ -17,6 +17,10 @@
         border: 0;
         box-shadow: $box-shadow;
       }
+
+      &.leaflet-control {
+        margin: 0;
+      }
     }
 
     .leaflet-popup-content-wrapper {
