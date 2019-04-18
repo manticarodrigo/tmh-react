@@ -19,6 +19,10 @@
       }
     }
 
+    .leaflet-popup-content-wrapper {
+      border-radius: 0;
+    }
+
     &__marker {
       border-radius: 50%;
       box-shadow: $box-shadow;
