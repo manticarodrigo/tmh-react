@@ -4,6 +4,7 @@
 
   &__map {
     
+    
     &.leaflet-container {
       background: transparent;
       overflow: visible;
@@ -21,6 +22,10 @@
       &.leaflet-control {
         margin: 0;
       }
+    }
+
+    .leaflet-image-layer {
+      box-shadow: $box-shadow-light;
     }
 
     .leaflet-popup-content-wrapper {
