@@ -9,7 +9,7 @@ import { ThunkDispatch } from 'redux-thunk';
 import { AppState } from '../../store/Store';
 import { AppRoutes } from '../App/App';
 
-import { CurrentAuth, User } from '../../reducers/UserReducer';
+import { CurrentAuth, User } from '../../reducers/AuthReducer';
 
 import { getProjects } from '../../actions/ProjectActions';
 import { Project, ProjectStatus } from '../../reducers/ProjectReducer';
@@ -141,7 +141,7 @@ class DashboardPage extends Component<DashboardPageProps> {
 }
 
 const mapStateToProps = (store: AppState) => ({
-  auth: store.userState.auth,
+  auth: store.authState.auth,
   projects: store.projectState.projects,
 });
 

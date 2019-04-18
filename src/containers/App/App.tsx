@@ -4,7 +4,7 @@ import { BrowserRouter as Router } from 'react-router-dom';
 
 import { AppState } from '../../store/Store';
 
-import { CurrentAuth } from '../../reducers/UserReducer';
+import { CurrentAuth } from '../../reducers/AuthReducer';
 
 import {
   ProtectedRoute,
@@ -78,7 +78,7 @@ class App extends Component<AppProps> {
 }
 
 const mapStateToProps = (store: AppState) => ({
-  auth: store.userState.auth,
+  auth: store.authState.auth,
 });
 
 export default connect(mapStateToProps)(App);

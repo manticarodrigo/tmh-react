@@ -5,7 +5,7 @@ import {
   ProjectActionTypes,
 } from '../actions/ProjectActions';
 
-import { User } from './UserReducer';
+import { User } from './AuthReducer';
 
 export class Project {
   readonly id!: string;
@@ -95,11 +95,10 @@ export enum ProjectStatus {
 }
 
 export interface Detail {
-  readonly id?: string;
-  readonly created_date?: string;
-  readonly modified_date?: string;
-  readonly project: string | Project;
-  parent?: string | Detail;
+  readonly id: string;
+  readonly created_date: string;
+  readonly modified_date: string;
+  readonly project: string;
   image: string;
   status: DetailStatus;
   type: DetailType;
@@ -118,6 +117,30 @@ export enum DetailType {
   CONCEPT = 'CONCEPT',
   FLOOR_PLAN = 'FLOOR_PLAN',
   FINAL_SNAPSHOT = 'FINAL_SNAPSHOT',
+}
+
+export interface Item {
+  readonly id: string;
+  readonly created_date: string;
+  readonly modified_date: string;
+  readonly project: string;
+  parent?: string;
+  image: string;
+  status: ItemStatus;
+  make: string;
+  type: string;
+  price: string;
+  inspiration: string;
+  lat: number;
+  lng: number;
+}
+
+export enum ItemStatus {
+  APPROVED = 'APPROVED',
+  PENDING = 'PENGIN',
+  SUBMITTED = 'SUBMITTED',
+  REQUEST_ALTERNATIVE = 'REQUEST_ALTERNATIVE',
+  ALTERNATE_READY = 'ALTERNATE_READY',
 }
 
 export interface ProjectState {

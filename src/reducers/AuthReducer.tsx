@@ -1,9 +1,14 @@
 import { Reducer } from 'redux';
 
+import { store } from '../store/Store';
+
 import {
-  UserActions,
-  UserActionTypes,
-} from '../actions/UserActions';
+  AuthActions,
+  AuthActionTypes,
+  logout,
+} from '../actions/AuthActions';
+
+import axios from 'axios';
 
 export interface CurrentAuth {
   user: User;
@@ -31,11 +36,11 @@ export class User {
   getFullName = (): string => `${this.first_name} ${this.last_name}`;
 }
 
-export interface UserState {
+export interface AuthState {
   readonly auth?: CurrentAuth;
 }
 
-const defaultUserState: UserState = {
+const defaultUserState: AuthState = {
   auth: undefined,
 };
 
@@ -45,7 +50,11 @@ const loadUserState = () => {
     if (serializedState === null) {
       return defaultUserState;
     }
-    return JSON.parse(serializedState);
+
+    const deserializedState = JSON.parse(serializedState);
+    setAuthHeaders(deserializedState.auth);
+
+    return deserializedState;
   } catch (err) {
     return defaultUserState;
   }
@@ -56,29 +65,47 @@ export const saveUserState = (auth?: CurrentAuth) => {
     const state = { auth };
     const serializedState = JSON.stringify(state);
     localStorage.setItem('initialUserState', serializedState);
+
+    setAuthHeaders(auth);
   } catch {
     // ignore write errors
   }
 };
 
-export const UserReducer: Reducer<UserState, UserActions> = (
+const setAuthHeaders = (auth?: CurrentAuth) => {
+  protectedApi.defaults.headers.common.Authorization = auth ? `Token ${auth.key}` : undefined;
+};
+
+export const protectedApi = axios.create({
+  baseURL: `${process.env.REACT_APP_API_URL}/api/v1/`,
+});
+
+protectedApi.interceptors.response.use(undefined, (err) => {
+  const error = err.response;
+  // if response is unauthorized
+  if (error.status === 403) {
+    store.dispatch(logout());
+  }
+});
+
+export const AuthReducer: Reducer<AuthState, AuthActions> = (
   state = loadUserState(),
   action,
 ) => {
   switch (action.type) {
-    case UserActionTypes.LOGIN: {
+    case AuthActionTypes.LOGIN: {
       return {
         ...state,
         auth: action.auth,
       };
     }
-    case UserActionTypes.REGISTER: {
+    case AuthActionTypes.REGISTER: {
       return {
         ...state,
         auth: action.auth,
       };
     }
-    case UserActionTypes.LOGOUT: {
+    case AuthActionTypes.LOGOUT: {
       return {
         ...state,
         auth: undefined,

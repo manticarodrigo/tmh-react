@@ -5,8 +5,8 @@ import { connect } from 'react-redux';
 import { Action } from 'redux';
 import { ThunkDispatch } from 'redux-thunk';
 
-import { login, register } from '../../actions/UserActions';
-import { User, UserState } from '../../reducers/UserReducer';
+import { login, register } from '../../actions/AuthActions';
+import { AuthState, User } from '../../reducers/AuthReducer';
 
 import logo from '../../assets/logo.png';
 
@@ -204,7 +204,7 @@ const TextInput = (props: TextInputProps) => {
   ) : <Fragment />;
 };
 
-const mapDispatchToProps = (dispatch: ThunkDispatch<UserState, void, Action>) => ({
+const mapDispatchToProps = (dispatch: ThunkDispatch<AuthState, void, Action>) => ({
   login: (username: string, password: string) => dispatch(login(username, password)),
   register: (formData: RegisterForm) => dispatch(register(formData)),
 });

@@ -1,4 +1,4 @@
-import React, { Component, ReactElement } from 'react';
+import React, { Component } from 'react';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
 import './DesignPage.scss';
 
@@ -9,7 +9,7 @@ import { ThunkDispatch } from 'redux-thunk';
 import { AppState } from '../../store/Store';
 import { AppRoutes } from '../App/App';
 
-import { CurrentAuth } from '../../reducers/UserReducer';
+import { CurrentAuth } from '../../reducers/AuthReducer';
 
 import {
   addDetail,
@@ -188,7 +188,7 @@ class DesignPage extends Component<DesignPageProps, DesignPageState> {
 }
 
 const mapStateToProps = (store: AppState) => ({
-  auth: store.userState.auth,
+  auth: store.authState.auth,
 });
 
 const mapDispatchToProps = (dispatch: ThunkDispatch<AppState, void, Action>) => ({

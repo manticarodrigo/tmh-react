@@ -7,10 +7,11 @@ import { connect } from 'react-redux';
 import { Action } from 'redux';
 import { ThunkDispatch } from 'redux-thunk';
 
+import { CurrentAuth } from '../../reducers/AuthReducer';
+import { AppState } from '../../store/Store';
+
 import { createProject } from '../../actions/ProjectActions';
 import { Project } from '../../reducers/ProjectReducer';
-import { CurrentAuth } from '../../reducers/UserReducer';
-import { AppState } from '../../store/Store';
 
 import HeaderComponent from '../../components/HeaderComponent/HeaderComponent';
 import OnboardingStepsComponent from './OnboardingStepsComponent/OnboardingStepsComponent';
@@ -221,7 +222,7 @@ class OnboardingPage extends Component<OnboardingPageProps, OnboardingPageState>
 }
 
 const mapStateToProps = (store: AppState) => ({
-  auth: store.userState.auth,
+  auth: store.authState.auth,
 });
 
 const mapDispatchToProps = (dispatch: ThunkDispatch<AppState, void, Action>) => ({

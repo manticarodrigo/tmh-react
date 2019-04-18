@@ -9,7 +9,7 @@ import { ThunkDispatch } from 'redux-thunk';
 import { AppState } from '../../store/Store';
 import { AppRoutes } from '../App/App';
 
-import { CurrentAuth } from '../../reducers/UserReducer';
+import { CurrentAuth } from '../../reducers/AuthReducer';
 
 import {
   addDetail,
@@ -233,7 +233,7 @@ class DetailsPage extends Component<DetailsPageProps, DetailsPageState> {
 }
 
 const mapStateToProps = (store: AppState) => ({
-  auth: store.userState.auth,
+  auth: store.authState.auth,
 });
 
 const mapDispatchToProps = (dispatch: ThunkDispatch<AppState, void, Action>) => ({

@@ -4,24 +4,21 @@ import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 import { Store } from 'redux';
 
-import configureStore, { AppState } from './store/Store';
+import { AppState, store } from './store/Store';
 
-interface Props {
+import App from './containers/App/App';
+import './styles/main.scss';
+
+interface AppProps {
   store: Store<AppState>;
 }
 
-import './styles/main.scss';
-import App from './containers/App/App';
-
-const Root: React.FunctionComponent<Props> = props => {
+const Root: React.FunctionComponent<AppProps> = (props) => {
   return (
     <Provider store={props.store}>
       <App />
     </Provider>
   );
 };
-
-// Generate the store
-const store = configureStore();
 
 ReactDOM.render(<Root store={store} />, document.getElementById('root') as HTMLElement);

@@ -4,8 +4,8 @@ import './HeaderComponent.scss';
 
 import { connect } from 'react-redux';
 import { Action, Dispatch } from 'redux';
-import { logout } from '../../actions/UserActions';
-import { CurrentAuth, User } from '../../reducers/UserReducer';
+import { logout } from '../../actions/AuthActions';
+import { CurrentAuth, User } from '../../reducers/AuthReducer';
 
 import { AppRoutes } from '../../containers/App/App';
 

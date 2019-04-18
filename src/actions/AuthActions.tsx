@@ -2,21 +2,21 @@ import axios from 'axios';
 import { ActionCreator, Dispatch } from 'redux';
 import { ThunkAction } from 'redux-thunk';
 
-import { CurrentAuth, saveUserState, UserState } from '../reducers/UserReducer';
+import { AuthState, CurrentAuth, saveUserState } from '../reducers/AuthReducer';
 
-export enum UserActionTypes {
+export enum AuthActionTypes {
   LOGIN = 'LOGIN',
   REGISTER = 'REGISTER',
   LOGOUT = 'LOGOUT',
 }
 
-export interface UserLoginAction {
-  type: UserActionTypes.LOGIN;
+export interface AuthLoginAction {
+  type: AuthActionTypes.LOGIN;
   auth: CurrentAuth;
 }
 
 export const login: ActionCreator<
-  ThunkAction<Promise<any>, UserState, void, UserLoginAction>
+  ThunkAction<Promise<any>, AuthState, void, AuthLoginAction>
 > = (username, password) => (async (dispatch: Dispatch) => {
   try {
     const response = await axios.post(`${process.env.REACT_APP_API_URL}/rest-auth/login/`, { username, password });
@@ -25,7 +25,7 @@ export const login: ActionCreator<
 
     dispatch({
       auth: response.data,
-      type: UserActionTypes.LOGIN,
+      type: AuthActionTypes.LOGIN,
     });
   } catch (err) {
     return err;
@@ -33,12 +33,12 @@ export const login: ActionCreator<
 });
 
 export interface UserRegisterAction {
-  type: UserActionTypes.REGISTER;
+  type: AuthActionTypes.REGISTER;
   auth: CurrentAuth;
 }
 
 export const register: ActionCreator<
-  ThunkAction<Promise<any>, UserState, void, UserRegisterAction>
+  ThunkAction<Promise<any>, AuthState, void, UserRegisterAction>
 > = ({
   username,
   first_name,
@@ -61,7 +61,7 @@ export const register: ActionCreator<
 
     dispatch({
       auth: response.data,
-      type: UserActionTypes.LOGIN,
+      type: AuthActionTypes.LOGIN,
     });
   } catch (err) {
     return err;
@@ -69,12 +69,12 @@ export const register: ActionCreator<
 });
 
 export interface UserLogoutAction {
-  type: UserActionTypes.LOGOUT;
+  type: AuthActionTypes.LOGOUT;
 }
 
 export const logout: ActionCreator<any> = () => ((dispatch: Dispatch) => {
   saveUserState(undefined);
-  dispatch({ type: UserActionTypes.LOGOUT });
+  dispatch({ type: AuthActionTypes.LOGOUT });
 });
 
-export type UserActions = UserLoginAction | UserRegisterAction | UserLogoutAction;
+export type AuthActions = AuthLoginAction | UserRegisterAction | UserLogoutAction;

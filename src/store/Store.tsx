@@ -1,11 +1,11 @@
-import { compose, applyMiddleware, combineReducers, createStore, Store } from 'redux';
+import { applyMiddleware, combineReducers, compose, createStore, Store } from 'redux';
 import thunk from 'redux-thunk';
 
 // Import reducers and state type
 import {
-  UserReducer,
-  UserState,
-} from '../reducers/UserReducer';
+  AuthReducer,
+  AuthState,
+} from '../reducers/AuthReducer';
 
 import {
   ProjectReducer,
@@ -14,19 +14,21 @@ import {
 
 // Create an interface for the application state
 export interface AppState {
-  userState: UserState;
+  authState: AuthState;
   projectState: ProjectState;
 }
 
 // Create the root reducer
 const rootReducer = combineReducers<AppState>({
-  userState: UserReducer,
+  authState: AuthReducer,
   projectState: ProjectReducer,
 });
 
 // Create a configure store function of type `AppState`
-export default function configureStore(initialState?: {}): Store<AppState, any> {
+function configureStore(initialState?: {}): Store<AppState, any> {
   const composeEnhancers = (window as any).__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
-  const store = createStore(rootReducer, initialState, composeEnhancers(applyMiddleware(thunk)));
-  return store;
+  return createStore(rootReducer, initialState, composeEnhancers(applyMiddleware(thunk)));
 }
+
+// Generate the store
+export const store = configureStore();
