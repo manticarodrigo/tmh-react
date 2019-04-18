@@ -8,5 +8,15 @@
       background: transparent;
       overflow: visible;
     }
+
+    .leaflet-control-zoom {
+      border-radius: 0;
+
+      &.leaflet-touch,
+      &.leaflet-bar {
+        border: 0;
+        box-shadow: $box-shadow;
+      }
+    }
   }
 }
