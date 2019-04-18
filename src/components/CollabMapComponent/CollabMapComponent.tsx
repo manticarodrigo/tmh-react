@@ -120,5 +120,7 @@ export default class CollabMapComponent extends Component<CollabMapComponentProp
 }
 
 const markerDivIcon = (): DivIcon => new DivIcon({
-  html: `<div class="collab__map__marker">1</div>`,
+  html: `1`,
+  iconSize: [30, 30],
+  className: 'collab__map__marker',
 });
