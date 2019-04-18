@@ -52,7 +52,7 @@
     left: 0;
     transition: opacity .5s;
     opacity: 0;
-    z-index: 998;
+    z-index: 1001;
     background-color: rgba(color(primary, base), .5);
     cursor: pointer;
     width: 100%;
@@ -71,7 +71,7 @@
     right: 20px;
     transition: opacity .25s, max-height .5s;
     opacity: 0;
-    z-index: 999;
+    z-index: 1002;
     box-shadow: $box-shadow;
     background-color: color(default, light);
     padding: 20px;
