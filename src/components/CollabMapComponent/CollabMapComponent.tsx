@@ -1,7 +1,7 @@
 import React, { Component, Fragment } from 'react';
 import './CollabMapComponent.scss';
 
-import { CRS, LatLngBounds, LeafletEvent, LeafletMouseEvent, LatLng } from 'leaflet';
+import { CRS, LatLngBounds, LeafletEvent, LeafletMouseEvent } from 'leaflet';
 import { ImageOverlay, Map, Marker, Popup } from 'react-leaflet';
 import '../../../node_modules/leaflet/dist/leaflet.css';
 
@@ -14,8 +14,8 @@ interface CollabMapComponentProps {
 
 interface CollabMapComponentState {
   mapRef?: Map;
-  width?: number;
-  height?: number;
+  imageWidth?: number;
+  imageHeight?: number;
   bounds?: LatLngBounds;
 }
 
@@ -27,7 +27,7 @@ export default class CollabMapComponent extends Component<CollabMapComponentProp
     if (floorplan) {
       const img = new Image();
       img.src = floorplan.image;
-      img.onload = () => this.setBounds(img.width, img.height);
+      img.onload = () => this.setMapBounds(img.width, img.height);
     }
   }
 
@@ -40,6 +40,22 @@ export default class CollabMapComponent extends Component<CollabMapComponentProp
     }
   }
 
+  getWorkzoneDimensions = () => {
+    const { workzoneRef } = this.props;
+    const { imageHeight } = this.state;
+
+    let workzoneWidth = 0;
+    let minHeight = 0;
+
+    const workzoneStyle = window.getComputedStyle(workzoneRef, null);
+    workzoneWidth = parseFloat(workzoneStyle.getPropertyValue('width'));
+    workzoneWidth -= parseFloat(workzoneStyle.paddingLeft!) + parseFloat(workzoneStyle.paddingRight!);
+
+    minHeight = Math.max(imageHeight || 0, workzoneRef.clientHeight);
+
+    return { width: workzoneWidth, height: minHeight };
+  }
+
   handleMapInit = (mapRef: Map) => {
     this.setState({ mapRef });
 
@@ -49,26 +65,26 @@ export default class CollabMapComponent extends Component<CollabMapComponentProp
     }
   }
 
-  setBounds = (width: number, height: number) => {
+  setMapBounds = (imageWidth: number, imageHeight: number) => {
     const { mapRef } = this.state;
 
-    setTimeout(() => {
-      if (mapRef) {
-        const mapEl = mapRef!.leafletElement;
+    if (mapRef) {
+      const mapEl = mapRef.leafletElement;
 
-        // calculate the edges of the image, in coordinate space
-        const southWest = mapEl.unproject([0, height], 0);
-        const northEast = mapEl.unproject([width, 0], 0);
-        const bounds = new LatLngBounds(southWest, northEast);
+      // calculate the edges of the image, in coordinate space
+      const southWest = mapEl.unproject([0, imageHeight], 0);
+      const northEast = mapEl.unproject([imageWidth, 0], 0);
+      const bounds = new LatLngBounds(southWest, northEast);
 
-        this.setState({ width, height, bounds }, () => mapEl.invalidateSize());
-      }
-    });
+      this.setState({ imageWidth, imageHeight, bounds }, () => mapEl.invalidateSize());
+    }
   }
 
   render() {
     const { floorplan } = this.props;
-    const { width, height, bounds } = this.state;
+    const { bounds } = this.state;
+
+    const { width, height } = this.getWorkzoneDimensions();
 
     return (
       <Fragment>
@@ -88,7 +104,7 @@ export default class CollabMapComponent extends Component<CollabMapComponentProp
           easeLinearity={0.35}
           crs={CRS.Simple}
           maxBounds={bounds || [[0, 0], [0, 0]]}
-          style={{ width: width || 0, height: height || 0 }}
+          style={{ width, height }}
           className="collab__map"
         >
           {bounds && (

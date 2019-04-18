@@ -3,6 +3,10 @@
 .collab {
 
   &__map {
-    overflow: visible !important;
+    
+    &.leaflet-container {
+      background: transparent;
+      overflow: visible;
+    }
   }
 }
