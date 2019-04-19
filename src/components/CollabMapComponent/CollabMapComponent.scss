@@ -8,6 +8,7 @@
     &.leaflet-container {
       background: transparent;
       overflow: visible;
+      font: unset;
     }
 
     .leaflet-control-zoom {
@@ -36,8 +37,6 @@
       border-radius: 50%;
       box-shadow: $box-shadow;
       background-color: color(status, neutral);
-      width: 30px;
-      height: 30px;
       text-align: center;
       line-height: 30px;
       color: color(default, light);

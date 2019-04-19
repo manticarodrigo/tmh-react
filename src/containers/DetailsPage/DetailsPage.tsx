@@ -21,6 +21,7 @@ import {
 } from '../../actions/ProjectActions';
 import { Detail, DetailStatus, DetailType, Project, ProjectStatus } from '../../reducers/ProjectReducer';
 
+import CollabWorkzoneComponent from '../../components/CollabWorkzoneComponent/CollabWorkzoneComponent';
 import HeaderComponent from '../../components/HeaderComponent/HeaderComponent';
 import LoadingComponent from '../../components/LoadingComponent/LoadingComponent';
 
@@ -206,7 +207,7 @@ class DetailsPage extends Component<DetailsPageProps, DetailsPageState> {
       <React.Fragment>
         <HeaderComponent auth={auth} title="Details" />
         <main className="details">
-          <div className="collab__workzone">
+          <CollabWorkzoneComponent>
             <DetailsCollabMenuComponent
               project={project}
               view={view}
@@ -224,7 +225,7 @@ class DetailsPage extends Component<DetailsPageProps, DetailsPageState> {
               handleDeleteClicked={this.handleDeleteClicked}
               handleSubmitClicked={this.handleSubmitClicked}
             />
-          </div>
+          </CollabWorkzoneComponent>
           <DetailsInfoComponent project={project} />
         </main>
       </React.Fragment>

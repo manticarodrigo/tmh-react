@@ -3,11 +3,8 @@ import './CollabMapComponent.scss';
 
 import {
   CRS,
-  DivIcon,
   LatLng,
   LatLngBounds,
-  LatLngExpression,
-  LeafletEvent,
   LeafletMouseEvent,
 } from 'leaflet';
 import '../../../node_modules/leaflet/dist/leaflet.css';
@@ -15,6 +12,8 @@ import '../../../node_modules/leaflet/dist/leaflet.css';
 import { ImageOverlay, Map, Marker, Popup } from 'react-leaflet';
 
 import { Detail, Item } from '../../reducers/ProjectReducer';
+
+import CollabNewItemMarker, { divIcon, ItemForm } from './CollabNewItemMarker';
 
 interface CollabMapComponentProps {
   floorplan: Detail;
@@ -25,11 +24,7 @@ interface CollabMapComponentState {
   height?: number;
   bounds?: LatLngBounds;
   items?: Item[];
-  itemForm?: ItemForm;
-}
-
-interface ItemForm {
-
+  newItemForm?: ItemForm;
 }
 
 export default class CollabMapComponent extends Component<CollabMapComponentProps, CollabMapComponentState> {
@@ -48,10 +43,12 @@ export default class CollabMapComponent extends Component<CollabMapComponentProp
   handleMapInit = (mapRef: Map) => this.setState({ mapRef });
 
   handleDblClick = (event: LeafletMouseEvent) => {
-    const ltlng = event.latlng;
-    const items = this.state.items || [];
+    const { latlng } = event;
+    const { lat, lng } = latlng;
 
-    // this.setState({ items: [...items, ]})
+    const newItemForm: ItemForm = { position: [lat, lng] };
+
+    this.setState({ newItemForm });
   }
 
   setMapBounds = (width: number, height: number) => (
@@ -63,7 +60,7 @@ export default class CollabMapComponent extends Component<CollabMapComponentProp
 
   render() {
     const { floorplan } = this.props;
-    const { height, bounds, items } = this.state;
+    const { height, bounds, items, newItemForm } = this.state;
 
     return (
       <Fragment>
@@ -87,9 +84,9 @@ export default class CollabMapComponent extends Component<CollabMapComponentProp
             {items ? items.map((item, index) => (
               <Marker
                 key={index}
-                icon={markerDivIcon(`${index + 1}`)}
-                position={[item.lat, item.lng]}
                 draggable
+                icon={divIcon(`${index + 1}`)}
+                position={[item.lat, item.lng]}
               >
                 <Popup>
                   Popup for any custom information.
@@ -98,7 +95,7 @@ export default class CollabMapComponent extends Component<CollabMapComponentProp
             )) : (
               <Marker
                 draggable
-                icon={markerDivIcon('*')}
+                icon={divIcon('?')}
                 position={[
                   (bounds.getSouthWest().lat / 2),
                   (bounds.getNorthEast().lng / 2),
@@ -109,15 +106,21 @@ export default class CollabMapComponent extends Component<CollabMapComponentProp
                 </Popup>
               </Marker>
             )}
+            {newItemForm && (
+              <CollabNewItemMarker
+                key={`${newItemForm.position[0]}-${newItemForm.position[1]}}`}
+                draggable
+                icon={divIcon('1')}
+                position={newItemForm.position}
+              >
+                <Popup>
+                  Popup for any custom information.
+                </Popup>
+              </CollabNewItemMarker>
+            )}
           </Map>
         )}
       </Fragment>
     );
   }
 }
-
-const markerDivIcon = (html: string): DivIcon => new DivIcon({
-  html,
-  iconSize: [30, 30],
-  className: 'collab__map__marker',
-});
