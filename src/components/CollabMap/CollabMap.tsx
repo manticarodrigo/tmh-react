@@ -14,8 +14,8 @@ import { ImageOverlay, Map, Marker, Popup } from 'react-leaflet';
 
 import { Detail, Item } from '../../reducers/ProjectReducer';
 
+import CollabFormMarker, { ItemForm } from './CollabFormMarker';
 import CollabInfoMarker from './CollabInfoMarker';
-import CollabNewItemMarker, { ItemForm } from './CollabNewItemMarker';
 
 interface CollabMapProps {
   floorplan: Detail;
@@ -80,8 +80,6 @@ export default class CollabMap extends Component<CollabMapProps, CollabMapState>
     const { floorplan } = this.props;
     const { height, bounds, items, newItemForm } = this.state;
 
-    const newItemFormKey = (form: ItemForm) => `${form.position[0]}-${form.position[1]}}`;
-
     return (
       <Fragment>
         {height && bounds && (
@@ -119,9 +117,8 @@ export default class CollabMap extends Component<CollabMapProps, CollabMapState>
               </Marker>
             )) : (<CollabInfoMarker bounds={bounds} />)}
             {newItemForm && (
-              <CollabNewItemMarker
+              <CollabFormMarker
                 draggable
-                key={newItemFormKey(newItemForm)}
                 items={items || []}
                 position={newItemForm.position}
                 handlePopupClosed={this.handlePopupClosed}

@@ -1,11 +1,11 @@
 import React, { useEffect } from 'react';
 import { Marker, Popup } from 'react-leaflet';
 
-import { DivIcon, marker } from 'leaflet';
+import { DivIcon } from 'leaflet';
 
 import { Item } from '../../reducers/ProjectReducer';
 
-interface CollabNewItemProps {
+interface CollabFormMarkerProps {
   draggable?: boolean;
   items: Item[];
   position: [number, number];
@@ -21,7 +21,7 @@ export interface ItemForm {
   file?: File;
 }
 
-const CollabNewItemMarker = (props: CollabNewItemProps) => {
+const CollabFormMarker = (props: CollabFormMarkerProps) => {
   const { draggable, position, items } = props;
 
   let markerRef: Marker;
@@ -78,4 +78,4 @@ const CollabNewItemMarker = (props: CollabNewItemProps) => {
   );
 };
 
-export default React.memo(CollabNewItemMarker);
+export default React.memo(CollabFormMarker);
