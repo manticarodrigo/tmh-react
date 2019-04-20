@@ -14,7 +14,7 @@ import { ImageOverlay, Map, Marker, Popup } from 'react-leaflet';
 
 import { Detail, Item } from '../../reducers/ProjectReducer';
 
-import CollabFormMarker, { ItemForm } from './CollabFormMarker';
+import CollabFormMarker, { CollabFormMarkerState } from './CollabFormMarker';
 import CollabInfoMarker from './CollabInfoMarker';
 
 interface CollabMapProps {
@@ -26,7 +26,7 @@ interface CollabMapState {
   height?: number;
   bounds?: LatLngBounds;
   items?: Item[];
-  newItemForm?: ItemForm;
+  newPoint?: [number, number];
 }
 
 export default class CollabMap extends Component<CollabMapProps, CollabMapState> {
@@ -48,8 +48,7 @@ export default class CollabMap extends Component<CollabMapProps, CollabMapState>
     const { latlng } = event;
     const { lat, lng } = latlng;
 
-    const newItemForm: ItemForm = { position: [lat, lng] };
-    this.setState({ newItemForm });
+    this.setState({ newPoint: [lat, lng] });
   }
 
   setMapBounds = (width: number, height: number) => (
@@ -79,9 +78,13 @@ export default class CollabMap extends Component<CollabMapProps, CollabMapState>
     map.setMaxBounds(bounds!);
   }
 
+  handleFormSubmitted = (form: CollabFormMarkerState) => {
+    console.log(form);
+  }
+
   render() {
     const { floorplan } = this.props;
-    const { height, bounds, items, newItemForm } = this.state;
+    const { height, bounds, items, newPoint } = this.state;
 
     return (
       <Fragment>
@@ -120,12 +123,11 @@ export default class CollabMap extends Component<CollabMapProps, CollabMapState>
                 </Popup>
               </Marker>
             )) : (<CollabInfoMarker bounds={bounds} />)}
-            {newItemForm && (
+            {newPoint && (
               <CollabFormMarker
-                draggable
                 items={items || []}
-                position={newItemForm.position}
-                handlePopupClosed={this.handlePopupClosed}
+                position={newPoint}
+                handleSubmit={this.handleFormSubmitted}
               />
             )}
           </Map>
