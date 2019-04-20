@@ -45,14 +45,8 @@ export default class CollabMap extends Component<CollabMapProps, CollabMapState>
   handleMapInit = (mapRef: Map) => this.setState({ mapRef });
 
   handleDblClick = (event: LeafletMouseEvent) => {
-    const { mapRef } = this.state;
     const { latlng } = event;
     const { lat, lng } = latlng;
-
-    const map = mapRef!.leafletElement!;
-    const paddedBounds = map.getBounds().pad(.5);
-    map.zoomControl.remove();
-    map.setMaxBounds(paddedBounds);
 
     const newItemForm: ItemForm = { position: [lat, lng] };
     this.setState({ newItemForm });
@@ -67,6 +61,15 @@ export default class CollabMap extends Component<CollabMapProps, CollabMapState>
       ),
     })
   )
+
+  handlePopupOpened = () => {
+    const { mapRef } = this.state;
+
+    const map = mapRef!.leafletElement!;
+    const paddedBounds = map.getBounds().pad(.5);
+    map.zoomControl.remove();
+    map.setMaxBounds(paddedBounds);
+  }
 
   handlePopupClosed = () => {
     const { bounds, mapRef } = this.state;
@@ -96,6 +99,7 @@ export default class CollabMap extends Component<CollabMapProps, CollabMapState>
             maxBounds={bounds}
             style={{ minHeight: height }}
             ondblclick={this.handleDblClick}
+            onpopupopen={this.handlePopupOpened}
             onpopupclose={this.handlePopupClosed}
             className="collab__map"
           >
