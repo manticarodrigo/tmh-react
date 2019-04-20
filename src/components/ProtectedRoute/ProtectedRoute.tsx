@@ -12,8 +12,8 @@ export class ProtectedRoute extends Route<ProtectedRouteProps> {
       const redirectPath: string = !isAuthenticated ? authenticationPath : '';
 
       if (redirectPath) {
-          const renderComponent = () => (<Redirect to={{ pathname: redirectPath }}/>);
-          return <Route {...this.props} component={renderComponent} render={undefined}/>;
+          const render = () => (<Redirect to={{ pathname: redirectPath }}/>);
+          return <Route {...this.props} component={render} render={undefined}/>;
       }
 
       return <Route {...this.props}/>;

@@ -6,14 +6,14 @@ import { Store } from 'redux';
 
 import { AppState, store } from './store/Store';
 
-import App from './containers/App/App';
+import App from './pages/App/App';
 import './styles/main.scss';
 
 interface AppProps {
   store: Store<AppState>;
 }
 
-const Root: React.FunctionComponent<AppProps> = (props) => {
+const Root = (props: AppProps) => {
   return (
     <Provider store={props.store}>
       <App />
