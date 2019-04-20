@@ -1,17 +1,14 @@
-import React, { Component, ReactNode } from 'react';
+import React, { useEffect } from 'react';
 import { Marker, Popup } from 'react-leaflet';
 
-import { DivIcon } from 'leaflet';
+import { DivIcon, marker } from 'leaflet';
+
+import { Item } from '../../reducers/ProjectReducer';
 
 interface CollabNewItemProps {
-  children: ReactNode;
   draggable?: boolean;
-  icon: DivIcon;
+  items: Item[];
   position: [number, number];
-}
-
-interface CollabNewItemState {
-  markerRef?: Marker;
 }
 
 export interface ItemForm {
@@ -23,38 +20,31 @@ export interface ItemForm {
   file?: File;
 }
 
-class CollabNewItemMarker extends Component<CollabNewItemProps, CollabNewItemState> {
-  state: CollabNewItemState = {};
+const CollabNewItemMarker = (props: CollabNewItemProps) => {
+  const { draggable, position, items } = props;
 
-  handleMarkerRef = (marker: Marker) => {
-    this.setState({ markerRef: marker }, () => {
-      const markerEl = marker.leafletElement;
-      markerEl.openPopup();
-    });
-  }
+  let markerRef: Marker;
 
-  render() {
-    const { draggable, position, icon } = this.props;
+  useEffect(() => {
+    markerRef.leafletElement!.openPopup();
+  });
 
-    return (
-      <Marker
-        draggable={draggable}
-        ref={this.handleMarkerRef}
-        position={position}
-        icon={icon}
-      >
-        <Popup>
-          Double click to set a new pin or drag to move around.
-        </Popup>
-      </Marker>
-    );
-  }
-}
-
-export const divIcon = (html: string): DivIcon => new DivIcon({
-  html,
-  iconSize: [30, 30],
-  className: 'collab__map__marker',
-});
+  return (
+    <Marker
+      draggable={draggable}
+      ref={(ref) => { markerRef = ref!; }}
+      position={position}
+      icon={new DivIcon({
+        html: `${items.length + 1}`,
+        iconSize: [30, 30],
+        className: 'collab__map__marker',
+      })}
+    >
+      <Popup>
+        Double click to set a new pin or drag to move around.
+      </Popup>
+    </Marker>
+  );
+};
 
 export default React.memo(CollabNewItemMarker);

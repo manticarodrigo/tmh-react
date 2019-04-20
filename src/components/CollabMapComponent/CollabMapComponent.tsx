@@ -3,6 +3,7 @@ import './CollabMapComponent.scss';
 
 import {
   CRS,
+  DivIcon,
   LatLng,
   LatLngBounds,
   LeafletMouseEvent,
@@ -13,7 +14,8 @@ import { ImageOverlay, Map, Marker, Popup } from 'react-leaflet';
 
 import { Detail, Item } from '../../reducers/ProjectReducer';
 
-import CollabNewItemMarker, { divIcon, ItemForm } from './CollabNewItemMarker';
+import CollabInfoMarker from './CollabInfoMarker';
+import CollabNewItemMarker, { ItemForm } from './CollabNewItemMarker';
 
 interface CollabMapComponentProps {
   floorplan: Detail;
@@ -54,13 +56,18 @@ export default class CollabMapComponent extends Component<CollabMapComponentProp
   setMapBounds = (width: number, height: number) => (
     this.setState({
       height,
-      bounds: new LatLngBounds(new LatLng(-height, 0), new LatLng(0, width)),
+      bounds: new LatLngBounds(
+        new LatLng(-height, 0),
+        new LatLng(0, width),
+      ),
     })
   )
 
   render() {
     const { floorplan } = this.props;
     const { height, bounds, items, newItemForm } = this.state;
+
+    const newItemFormKey = (form: ItemForm) => `${form.position[0]}-${form.position[1]}}`;
 
     return (
       <Fragment>
@@ -85,38 +92,25 @@ export default class CollabMapComponent extends Component<CollabMapComponentProp
               <Marker
                 key={index}
                 draggable
-                icon={divIcon(`${index + 1}`)}
+                icon={new DivIcon({
+                  html: `${items.length + 1}`,
+                  iconSize: [30, 30],
+                  className: 'collab__map__marker',
+                })}
                 position={[item.lat, item.lng]}
               >
                 <Popup>
                   Popup for any custom information.
                 </Popup>
               </Marker>
-            )) : (
-              <Marker
-                draggable
-                icon={divIcon('?')}
-                position={[
-                  (bounds.getSouthWest().lat / 2),
-                  (bounds.getNorthEast().lng / 2),
-                ]}
-              >
-                <Popup>
-                  Double click to set a new pin or drag to move around.
-                </Popup>
-              </Marker>
-            )}
+            )) : (<CollabInfoMarker bounds={bounds} />)}
             {newItemForm && (
               <CollabNewItemMarker
-                key={`${newItemForm.position[0]}-${newItemForm.position[1]}}`}
                 draggable
-                icon={divIcon('1')}
+                key={newItemFormKey(newItemForm)}
+                items={items || []}
                 position={newItemForm.position}
-              >
-                <Popup>
-                  Popup for any custom information.
-                </Popup>
-              </CollabNewItemMarker>
+              />
             )}
           </Map>
         )}
