@@ -9,6 +9,7 @@ interface CollabNewItemProps {
   draggable?: boolean;
   items: Item[];
   position: [number, number];
+  handlePopupClosed: () => void;
 }
 
 export interface ItemForm {
@@ -24,6 +25,20 @@ const CollabNewItemMarker = (props: CollabNewItemProps) => {
   const { draggable, position, items } = props;
 
   let markerRef: Marker;
+  let fileInput: HTMLInputElement;
+  let selectedFile: File;
+
+  const handleClickFileInput = () => fileInput.click();
+
+  const handleFileChanged = (e: React.SyntheticEvent<HTMLInputElement>) =>  {
+    const { files } = e.currentTarget;
+
+    if (files) {
+      const file = files[0];
+      selectedFile = file;
+      console.log(file);
+    }
+  };
 
   useEffect(() => {
     markerRef.leafletElement!.openPopup();
@@ -41,7 +56,23 @@ const CollabNewItemMarker = (props: CollabNewItemProps) => {
       })}
     >
       <Popup>
-        Double click to set a new pin or drag to move around.
+        <div className="collab__item__form">
+          <h3 className="h2 u-text-uppercase">Item</h3>
+          <p>Please enter the required details</p>
+          <input type="text" placeholder="Item make" className="u-placeholder-uppercase" />
+          <input type="text" placeholder="Item type" className="u-placeholder-uppercase" />
+          <input type="text" placeholder="Price" className="u-placeholder-uppercase" />
+          <input type="text" placeholder="Source" className="u-placeholder-uppercase" />
+          <button className="u-text-uppercase" onClick={handleClickFileInput}>Upload Image</button>
+          <input
+            ref={(ref: HTMLInputElement) => { fileInput = ref; }}
+            type="file"
+            accept="image/*"
+            className="u-spaceless"
+            onChange={handleFileChanged}
+          />
+          <button className="u-text-uppercase">Save</button>
+        </div>
       </Popup>
     </Marker>
   );

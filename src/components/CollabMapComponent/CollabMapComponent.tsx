@@ -45,11 +45,16 @@ export default class CollabMapComponent extends Component<CollabMapComponentProp
   handleMapInit = (mapRef: Map) => this.setState({ mapRef });
 
   handleDblClick = (event: LeafletMouseEvent) => {
+    const { mapRef } = this.state;
     const { latlng } = event;
     const { lat, lng } = latlng;
 
-    const newItemForm: ItemForm = { position: [lat, lng] };
+    const map = mapRef!.leafletElement!;
+    const paddedBounds = map.getBounds().pad(.5);
+    map.zoomControl.remove();
+    map.setMaxBounds(paddedBounds);
 
+    const newItemForm: ItemForm = { position: [lat, lng] };
     this.setState({ newItemForm });
   }
 
@@ -62,6 +67,14 @@ export default class CollabMapComponent extends Component<CollabMapComponentProp
       ),
     })
   )
+
+  handlePopupClosed = () => {
+    const { bounds, mapRef } = this.state;
+
+    const map = mapRef!.leafletElement!;
+    map.zoomControl.addTo(map);
+    map.setMaxBounds(bounds!);
+  }
 
   render() {
     const { floorplan } = this.props;
@@ -85,6 +98,7 @@ export default class CollabMapComponent extends Component<CollabMapComponentProp
             maxBounds={bounds}
             style={{ minHeight: height }}
             ondblclick={this.handleDblClick}
+            onpopupclose={this.handlePopupClosed}
             className="collab__map"
           >
             <ImageOverlay url={floorplan.image} bounds={bounds} />
@@ -110,6 +124,7 @@ export default class CollabMapComponent extends Component<CollabMapComponentProp
                 key={newItemFormKey(newItemForm)}
                 items={items || []}
                 position={newItemForm.position}
+                handlePopupClosed={this.handlePopupClosed}
               />
             )}
           </Map>
