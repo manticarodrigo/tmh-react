@@ -2,7 +2,7 @@ import { ActionCreator, Dispatch } from 'redux';
 import { ThunkAction } from 'redux-thunk';
 
 import { protectedApi } from '../reducers/AuthReducer';
-import { Detail, Item, Project } from '../reducers/ProjectReducer';
+import { Detail, Item, ItemForm, Project } from '../reducers/ProjectReducer';
 import { AppState } from '../store/Store';
 
 export enum ProjectActionTypes {
@@ -237,18 +237,18 @@ export interface ProjectAddItemAction {
 
 export const addItem: ActionCreator<
   ThunkAction<Promise<any>, AppState, void, ProjectAddItemAction>
-> = (item: Item, project: Project) => (async (dispatch: Dispatch) => {
+> = (itemForm: ItemForm, project: Project) => (async (dispatch: Dispatch) => {
   try {
     const formData = new FormData();
 
     formData.append('status', 'PENDING');
-    formData.append('image', item.image);
-    formData.append('make', item.make);
-    formData.append('type', item.type);
-    formData.append('price', item.price);
-    formData.append('inspiration', item.inspiration);
-    formData.append('lat', item.lat.toString());
-    formData.append('lng', item.lng.toString());
+    formData.append('image', itemForm.file);
+    formData.append('make', itemForm.make);
+    formData.append('type', itemForm.type);
+    formData.append('price', itemForm.price);
+    formData.append('inspiration', itemForm.inspiration);
+    formData.append('lat', itemForm.lat.toString());
+    formData.append('lng', itemForm.lng.toString());
     formData.append('project', project.id);
 
     const response = await protectedApi.post(`items/`, formData);
@@ -256,8 +256,8 @@ export const addItem: ActionCreator<
     dispatch({ type: ProjectActionTypes.ADD_ITEM });
 
     return response.data;
-  } catch (err) {
-    return err;
+  } catch (error) {
+    throw error;
   }
 });
 
