@@ -26,8 +26,9 @@ const Input = (props: InputProps) => {
 
   return (
     <div className="form__field">
-      {value && (<label>{placeholder}</label>)}
+      {value && (<label className="u-text-uppercase">{placeholder}</label>)}
       <input
+        className="u-placeholder-uppercase"
         type={type || 'text'}
         name={name}
         value={value}

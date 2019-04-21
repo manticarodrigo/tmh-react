@@ -163,17 +163,17 @@ const LoginInput = (props: LoginInputProps) => {
   switch (name) {
     case 'username':
       type = 'text';
-      placeholder = 'USERNAME';
+      placeholder = 'Username';
       isVisible = true;
       break;
     case 'first_name':
       type = 'text';
-      placeholder = 'FIRST NAME';
+      placeholder = 'First name';
       isVisible = isRegistration;
       break;
     case 'last_name':
       type = 'text';
-      placeholder = 'LAST NAME';
+      placeholder = 'Last name';
       isVisible = isRegistration;
       break;
     case 'email':
@@ -183,12 +183,12 @@ const LoginInput = (props: LoginInputProps) => {
       break;
     case 'password1':
       type = 'password';
-      placeholder = 'PASSWORD';
+      placeholder = 'Password';
       isVisible = true;
       break;
     case 'password2':
       type = 'password';
-      placeholder = 'CONFIRM PASSWORD';
+      placeholder = 'Confirm password';
       isVisible = isRegistration;
       break;
     default:
