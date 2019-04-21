@@ -18,7 +18,7 @@ export class Project {
   readonly room!: string;
   status!: ProjectStatus;
   readonly shared_with!: string;
-  readonly budget!: string;
+  readonly budget!: ProjectBudgetOptions;
   readonly pet_friendly!: boolean;
   readonly limited_access!: boolean;
   readonly style!: string;
@@ -80,6 +80,17 @@ export class Project {
   }
 }
 
+export interface ProjectForm {
+  room: string;
+  styles: object;
+  package: string;
+  zipcode: string;
+  shared_with: string;
+  pet_friendly: boolean | undefined;
+  limited_access: boolean | undefined;
+  budget: ProjectBudgetOptions;
+}
+
 export enum ProjectStatus {
   DETAILS = 'DETAILS',
   DESIGN = 'DESIGN',
@@ -92,6 +103,13 @@ export enum ProjectStatus {
   ESTIMATE_SHIPPING_AND_TAX = 'ESTIMATE_SHIPPING_AND_TAX',
   CHECKOUT = 'CHECKOUT',
   ARCHIVED = 'ARCHIVED',
+}
+
+export enum ProjectBudgetOptions {
+  LOW = '1',
+  MEDIUM = '2',
+  HIGH = '3',
+  UNLIMITED = '4',
 }
 
 export interface Detail {

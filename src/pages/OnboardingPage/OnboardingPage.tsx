@@ -11,7 +11,7 @@ import { CurrentAuth } from '../../reducers/AuthReducer';
 import { AppState } from '../../store/Store';
 
 import { createProject } from '../../actions/ProjectActions';
-import { Project } from '../../reducers/ProjectReducer';
+import { Project, ProjectBudgetOptions, ProjectForm } from '../../reducers/ProjectReducer';
 
 import Header from '../../components/Header/Header';
 import OnboardingSteps from './OnboardingSteps/OnboardingSteps';
@@ -23,18 +23,7 @@ interface OnboardingPageProps extends RouteComponentProps {
 
 interface OnboardingPageState {
   step: number;
-  form: OnboardingForm;
-}
-
-export interface OnboardingForm {
-  room: string;
-  styles: object;
-  package: string;
-  zipcode: string;
-  shared_with: string;
-  pet_friendly: boolean | undefined;
-  limited_access: boolean | undefined;
-  budget: string;
+  form: ProjectForm;
 }
 
 class OnboardingPage extends Component<OnboardingPageProps, OnboardingPageState> {
@@ -48,7 +37,7 @@ class OnboardingPage extends Component<OnboardingPageProps, OnboardingPageState>
       shared_with: '',
       pet_friendly: undefined,
       limited_access: undefined,
-      budget: '',
+      budget: ProjectBudgetOptions.LOW,
     },
   };
 
@@ -135,12 +124,12 @@ class OnboardingPage extends Component<OnboardingPageProps, OnboardingPageState>
     })
   )
 
-  handleBudgetClicked = (e: React.SyntheticEvent<HTMLInputElement>) => {
+  handleBudgetClicked = (budget: ProjectBudgetOptions) => {
     this.setState({
       step: this.state.step + 1,
       form: {
         ...this.state.form,
-        budget: e.currentTarget.value,
+        budget,
       },
     });
 

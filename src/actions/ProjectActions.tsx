@@ -2,7 +2,7 @@ import { ActionCreator, Dispatch } from 'redux';
 import { ThunkAction } from 'redux-thunk';
 
 import { protectedApi } from '../reducers/AuthReducer';
-import { Detail, Item, ItemForm, Project } from '../reducers/ProjectReducer';
+import { Detail, Item, ItemForm, ItemStatus, Project, ProjectForm } from '../reducers/ProjectReducer';
 import { AppState } from '../store/Store';
 
 export enum ProjectActionTypes {
@@ -36,8 +36,8 @@ export const getProjects: ActionCreator<
     });
 
     return response.data;
-  } catch (err) {
-    return err;
+  } catch (error) {
+    throw error;
   }
 });
 
@@ -55,8 +55,8 @@ export const getProject: ActionCreator<
     dispatch({ type: ProjectActionTypes.GET_PROJECT });
 
     return response.data;
-  } catch (err) {
-    return err;
+  } catch (error) {
+    throw error;
   }
 });
 
@@ -74,8 +74,8 @@ export const getLatestProject: ActionCreator<
     dispatch({ type: ProjectActionTypes.GET_LATEST_PROJECT });
 
     return response.data;
-  } catch (err) {
-    return err;
+  } catch (error) {
+    throw error;
   }
 });
 
@@ -86,9 +86,9 @@ export interface ProjectCreateProjectAction {
 
 export const createProject: ActionCreator<
   ThunkAction<Promise<any>, AppState, void, ProjectCreateProjectAction>
-> = (project) => (async (dispatch: Dispatch) => {
+> = (projectForm: ProjectForm) => (async (dispatch: Dispatch) => {
   try {
-    const response = await protectedApi.post(`projects/`, project);
+    const response = await protectedApi.post(`projects/`, projectForm);
 
     dispatch({
       project: response.data,
@@ -96,8 +96,8 @@ export const createProject: ActionCreator<
     });
 
     return response.data;
-  } catch (err) {
-    return err;
+  } catch (error) {
+    return error;
   }
 });
 
@@ -118,8 +118,8 @@ export const updateProject: ActionCreator<
     });
 
     return response.data;
-  } catch (err) {
-    return err;
+  } catch (error) {
+    return error;
   }
 });
 
@@ -137,8 +137,8 @@ export const getDetails: ActionCreator<
     dispatch({ type: ProjectActionTypes.GET_DETAILS });
 
     return response.data;
-  } catch (err) {
-    return err;
+  } catch (error) {
+    return error;
   }
 });
 
@@ -163,8 +163,8 @@ export const addDetail: ActionCreator<
     dispatch({ type: ProjectActionTypes.ADD_DETAIL });
 
     return response.data;
-  } catch (err) {
-    return err;
+  } catch (error) {
+    return error;
   }
 });
 
@@ -182,8 +182,8 @@ export const updateDetail: ActionCreator<
     dispatch({ type: ProjectActionTypes.UPDATE_DETAIL });
 
     return response.data;
-  } catch (err) {
-    return err;
+  } catch (error) {
+    return error;
   }
 });
 
@@ -201,8 +201,8 @@ export const deleteDetail: ActionCreator<
     dispatch({ type: ProjectActionTypes.DELETE_DETAIL });
 
     return response.data;
-  } catch (err) {
-    return err;
+  } catch (error) {
+    return error;
   }
 });
 
@@ -220,15 +220,10 @@ export const getItems: ActionCreator<
     dispatch({ type: ProjectActionTypes.GET_ITEMS });
 
     return response.data;
-  } catch (err) {
-    return err;
+  } catch (error) {
+    return error;
   }
 });
-
-export interface ProjectAddDetailAction {
-  type: ProjectActionTypes.ADD_DETAIL;
-  detail: Detail;
-}
 
 export interface ProjectAddItemAction {
   type: ProjectActionTypes.ADD_ITEM;
@@ -241,7 +236,7 @@ export const addItem: ActionCreator<
   try {
     const formData = new FormData();
 
-    formData.append('status', 'PENDING');
+    formData.append('status', ItemStatus.PENDING);
     formData.append('image', itemForm.file || '');
     formData.append('make', itemForm.make);
     formData.append('type', itemForm.type);

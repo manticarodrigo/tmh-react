@@ -3,7 +3,7 @@ import './OnboardingSteps.scss';
 
 import leftArrow from '../../../assets/images/utility/left-arrow.png';
 
-import { OnboardingForm } from '../OnboardingPage';
+import { ProjectBudgetOptions, ProjectForm } from '../../../reducers/ProjectReducer';
 
 import OnboardingAccess from '../OnboardingAccess/OnboardingAccess';
 import OnboardingBudget from '../OnboardingBudget/OnboardingBudget';
@@ -16,7 +16,7 @@ import OnboardingZip from '../OnboardingZip/OnboardingZip';
 
 export interface OnboardingStepsProps {
   step: number;
-  form: OnboardingForm;
+  form: ProjectForm;
   handleStepBack: () => void;
   handleStepForward: () => void;
   handleRoomClicked: (e: React.SyntheticEvent<HTMLInputElement>) => void;
@@ -26,7 +26,7 @@ export interface OnboardingStepsProps {
   handleSharedWithClicked: (e: React.SyntheticEvent<HTMLInputElement>) => void;
   handlePetsClicked: (e: React.SyntheticEvent<HTMLInputElement>) => void;
   handleAccessClicked: (e: React.SyntheticEvent<HTMLInputElement>) => void;
-  handleBudgetClicked: (e: React.SyntheticEvent<HTMLInputElement>) => void;
+  handleBudgetClicked: (budget: ProjectBudgetOptions) => void;
 }
 
 const OnboardingSteps = (props: OnboardingStepsProps) => {
