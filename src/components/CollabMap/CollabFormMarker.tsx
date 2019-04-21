@@ -52,7 +52,7 @@ const CollabFormMarker = (props: CollabFormMarkerProps) => {
 
   useEffect(() => {
     markerRef.leafletElement!.openPopup();
-  });
+  }, []);
 
   const handleDragend = (e: DragEndEvent) => {
     const point = e.target;

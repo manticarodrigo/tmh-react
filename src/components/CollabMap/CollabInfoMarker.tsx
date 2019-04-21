@@ -11,7 +11,7 @@ const CollabInfoMarker = (props: CollabInfoMarkerProps) => {
 
   useEffect(() => {
     markerRef.leafletElement!.openPopup();
-  });
+  }, []);
 
   return (
     <Marker
