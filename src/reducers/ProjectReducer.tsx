@@ -135,6 +135,16 @@ export interface Item {
   lng: number;
 }
 
+export interface ItemForm {
+  make: string;
+  type: string;
+  price: string;
+  inspiration: string;
+  file: File;
+  lat: number;
+  lng: number;
+}
+
 export enum ItemStatus {
   APPROVED = 'APPROVED',
   PENDING = 'PENGIN',
