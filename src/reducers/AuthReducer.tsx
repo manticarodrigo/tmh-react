@@ -36,6 +36,17 @@ export class User {
   getFullName = (): string => `${this.first_name} ${this.last_name}`;
 }
 
+export interface RegisterForm {
+  username: string;
+  first_name: string;
+  last_name: string;
+  email: string;
+  password1: string;
+  password2: string;
+
+  [propName: string]: string;
+}
+
 export interface AuthState {
   readonly auth?: CurrentAuth;
 }

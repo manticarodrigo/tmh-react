@@ -2,7 +2,7 @@ import axios from 'axios';
 import { ActionCreator, Dispatch } from 'redux';
 import { ThunkAction } from 'redux-thunk';
 
-import { AuthState, CurrentAuth, saveUserState } from '../reducers/AuthReducer';
+import { AuthState, CurrentAuth, RegisterForm, saveUserState } from '../reducers/AuthReducer';
 
 export enum AuthActionTypes {
   LOGIN = 'LOGIN',
@@ -17,9 +17,12 @@ export interface AuthLoginAction {
 
 export const login: ActionCreator<
   ThunkAction<Promise<any>, AuthState, void, AuthLoginAction>
-> = (username, password) => (async (dispatch: Dispatch) => {
+> = (username: string, password: string) => (async (dispatch: Dispatch) => {
   try {
-    const response = await axios.post(`${process.env.REACT_APP_API_URL}/rest-auth/login/`, { username, password });
+    const response = await axios.post(
+      `${process.env.REACT_APP_API_URL}/rest-auth/login/`,
+      { username, password },
+    );
 
     saveUserState(response.data);
 
@@ -27,8 +30,9 @@ export const login: ActionCreator<
       auth: response.data,
       type: AuthActionTypes.LOGIN,
     });
-  } catch (err) {
-    return err;
+
+  } catch (error) {
+    throw error;
   }
 });
 
@@ -39,23 +43,12 @@ export interface UserRegisterAction {
 
 export const register: ActionCreator<
   ThunkAction<Promise<any>, AuthState, void, UserRegisterAction>
-> = ({
-  username,
-  first_name,
-  last_name,
-  email,
-  password1,
-  password2,
-}) => (async (dispatch: Dispatch) => {
+> = (registerForm: RegisterForm) => (async (dispatch: Dispatch) => {
   try {
-    const response = await axios.post(`${process.env.REACT_APP_API_URL}/rest-auth/registration/`, {
-      username,
-      email,
-      first_name,
-      last_name,
-      password1,
-      password2,
-    });
+    const response = await axios.post(
+      `${process.env.REACT_APP_API_URL}/rest-auth/registration/`,
+      registerForm,
+    );
 
     saveUserState(response.data);
 
@@ -63,8 +56,8 @@ export const register: ActionCreator<
       auth: response.data,
       type: AuthActionTypes.LOGIN,
     });
-  } catch (err) {
-    return err;
+  } catch (error) {
+    return error;
   }
 });
 

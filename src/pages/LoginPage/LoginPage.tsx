@@ -6,7 +6,7 @@ import { Action } from 'redux';
 import { ThunkDispatch } from 'redux-thunk';
 
 import { login, register } from '../../actions/AuthActions';
-import { AuthState, User } from '../../reducers/AuthReducer';
+import { AuthState, RegisterForm, User } from '../../reducers/AuthReducer';
 
 import Input from '../../components/Input/Input';
 
@@ -25,17 +25,6 @@ interface LoginPageState {
   form: RegisterForm;
 
   [propName: string]: boolean | object | RegisterForm;
-}
-
-interface RegisterForm {
-  username: string;
-  first_name: string;
-  last_name: string;
-  email: string;
-  password1: string;
-  password2: string;
-
-  [propName: string]: string;
 }
 
 class LoginPage extends Component<LoginPageProps, LoginPageState> {
