@@ -84,8 +84,10 @@ protectedApi.interceptors.response.use(undefined, (err) => {
   const error = err.response;
   // if response is unauthorized
   if (error.status === 403) {
-    store.dispatch(logout());
+    return store.dispatch(logout());
   }
+
+  throw error;
 });
 
 export const AuthReducer: Reducer<AuthState, AuthActions> = (
