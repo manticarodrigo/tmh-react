@@ -2,7 +2,7 @@
 
 .form {
 
-  &__field {
+  &__item {
     position: relative;
     text-align: left;
 
@@ -43,6 +43,14 @@
 
       &::after {
         border-color: transparent transparent color(status, danger);
+      }
+    }
+
+    &--success {
+      background-color: color(status, neutral);
+
+      &::after {
+        border-color: transparent transparent color(status, neutral);
       }
     }
   }

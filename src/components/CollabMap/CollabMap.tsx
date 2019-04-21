@@ -1,24 +1,38 @@
 import React, { Component, Fragment } from 'react';
 import './CollabMap.scss';
 
+import { connect } from 'react-redux';
+import { Action } from 'redux';
+import { ThunkDispatch } from 'redux-thunk';
+
+import { AppState } from '../../store/Store';
+
+import {
+  addItem,
+  getItems,
+} from '../../actions/ProjectActions';
+
 import {
   CRS,
-  DivIcon,
   LatLng,
   LatLngBounds,
   LeafletMouseEvent,
 } from 'leaflet';
 import '../../../node_modules/leaflet/dist/leaflet.css';
 
-import { ImageOverlay, Map, Marker, Popup } from 'react-leaflet';
+import { ImageOverlay, Map } from 'react-leaflet';
 
-import { Detail, Item } from '../../reducers/ProjectReducer';
+import { Detail, Item, ItemForm, Project } from '../../reducers/ProjectReducer';
 
-import CollabFormMarker, { CollabFormMarkerState } from './CollabFormMarker';
+import CollabFormMarker, { CollabFormMarkerState, ItemFieldErrors } from './CollabFormMarker';
 import CollabInfoMarker from './CollabInfoMarker';
+import CollabItemMarker from './CollabItemMarker';
 
 interface CollabMapProps {
+  project: Project;
   floorplan: Detail;
+  getItems: (projectId: string) => Promise<Item[]>;
+  addItem: (itemForm: ItemForm, project: Project) => Promise<Item>;
 }
 
 interface CollabMapState {
@@ -27,18 +41,26 @@ interface CollabMapState {
   bounds?: LatLngBounds;
   items?: Item[];
   newPoint?: [number, number];
+  fieldErrors: ItemFieldErrors;
 }
 
-export default class CollabMap extends Component<CollabMapProps, CollabMapState> {
-  state: CollabMapState = {};
+class CollabMap extends Component<CollabMapProps, CollabMapState> {
+  state: CollabMapState = {
+    fieldErrors: {},
+  };
 
-  componentDidMount = () => {
-    const { floorplan } = this.props;
+  componentDidMount = async () => {
+    const { floorplan, project } = this.props;
 
     if (floorplan) {
       const img = new Image();
       img.src = floorplan.image;
       img.onload = () => this.setMapBounds(img.width, img.height);
+    }
+
+    if (project) {
+      const items = await this.props.getItems(project.id);
+      this.setState({ items: items.reverse() });
     }
   }
 
@@ -76,20 +98,39 @@ export default class CollabMap extends Component<CollabMapProps, CollabMapState>
     const map = mapRef!.leafletElement!;
     map.zoomControl.addTo(map);
     map.setMaxBounds(bounds!);
+
+    this.setState({ newPoint: undefined });
   }
 
-  handleFormSubmitted = (form: CollabFormMarkerState) => {
-    console.log(form);
+  handleFormSubmitted = async (form: CollabFormMarkerState) => {
+
+    if (form.file) {
+      const itemForm: ItemForm = {
+        ...form,
+        file: form.file,
+        lat: form.position[0],
+        lng: form.position[1],
+      };
+
+      try {
+        await this.props.addItem(itemForm, this.props.project);
+        const items = await this.props.getItems(this.props.project.id);
+        this.setState({ items: items.reverse(), newPoint: undefined, fieldErrors: {} });
+      } catch (error) {
+        this.setState({ fieldErrors: error.data });
+      }
+    }
   }
 
   render() {
     const { floorplan } = this.props;
-    const { height, bounds, items, newPoint } = this.state;
+    const { height, bounds, items, newPoint, fieldErrors } = this.state;
 
     return (
       <Fragment>
         {height && bounds && (
           <Map
+            className="collab__map"
             ref={this.handleMapInit}
             center={[0, 0]}
             zoom={0}
@@ -104,29 +145,20 @@ export default class CollabMap extends Component<CollabMapProps, CollabMapState>
             ondblclick={this.handleDblClick}
             onpopupopen={this.handlePopupOpened}
             onpopupclose={this.handlePopupClosed}
-            className="collab__map"
           >
             <ImageOverlay url={floorplan.image} bounds={bounds} />
             {items ? items.map((item, index) => (
-              <Marker
+              <CollabItemMarker
                 key={index}
-                draggable
-                icon={new DivIcon({
-                  html: `${items.length + 1}`,
-                  iconSize: [30, 30],
-                  className: 'collab__map__marker',
-                })}
-                position={[item.lat, item.lng]}
-              >
-                <Popup>
-                  Popup for any custom information.
-                </Popup>
-              </Marker>
+                index={index}
+                item={item}
+              />
             )) : (<CollabInfoMarker bounds={bounds} />)}
             {newPoint && (
               <CollabFormMarker
                 items={items || []}
                 position={newPoint}
+                fieldErrors={fieldErrors}
                 handleSubmit={this.handleFormSubmitted}
               />
             )}
@@ -136,3 +168,10 @@ export default class CollabMap extends Component<CollabMapProps, CollabMapState>
     );
   }
 }
+
+const mapDispatchToProps = (dispatch: ThunkDispatch<AppState, void, Action>) => ({
+  getItems: (projectId: string) => dispatch(getItems(projectId)),
+  addItem: (itemForm: ItemForm, project: Project) => dispatch(addItem(itemForm, project)),
+});
+
+export default connect(null, mapDispatchToProps)(CollabMap);

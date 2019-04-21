@@ -29,10 +29,6 @@
       box-shadow: $box-shadow-light;
     }
 
-    .leaflet-popup-content-wrapper {
-      border-radius: 0;
-    }
-
     &__marker {
       border-radius: 50%;
       box-shadow: $box-shadow;
@@ -41,6 +37,20 @@
       line-height: 30px;
       color: color(default, light);
       font-weight: bold;
+    }
+
+    &__popup {
+      
+      .leaflet-popup-content-wrapper {
+        border-radius: 0;
+        text-align: center;
+      }
+
+      &__image {
+        background-size: cover;
+        width: 150px;
+        height: 150px;
+      }
     }
   }
 }

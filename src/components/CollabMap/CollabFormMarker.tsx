@@ -3,11 +3,14 @@ import { Marker, Popup } from 'react-leaflet';
 
 import { DivIcon, DragEndEvent } from 'leaflet';
 
+import Input from '../Input/Input';
+
 import { Item } from '../../reducers/ProjectReducer';
 
 interface CollabFormMarkerProps {
   items: Item[];
   position: [number, number];
+  fieldErrors: ItemFieldErrors;
   handleSubmit: (form: CollabFormMarkerState) => void;
 }
 
@@ -18,6 +21,16 @@ export interface CollabFormMarkerState {
   price: string;
   inspiration: string;
   file?: File;
+}
+
+export interface ItemFieldErrors {
+  make?: string[];
+  type?: string[];
+  price?: string[];
+  inspiration?: string[];
+  file?: string[];
+
+  [propName: string]: string[] | undefined;
 }
 
 const CollabFormMarker = (props: CollabFormMarkerProps) => {
@@ -66,7 +79,6 @@ const CollabFormMarker = (props: CollabFormMarkerProps) => {
 
   return (
     <Marker
-      draggable
       ref={(ref) => { markerRef = ref!; }}
       position={state.position}
       ondragend={handleDragend}
@@ -76,44 +88,48 @@ const CollabFormMarker = (props: CollabFormMarkerProps) => {
         className: 'collab__map__marker',
       })}
     >
-      <Popup>
+      <Popup className="collab__map__popup">
         <div className="collab__item__form">
           <h3 className="h2 u-text-uppercase">Item</h3>
           <p>Please enter the required details</p>
-          <input
+          <Input
             type="text"
             name="make"
-            placeholder="Item make"
             value={state.make}
+            placeholder="Item make"
+            fieldErrors={props.fieldErrors}
             onChange={handleInputChanged}
-            className="u-placeholder-uppercase"
           />
-          <input
+          <Input
             type="text"
             name="type"
-            placeholder="Item type"
             value={state.type}
+            placeholder="Item type"
+            fieldErrors={props.fieldErrors}
             onChange={handleInputChanged}
-            className="u-placeholder-uppercase"
           />
-          <input
+          <Input
             type="text"
             name="price"
-            placeholder="Item Price"
             value={state.price}
+            placeholder="Item Price"
+            fieldErrors={props.fieldErrors}
             onChange={handleInputChanged}
-            className="u-placeholder-uppercase"
           />
-          <input
+          <Input
             type="text"
             name="inspiration"
-            placeholder="Inspiration url"
             value={state.inspiration}
+            placeholder="Inspiration url"
+            fieldErrors={props.fieldErrors}
             onChange={handleInputChanged}
-            className="u-placeholder-uppercase"
           />
-          <button className="u-text-uppercase" onClick={handleClickFileInput}>Upload Image</button>
-          {state.file && (<p className="collab__map__success">Selected {state.file.name}</p>)}
+          <div className="form__item">
+            <button className="u-text-uppercase" onClick={handleClickFileInput}>Upload Image</button>
+            {state.file && (
+              <p className="u-margin-hug--vert form__status form__status--success">Selected {state.file.name}</p>
+            )}
+          </div>
           <input
             ref={(ref: HTMLInputElement) => { fileInput = ref; }}
             type="file"

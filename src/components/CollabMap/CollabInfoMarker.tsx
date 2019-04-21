@@ -27,7 +27,7 @@ const CollabInfoMarker = (props: CollabInfoMarkerProps) => {
         className: 'collab__map__marker',
       })}
     >
-      <Popup>
+      <Popup className="collab__map__popup">
         Double click to set a new pin or drag to move around.
       </Popup>
     </Marker>

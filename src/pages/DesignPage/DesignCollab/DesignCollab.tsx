@@ -119,7 +119,7 @@ const DesignClientCollab = (props: DesignCollabProps) => {
       );
     case !!props.floorplan:
         return (
-          <CollabMap floorplan={props.floorplan!} />
+          <CollabMap project={props.project} floorplan={props.floorplan!} />
         );
     default:
       return <React.Fragment />;
