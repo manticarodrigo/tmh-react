@@ -8,6 +8,8 @@ import { ThunkDispatch } from 'redux-thunk';
 import { login, register } from '../../actions/AuthActions';
 import { AuthState, User } from '../../reducers/AuthReducer';
 
+import Input from '../../components/Input/Input';
+
 import logo from '../../assets/logo.png';
 
 interface LoginPageProps {
@@ -18,7 +20,7 @@ interface LoginPageProps {
 
 interface LoginPageState {
   isRegistration: boolean;
-  fieldErrors: FieldErrors;
+  fieldErrors: LoginFieldErrors;
   nonFieldErrors: string[];
   form: RegisterForm;
 
@@ -34,17 +36,6 @@ interface RegisterForm {
   password2: string;
 
   [propName: string]: string;
-}
-
-interface FieldErrors {
-  username?: string[];
-  first_name?: string[];
-  last_name?: string[];
-  email?: string[];
-  password1?: string[];
-  password2?: string[];
-
-  [propName: string]: string[] | undefined;
 }
 
 class LoginPage extends Component<LoginPageProps, LoginPageState> {
@@ -102,18 +93,16 @@ class LoginPage extends Component<LoginPageProps, LoginPageState> {
         <div className="login__container">
           <img className="login__logo" src={logo} />
           <form className="login__form" onSubmit={this.handleSubmit}>
-            <div className="login__form__fields">
-              {Object.keys(form).map((key) => (
-                <TextInput
-                  isRegistration={isRegistration}
-                  key={key}
-                  name={key}
-                  value={form[key]}
-                  fieldErrors={fieldErrors}
-                  onChange={this.handleInputChange}
-                />
-              ))}
-            </div>
+            {Object.keys(form).map((key) => (
+              <LoginInput
+                isRegistration={isRegistration}
+                key={key}
+                name={key}
+                value={form[key]}
+                fieldErrors={fieldErrors}
+                onChange={this.handleInputChange}
+              />
+            ))}
             <button>{getBtnText(!isRegistration)}</button>
             <p className="login__form__divider">or</p>
             <button
@@ -132,15 +121,27 @@ class LoginPage extends Component<LoginPageProps, LoginPageState> {
   }
 }
 
-interface TextInputProps {
+interface LoginFieldErrors {
+  username?: string[];
+  first_name?: string[];
+  last_name?: string[];
+  email?: string[];
+  password?: string[];
+  password1?: string[];
+  password2?: string[];
+
+  [propName: string]: string[] | undefined;
+}
+
+interface LoginInputProps {
   isRegistration: boolean;
   name: string;
   value: string;
-  fieldErrors: FieldErrors;
+  fieldErrors: LoginFieldErrors;
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
-const TextInput = (props: TextInputProps) => {
+const LoginInput = (props: LoginInputProps) => {
   const {
     isRegistration,
     name,
@@ -152,6 +153,12 @@ const TextInput = (props: TextInputProps) => {
   let type;
   let placeholder;
   let isVisible;
+
+  Object.keys(fieldErrors).forEach((field) => {
+    if (field === 'password') {
+      fieldErrors.password1 = fieldErrors[field];
+    }
+  });
 
   switch (name) {
     case 'username':
@@ -190,17 +197,14 @@ const TextInput = (props: TextInputProps) => {
   }
 
   return isVisible ? (
-    <Fragment>
-      {value && (<label>{placeholder}</label>)}
-      <input
-        type={type}
-        name={name}
-        value={value}
-        placeholder={placeholder}
-        onChange={onChange}
-      />
-      {fieldErrors[name] && fieldErrors[name]!.map((err) => (<p key={name}>{err}</p>))}
-    </Fragment>
+    <Input
+      type={type}
+      name={name}
+      value={value}
+      placeholder={placeholder}
+      fieldErrors={fieldErrors}
+      onChange={onChange}
+    />
   ) : <Fragment />;
 };
 

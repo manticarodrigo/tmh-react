@@ -32,31 +32,6 @@
       width: 100%;
     }
 
-    &__fields {
-      display: flex;
-      flex-direction: column;
-
-      p,
-      label {
-        @include fade-in(.5s);
-      }
-
-      p {
-        @include font-size(14);
-
-        align-self: flex-end;
-        margin: 0 0 5px;
-      }
-
-      label {
-        @include font-size(14);
-
-        align-self: flex-start;
-        margin: 5px 0 0;
-        font-weight: bold;
-      }
-    }
-
     &__divider {
       border-top: 1px solid rgba(color(primary, base), .1);
       padding: 10px 0 0;
