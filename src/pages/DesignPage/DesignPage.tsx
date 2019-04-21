@@ -32,7 +32,6 @@ import {
   Project,
 } from '../../reducers/ProjectReducer';
 
-import CollabWorkzone from '../../components/CollabWorkzone/CollabWorkzone';
 import Header from '../../components/Header/Header';
 import Loading from '../../components/Loading/Loading';
 
@@ -213,22 +212,20 @@ class DesignPage extends Component<DesignPageProps, DesignPageState> {
       <React.Fragment>
         <Header auth={auth} title="Details" />
         <main className="details">
-          <CollabWorkzone>
-            <DesignCollab
-              project={project}
-              conceptboards={conceptboards}
-              floorplan={floorplan}
-              selectedIndex={selectedIndex}
-              items={items}
-              handleFileChanged={this.handleFileChanged}
-              handleThumbClicked={this.handleThumbClicked}
-              handleDeleteClicked={this.handleDeleteClicked}
-              handleSubmitDetailClicked={this.handleSubmitDetailClicked}
-              handleApproveDetailClicked={this.handleApproveDetailClicked}
-              handleGetItems={this.handleGetItems}
-              handleAddItem={this.handleAddItem}
-            />
-          </CollabWorkzone>
+          <DesignCollab
+            project={project}
+            conceptboards={conceptboards}
+            floorplan={floorplan}
+            selectedIndex={selectedIndex}
+            items={items}
+            handleFileChanged={this.handleFileChanged}
+            handleThumbClicked={this.handleThumbClicked}
+            handleDeleteClicked={this.handleDeleteClicked}
+            handleSubmitDetailClicked={this.handleSubmitDetailClicked}
+            handleApproveDetailClicked={this.handleApproveDetailClicked}
+            handleGetItems={this.handleGetItems}
+            handleAddItem={this.handleAddItem}
+          />
         </main>
       </React.Fragment>
     ) : <Loading />;
