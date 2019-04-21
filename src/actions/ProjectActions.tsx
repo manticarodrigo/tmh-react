@@ -2,7 +2,7 @@ import { ActionCreator, Dispatch } from 'redux';
 import { ThunkAction } from 'redux-thunk';
 
 import { protectedApi } from '../reducers/AuthReducer';
-import { Detail, Project } from '../reducers/ProjectReducer';
+import { Detail, Item, Project } from '../reducers/ProjectReducer';
 import { AppState } from '../store/Store';
 
 export enum ProjectActionTypes {
@@ -15,6 +15,8 @@ export enum ProjectActionTypes {
   ADD_DETAIL = 'ADD_DETAIL',
   UPDATE_DETAIL = 'UPDATE_DETAIL',
   DELETE_DETAIL = 'DELETE_DETAIL',
+  GET_ITEMS = 'GET_ITEMS',
+  ADD_ITEM = 'ADD_ITEM',
 }
 
 export interface ProjectGetProjectsAction {
@@ -128,9 +130,9 @@ export interface ProjectGetDetailsAction {
 
 export const getDetails: ActionCreator<
   ThunkAction<Promise<any>, AppState, void, ProjectGetDetailsAction>
-> = (id: string) => (async (dispatch: Dispatch) => {
+> = (projectId: string) => (async (dispatch: Dispatch) => {
   try {
-    const response = await protectedApi.get(`details/project/?project=${id}`);
+    const response = await protectedApi.get(`details/project/?project=${projectId}`);
 
     dispatch({ type: ProjectActionTypes.GET_DETAILS });
 
@@ -204,6 +206,61 @@ export const deleteDetail: ActionCreator<
   }
 });
 
+export interface ProjectGetItemsAction {
+  type: ProjectActionTypes.GET_ITEMS;
+  details: Item[];
+}
+
+export const getItems: ActionCreator<
+  ThunkAction<Promise<any>, AppState, void, ProjectGetItemsAction>
+> = (projectId: string) => (async (dispatch: Dispatch) => {
+  try {
+    const response = await protectedApi.get(`items/project/?project=${projectId}`);
+
+    dispatch({ type: ProjectActionTypes.GET_ITEMS });
+
+    return response.data;
+  } catch (err) {
+    return err;
+  }
+});
+
+export interface ProjectAddDetailAction {
+  type: ProjectActionTypes.ADD_DETAIL;
+  detail: Detail;
+}
+
+export interface ProjectAddItemAction {
+  type: ProjectActionTypes.ADD_ITEM;
+  item: Item;
+}
+
+export const addItem: ActionCreator<
+  ThunkAction<Promise<any>, AppState, void, ProjectAddItemAction>
+> = (item: Item, project: Project) => (async (dispatch: Dispatch) => {
+  try {
+    const formData = new FormData();
+
+    formData.append('status', 'PENDING');
+    formData.append('image', item.image);
+    formData.append('make', item.make);
+    formData.append('type', item.type);
+    formData.append('price', item.price);
+    formData.append('inspiration', item.inspiration);
+    formData.append('lat', item.lat.toString());
+    formData.append('lng', item.lng.toString());
+    formData.append('project', project.id);
+
+    const response = await protectedApi.post(`items/`, formData);
+
+    dispatch({ type: ProjectActionTypes.ADD_ITEM });
+
+    return response.data;
+  } catch (err) {
+    return err;
+  }
+});
+
 export type ProjectActions = (
   ProjectGetProjectsAction |
   ProjectGetProjectAction |
@@ -213,5 +270,7 @@ export type ProjectActions = (
   ProjectGetDetailsAction |
   ProjectAddDetailAction |
   ProjectUpdateDetailAction |
-  ProjectDeleteDetailAction
+  ProjectDeleteDetailAction |
+  ProjectGetItemsAction |
+  ProjectAddItemAction
 );
