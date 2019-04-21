@@ -13,8 +13,10 @@ import { CurrentAuth } from '../../reducers/AuthReducer';
 
 import {
   addDetail,
+  addItem,
   deleteDetail,
   getDetails,
+  getItems,
   getLatestProject,
   getProject,
   updateDetail,
@@ -25,6 +27,8 @@ import {
   Detail,
   DetailStatus,
   DetailType,
+  Item,
+  ItemForm,
   Project,
 } from '../../reducers/ProjectReducer';
 
@@ -53,6 +57,8 @@ interface DesignPageProps extends RouteComponentProps<MatchParams> {
   ) => Promise<Detail>;
   updateDetail: (detail: Partial<Detail>) => Promise<void>;
   deleteDetail: (id: string) => Promise<void>;
+  getItems: (projectId: string) => Promise<Item[]>;
+  addItem: (itemForm: ItemForm, project: Project) => Promise<Item>;
 }
 
 interface DesignPageState {
@@ -60,6 +66,7 @@ interface DesignPageState {
   conceptboards?: Detail[];
   floorplan?: Detail;
   selectedIndex: number;
+  items?: Item[];
 }
 
 class DesignPage extends Component<DesignPageProps, DesignPageState> {
@@ -74,12 +81,12 @@ class DesignPage extends Component<DesignPageProps, DesignPageState> {
       const promises = Promise.all([
         this.props.getProject(params.projectId),
         this.props.getDetails(params.projectId),
+        this.props.getItems(params.projectId),
       ]);
 
       const data = await promises;
 
-      this.setState({ project: data[0] });
-      this.setDetails(data[1]);
+      this.setInitialState(...data);
 
       return;
     }
@@ -90,9 +97,15 @@ class DesignPage extends Component<DesignPageProps, DesignPageState> {
       const isDesigner = project.designer && project.designer.id === auth!.user.id;
       const view = isDesigner ? 'designer' : 'client';
       this.props.history.replace(`${AppRoutes.DETAILS}/${view}/${project.id}`);
-      const details = await this.props.getDetails(project.id);
-      this.setState({ project });
-      this.setDetails(details);
+
+      const promises = Promise.all([
+        this.props.getDetails(project.id),
+        this.props.getItems(project.id),
+      ]);
+
+      const data = await promises;
+
+      this.setInitialState(project, ...data);
 
       return;
     }
@@ -100,11 +113,23 @@ class DesignPage extends Component<DesignPageProps, DesignPageState> {
     this.props.history.push(AppRoutes.DASHBOARD);
   }
 
-  setDetails(details: Detail[]) {
+  setInitialState = (project: Project, details: Detail[], items: Item[]) => {
+    const { floorplan, conceptboards } = this.findDetails(details);
+
+    return this.setState({ project, conceptboards, floorplan, items: items.reverse() });
+  }
+
+  setDetails = (details: Detail[]) => {
+    const { floorplan, conceptboards } = this.findDetails(details);
+
+    return this.setState({ conceptboards, floorplan });
+  }
+
+  findDetails = (details: Detail[]) => {
     const floorplan = details.find((detail) => detail.type === DetailType.FLOOR_PLAN);
     const conceptboards = details.filter((detail) => detail.type === DetailType.CONCEPT);
 
-    return this.setState({ conceptboards, floorplan });
+    return { floorplan, conceptboards };
   }
 
   handleFileChanged = async (e: React.SyntheticEvent<HTMLInputElement>) => {
@@ -156,6 +181,24 @@ class DesignPage extends Component<DesignPageProps, DesignPageState> {
     this.setDetails(details);
   }
 
+  handleGetItems = async () => {
+    const { project } = this.state;
+
+    if (project) {
+      const items = await this.props.getItems(project.id);
+      this.setState({ items: items.reverse() });
+    }
+  }
+
+  handleAddItem = async (itemForm: ItemForm) => {
+    const { project } = this.state;
+
+    if (project) {
+      await this.props.addItem(itemForm, project);
+      this.handleGetItems();
+    }
+  }
+
   render() {
     const { auth } = this.props;
     const {
@@ -163,6 +206,7 @@ class DesignPage extends Component<DesignPageProps, DesignPageState> {
       conceptboards,
       floorplan,
       selectedIndex,
+      items,
     } = this.state;
 
     return project ? (
@@ -175,11 +219,14 @@ class DesignPage extends Component<DesignPageProps, DesignPageState> {
               conceptboards={conceptboards}
               floorplan={floorplan}
               selectedIndex={selectedIndex}
+              items={items}
               handleFileChanged={this.handleFileChanged}
               handleThumbClicked={this.handleThumbClicked}
               handleDeleteClicked={this.handleDeleteClicked}
               handleSubmitDetailClicked={this.handleSubmitDetailClicked}
               handleApproveDetailClicked={this.handleApproveDetailClicked}
+              handleGetItems={this.handleGetItems}
+              handleAddItem={this.handleAddItem}
             />
           </CollabWorkzone>
         </main>
@@ -205,6 +252,8 @@ const mapDispatchToProps = (dispatch: ThunkDispatch<AppState, void, Action>) => 
   ) => dispatch(addDetail(project, file, type, status)),
   updateDetail: (detail: Partial<Detail>) => dispatch(updateDetail(detail)),
   deleteDetail: (id: string) => dispatch(deleteDetail(id)),
+  getItems: (projectId: string) => dispatch(getItems(projectId)),
+  addItem: (itemForm: ItemForm, project: Project) => dispatch(addItem(itemForm, project)),
 });
 
 export default withRouter(connect(mapStateToProps, mapDispatchToProps)(DesignPage));

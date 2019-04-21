@@ -1,17 +1,6 @@
 import React, { Component, Fragment } from 'react';
 import './CollabMap.scss';
 
-import { connect } from 'react-redux';
-import { Action } from 'redux';
-import { ThunkDispatch } from 'redux-thunk';
-
-import { AppState } from '../../store/Store';
-
-import {
-  addItem,
-  getItems,
-} from '../../actions/ProjectActions';
-
 import {
   CRS,
   LatLng,
@@ -22,24 +11,23 @@ import '../../../node_modules/leaflet/dist/leaflet.css';
 
 import { ImageOverlay, Map } from 'react-leaflet';
 
-import { Detail, Item, ItemForm, Project } from '../../reducers/ProjectReducer';
+import { Detail, Item, ItemForm } from '../../reducers/ProjectReducer';
 
 import CollabFormMarker, { CollabFormMarkerState, ItemFieldErrors } from './CollabFormMarker';
 import CollabInfoMarker from './CollabInfoMarker';
 import CollabItemMarker from './CollabItemMarker';
 
 interface CollabMapProps {
-  project: Project;
   floorplan: Detail;
-  getItems: (projectId: string) => Promise<Item[]>;
-  addItem: (itemForm: ItemForm, project: Project) => Promise<Item>;
+  items?: Item[];
+  handleGetItems: () => void;
+  handleAddItem: (itemForm: ItemForm) => void;
 }
 
 interface CollabMapState {
   mapRef?: Map;
   height?: number;
   bounds?: LatLngBounds;
-  items?: Item[];
   newPoint?: [number, number];
 }
 
@@ -47,17 +35,12 @@ class CollabMap extends Component<CollabMapProps, CollabMapState> {
   state: CollabMapState = {};
 
   componentDidMount = async () => {
-    const { floorplan, project } = this.props;
+    const { floorplan } = this.props;
 
     if (floorplan) {
       const img = new Image();
       img.src = floorplan.image;
       img.onload = () => this.setMapBounds(img.width, img.height);
-    }
-
-    if (project) {
-      const items = await this.props.getItems(project.id);
-      this.setState({ items: items.reverse() });
     }
   }
 
@@ -111,17 +94,15 @@ class CollabMap extends Component<CollabMapProps, CollabMapState> {
     };
 
     try {
-      await this.props.addItem(itemForm, this.props.project);
-      const items = await this.props.getItems(this.props.project.id);
-      this.setState({ items: items.reverse(), newPoint: undefined });
+      await this.props.handleAddItem(itemForm);
     } catch (error) {
       callback(error.data);
     }
   }
 
   render() {
-    const { floorplan } = this.props;
-    const { height, bounds, items, newPoint } = this.state;
+    const { floorplan, items } = this.props;
+    const { height, bounds, newPoint } = this.state;
 
     return (
       <Fragment>
@@ -165,9 +146,4 @@ class CollabMap extends Component<CollabMapProps, CollabMapState> {
   }
 }
 
-const mapDispatchToProps = (dispatch: ThunkDispatch<AppState, void, Action>) => ({
-  getItems: (projectId: string) => dispatch(getItems(projectId)),
-  addItem: (itemForm: ItemForm, project: Project) => dispatch(addItem(itemForm, project)),
-});
-
-export default connect(null, mapDispatchToProps)(CollabMap);
+export default React.memo(CollabMap);

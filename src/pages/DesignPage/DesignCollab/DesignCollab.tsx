@@ -1,9 +1,16 @@
-import React, { ReactElement } from 'react';
+import React from 'react';
 import { Route, Switch } from 'react-router-dom';
 
 import { AppRoutes } from '../../App/App';
 
-import { Detail, DetailStatus, DetailType, Project } from '../../../reducers/ProjectReducer';
+import {
+  Detail,
+  DetailStatus,
+  DetailType,
+  Item,
+  ItemForm,
+  Project,
+} from '../../../reducers/ProjectReducer';
 
 import CollabAlert from '../../../components/CollabAlert/CollabAlert';
 import CollabImage from '../../../components/CollabImage/CollabImage';
@@ -16,11 +23,14 @@ interface DesignCollabProps {
   conceptboards?: Detail[];
   floorplan?: Detail;
   selectedIndex: number;
+  items?: Item[];
   handleFileChanged: (e: React.SyntheticEvent<HTMLInputElement>) => void;
   handleThumbClicked: (e: React.SyntheticEvent<HTMLElement>) => void;
   handleDeleteClicked: (e: React.SyntheticEvent<HTMLElement>) => void;
   handleSubmitDetailClicked: (detail: Detail) => void;
   handleApproveDetailClicked: (detail: Detail) => void;
+  handleGetItems: () => void;
+  handleAddItem: (itemForm: ItemForm) => void;
 }
 
 const hasFinishedDetails = (details: Detail[]) => hasSubmittedDetails(details) || hasApprovedDetails(details);
@@ -119,7 +129,12 @@ const DesignClientCollab = (props: DesignCollabProps) => {
       );
     case !!props.floorplan:
         return (
-          <CollabMap project={props.project} floorplan={props.floorplan!} />
+          <CollabMap
+            floorplan={props.floorplan!}
+            items={props.items}
+            handleGetItems={props.handleGetItems}
+            handleAddItem={props.handleAddItem}
+          />
         );
     default:
       return <React.Fragment />;
@@ -209,6 +224,15 @@ const DesignDesignerCollab = (props: DesignCollabProps) => {
             </Modal>
           )}
         </CollabImage>
+      );
+    case !!props.floorplan:
+      return (
+        <CollabMap
+          floorplan={props.floorplan!}
+          items={props.items}
+          handleGetItems={props.handleGetItems}
+          handleAddItem={props.handleAddItem}
+        />
       );
     default:
       return <React.Fragment />;
