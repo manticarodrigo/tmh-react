@@ -3,7 +3,6 @@
 .form {
 
   &__item {
-    position: relative;
     text-align: left;
 
     label {
@@ -14,26 +13,34 @@
       margin: 5px 0 0;
       font-weight: bold;
     }
+
+    &__inner {
+      position: relative;
+
+      p {
+        margin: 0;
+      }
+    }
   }
 
   &__status {
     @include fade-in(.5s);
-    @include font-size(14);
+    @include font-size(12);
 
     position: absolute;
-    top: 70%;
-    right: .5%;
+    top: 50%;
+    right: 5px;
     z-index: 1;
-    padding: 8px;
+    padding: 5px;
     color: color(default, light);
     font-weight: bold;
 
     &::after {
       position: absolute;
       bottom: 100%;
-      left: 90%;
-      margin-left: -8px;
-      border-width: 8px;
+      left: calc(100% - 15px);
+      margin-left: -5px;
+      border-width: 5px;
       border-style: solid;
       content: '';
     }

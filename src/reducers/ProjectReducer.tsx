@@ -140,7 +140,7 @@ export interface ItemForm {
   type: string;
   price: string;
   inspiration: string;
-  file: File;
+  file?: File;
   lat: number;
   lng: number;
 }

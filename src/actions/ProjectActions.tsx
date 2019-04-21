@@ -242,7 +242,7 @@ export const addItem: ActionCreator<
     const formData = new FormData();
 
     formData.append('status', 'PENDING');
-    formData.append('image', itemForm.file);
+    formData.append('image', itemForm.file || '');
     formData.append('make', itemForm.make);
     formData.append('type', itemForm.type);
     formData.append('price', itemForm.price);

@@ -27,17 +27,21 @@ const Input = (props: InputProps) => {
   return (
     <div className="form__item">
       {value && (<label className="u-text-uppercase">{placeholder}</label>)}
-      <input
-        className="u-placeholder-uppercase"
-        type={type || 'text'}
-        name={name}
-        value={value}
-        placeholder={placeholder}
-        onChange={onChange}
-      />
-      {fieldErrors[name] && fieldErrors[name]!.map((error) => (
-        <p key={name} className="u-margin-hug--vert form__status form__status--error">{error}</p>
-      ))}
+      <div className="form__item__inner">
+        <input
+          className="u-placeholder-uppercase"
+          type={type || 'text'}
+          name={name}
+          value={value}
+          placeholder={placeholder}
+          onChange={onChange}
+        />
+        {fieldErrors[name] && (
+          <p key={name} className="u-margin-hug--vert form__status form__status--error">
+            {fieldErrors[name]!.map((error) => `${error} `)}
+          </p>
+        )}
+      </div>
     </div>
   );
 };

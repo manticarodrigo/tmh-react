@@ -41,13 +41,10 @@ interface CollabMapState {
   bounds?: LatLngBounds;
   items?: Item[];
   newPoint?: [number, number];
-  fieldErrors: ItemFieldErrors;
 }
 
 class CollabMap extends Component<CollabMapProps, CollabMapState> {
-  state: CollabMapState = {
-    fieldErrors: {},
-  };
+  state: CollabMapState = {};
 
   componentDidMount = async () => {
     const { floorplan, project } = this.props;
@@ -102,29 +99,29 @@ class CollabMap extends Component<CollabMapProps, CollabMapState> {
     this.setState({ newPoint: undefined });
   }
 
-  handleFormSubmitted = async (form: CollabFormMarkerState) => {
+  handleFormSubmitted = async (
+    form: CollabFormMarkerState,
+    callback: (fieldErrors: ItemFieldErrors) => void,
+  ) => {
+    const itemForm: ItemForm = {
+      ...form,
+      file: form.file,
+      lat: form.position[0],
+      lng: form.position[1],
+    };
 
-    if (form.file) {
-      const itemForm: ItemForm = {
-        ...form,
-        file: form.file,
-        lat: form.position[0],
-        lng: form.position[1],
-      };
-
-      try {
-        await this.props.addItem(itemForm, this.props.project);
-        const items = await this.props.getItems(this.props.project.id);
-        this.setState({ items: items.reverse(), newPoint: undefined, fieldErrors: {} });
-      } catch (error) {
-        this.setState({ fieldErrors: error.data });
-      }
+    try {
+      await this.props.addItem(itemForm, this.props.project);
+      const items = await this.props.getItems(this.props.project.id);
+      this.setState({ items: items.reverse(), newPoint: undefined });
+    } catch (error) {
+      callback(error.data);
     }
   }
 
   render() {
     const { floorplan } = this.props;
-    const { height, bounds, items, newPoint, fieldErrors } = this.state;
+    const { height, bounds, items, newPoint } = this.state;
 
     return (
       <Fragment>
@@ -158,7 +155,6 @@ class CollabMap extends Component<CollabMapProps, CollabMapState> {
               <CollabFormMarker
                 items={items || []}
                 position={newPoint}
-                fieldErrors={fieldErrors}
                 handleSubmit={this.handleFormSubmitted}
               />
             )}

@@ -10,8 +10,10 @@ import { Item } from '../../reducers/ProjectReducer';
 interface CollabFormMarkerProps {
   items: Item[];
   position: [number, number];
-  fieldErrors: ItemFieldErrors;
-  handleSubmit: (form: CollabFormMarkerState) => void;
+  handleSubmit: (
+    form: CollabFormMarkerState,
+    callback: (fieldErrors: ItemFieldErrors) => void,
+  ) => void;
 }
 
 export interface CollabFormMarkerState {
@@ -21,6 +23,7 @@ export interface CollabFormMarkerState {
   price: string;
   inspiration: string;
   file?: File;
+  fieldErrors: ItemFieldErrors;
 }
 
 export interface ItemFieldErrors {
@@ -41,7 +44,7 @@ const CollabFormMarker = (props: CollabFormMarkerProps) => {
     make: '',
     price: '',
     inspiration: '',
-    file: undefined,
+    fieldErrors: {},
   });
 
   let markerRef: Marker;
@@ -66,16 +69,38 @@ const CollabFormMarker = (props: CollabFormMarkerProps) => {
 
     if (files) {
       const file = files[0];
-      setState({ ...state, file });
+      setState({
+        ...state,
+        file,
+        fieldErrors: {
+          ...state.fieldErrors,
+          image: undefined,
+        },
+      });
     }
   };
 
   const handleInputChanged = (e: React.SyntheticEvent<HTMLInputElement>) => {
     const { name, value } = e.currentTarget;
-    setState({ ...state, [name]: value });
+
+    setState({
+      ...state,
+      [name]: value,
+      fieldErrors: {
+        ...state.fieldErrors,
+        [name]: undefined,
+      },
+    });
   };
 
-  const handleSubmit = () => props.handleSubmit(state);
+  const handleSubmit = () => {
+    props.handleSubmit(state, (fieldErrors: ItemFieldErrors) => (
+      setState({
+        ...state,
+        fieldErrors,
+      })
+    ));
+  };
 
   return (
     <Marker
@@ -97,7 +122,7 @@ const CollabFormMarker = (props: CollabFormMarkerProps) => {
             name="make"
             value={state.make}
             placeholder="Item make"
-            fieldErrors={props.fieldErrors}
+            fieldErrors={state.fieldErrors}
             onChange={handleInputChanged}
           />
           <Input
@@ -105,7 +130,7 @@ const CollabFormMarker = (props: CollabFormMarkerProps) => {
             name="type"
             value={state.type}
             placeholder="Item type"
-            fieldErrors={props.fieldErrors}
+            fieldErrors={state.fieldErrors}
             onChange={handleInputChanged}
           />
           <Input
@@ -113,7 +138,7 @@ const CollabFormMarker = (props: CollabFormMarkerProps) => {
             name="price"
             value={state.price}
             placeholder="Item Price"
-            fieldErrors={props.fieldErrors}
+            fieldErrors={state.fieldErrors}
             onChange={handleInputChanged}
           />
           <Input
@@ -121,14 +146,19 @@ const CollabFormMarker = (props: CollabFormMarkerProps) => {
             name="inspiration"
             value={state.inspiration}
             placeholder="Inspiration url"
-            fieldErrors={props.fieldErrors}
+            fieldErrors={state.fieldErrors}
             onChange={handleInputChanged}
           />
           <div className="form__item">
-            <button className="u-text-uppercase" onClick={handleClickFileInput}>Upload Image</button>
-            {state.file && (
-              <p className="u-margin-hug--vert form__status form__status--success">Selected {state.file.name}</p>
-            )}
+            <div className="form__item__inner">
+              <button className="u-text-uppercase" onClick={handleClickFileInput}>Upload Image</button>
+              {state.file && (
+                <p className="u-margin-hug--vert form__status form__status--success">Selected {state.file.name}</p>
+              )}
+              {state.fieldErrors.image && (
+                <p className="u-margin-hug--vert form__status form__status--error">This field may not be blank.</p>
+              )}
+            </div>
           </div>
           <input
             ref={(ref: HTMLInputElement) => { fileInput = ref; }}
