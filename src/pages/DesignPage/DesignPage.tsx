@@ -20,7 +20,13 @@ import {
   updateDetail,
   updateProject,
 } from '../../actions/ProjectActions';
-import { Detail, DetailStatus, DetailType, Project } from '../../reducers/ProjectReducer';
+
+import {
+  Detail,
+  DetailStatus,
+  DetailType,
+  Project,
+} from '../../reducers/ProjectReducer';
 
 import CollabWorkzone from '../../components/CollabWorkzone/CollabWorkzone';
 import Header from '../../components/Header/Header';
@@ -57,12 +63,7 @@ interface DesignPageState {
 }
 
 class DesignPage extends Component<DesignPageProps, DesignPageState> {
-  state: DesignPageState = {
-    project: undefined,
-    conceptboards: undefined,
-    floorplan: undefined,
-    selectedIndex: 0,
-  };
+  state: DesignPageState = { selectedIndex: 0 };
 
   async componentDidMount() {
     const { auth, match } = this.props;
@@ -195,7 +196,7 @@ const mapDispatchToProps = (dispatch: ThunkDispatch<AppState, void, Action>) => 
   getLatestProject: () => dispatch(getLatestProject()),
   getProject: (id: string) => dispatch(getProject(id)),
   updateProject: (project: Partial<Project>) => dispatch(updateProject(project)),
-  getDetails: (id: string) => dispatch(getDetails(id)),
+  getDetails: (projectId: string) => dispatch(getDetails(projectId)),
   addDetail: (
     project: Project,
     file: File,
