@@ -1,0 +1,67 @@
+@import '../../styles/global';
+
+.collab {
+
+  &__collection {
+
+    &__info {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+      background-color: color(default, light);
+      padding: 20px;
+
+      &__text {
+        max-width: 500px;
+      }
+
+      .modal__trigger {
+        min-width: 250px;
+      }
+    }
+
+    &__items {
+      display: flex;
+      flex-flow: row wrap;
+      padding: 20px 10px;
+    }
+
+    &__item {
+      padding: 10px;
+      width: 20%;
+
+      @media (max-width: $break-lg) {
+        width: 25%;
+      }
+
+      @media (max-width: $break-md) {
+        width: 50%;
+      }
+
+      @media (max-width: $break-sm) {
+        width: 100%;
+      }
+
+      &__inner {
+        background-color: color(default, light);
+        padding: 10px;
+        text-align: center;
+      }
+
+      &__header {
+        margin-bottom: 10px;
+        background-color: color(status, neutral);
+        line-height: 30px;
+        color: color(default, light);
+      }
+    }
+
+    &__image {
+      background-repeat: no-repeat;
+      background-position: center;
+      background-size: cover;
+      width: 100%;
+      height: 12em;
+    }
+  }
+}

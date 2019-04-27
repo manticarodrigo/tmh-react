@@ -208,10 +208,13 @@ class DesignPage extends Component<DesignPageProps, DesignPageState> {
       items,
     } = this.state;
 
-    return project ? (
+    return auth && project ? (
       <React.Fragment>
-        <Header auth={auth} title="Details" />
-        <main className="details">
+        <Header
+          auth={auth}
+          title={`${auth.user.first_name}'s ${new Project(project).getReadableRoom()}: Design Studio`}
+        />
+        <main className="design">
           <DesignCollab
             project={project}
             conceptboards={conceptboards}

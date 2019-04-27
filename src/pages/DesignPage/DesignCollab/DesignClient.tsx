@@ -1,8 +1,9 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 
 import { DesignCollabProps, hasApprovedDetails, hasFinishedDetails } from './DesignCollab';
 
 import CollabAlert from '../../../components/CollabAlert/CollabAlert';
+import CollabCollection from '../../../components/CollabCollection/CollabCollection';
 import CollabImage from '../../../components/CollabImage/CollabImage';
 import CollabMap from '../../../components/CollabMap/CollabMap';
 import CollabWorkzone from '../../../components/CollabWorkzone/CollabWorkzone';
@@ -84,24 +85,29 @@ const DesignClient = (props: DesignCollabProps) => {
       );
     case !!props.floorplan:
         return (
-          <CollabWorkzone>
-            <CollabMap
-              floorplan={props.floorplan!}
-              items={props.items}
-              handleGetItems={props.handleGetItems}
-              handleAddItem={props.handleAddItem}
-            />
-            {/* <div className="design__collection-box">
-              <p className="h2 u-text-uppercase">Your Collection</p>
-              <p>
-                Review your furnishings and note the items that you would like to see alternatives from your designer.
-                Happy with the collection? Go ahead and approve all!
-              </p>
-            </div> */}
-        </CollabWorkzone>
+          <Fragment>
+            <CollabWorkzone>
+              <CollabMap
+                floorplan={props.floorplan!}
+                items={props.items}
+                handleGetItems={props.handleGetItems}
+                handleAddItem={props.handleAddItem}
+              />
+            </CollabWorkzone>
+              <CollabCollection
+                items={props.items}
+              >
+                <p className="h2 u-text-uppercase u-margin-hug--top">Your Collection</p>
+                <p className="u-margin-hug--vert">
+                  Review your furnishings and note the items that you would
+                  like to see alternatives from your designer.
+                  Happy with the collection? Go ahead and approve all!
+                </p>
+              </CollabCollection>
+          </Fragment>
         );
     default:
-      return <React.Fragment />;
+      return <Fragment />;
   }
 };
 

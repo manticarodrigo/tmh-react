@@ -10,6 +10,14 @@ const ModalTrigger = ({
   buttonRef,
   onOpen,
   text,
-}: ModalTriggerProps) => <button className="u-text-uppercase" onClick={onOpen} ref={buttonRef}>{text}</button>;
+}: ModalTriggerProps) => (
+  <button
+    className="u-text-uppercase modal__trigger"
+    ref={buttonRef}
+    onClick={onOpen}
+  >
+    {text}
+  </button>
+);
 
 export default React.memo(ModalTrigger);
