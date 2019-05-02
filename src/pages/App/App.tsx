@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Fragment, useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import { BrowserRouter as Router } from 'react-router-dom';
 
@@ -17,6 +17,8 @@ import DetailsPage from '../DetailsPage/DetailsPage';
 import LoginPage from '../LoginPage/LoginPage';
 import OnboardingPage from '../OnboardingPage/OnboardingPage';
 
+import WebSocketService, { startConnection } from '../../store/sockets/WebSocket';
+
 interface AppProps {
   auth?: CurrentAuth;
 }
@@ -30,51 +32,83 @@ export enum AppRoutes {
   FINAL_DELIVERY = '/final-delivery',
 }
 
-class App extends Component<AppProps> {
-  render() {
-    const { auth } = this.props;
+const App = (props: AppProps) => {
+  const { auth } = props;
+  const [socket, setSocket] = useState();
+  
+  useEffect(() => {
+    console.log(auth);
+    if (auth) {
+      startConnection()
+        .then((instance: WebSocketService) => {
+            console.log('socket', instance);
+            setSocket(instance);
+            instance.initChatUser(auth.user.username);
+            instance.addCallbacks(
+              (messages) => {
+                console.log('messages', messages);
+              },
+              (message) => {
+                console.log(message);
+              });
+            instance.fetchMessages(auth.user.username);
+          })
+          .catch(error => {
+            console.log(error);
+        });
+    }
+  }, [auth]);
 
-    const defaultProtectedRouteProps: ProtectedRouteProps = {
-      isAuthenticated: !!auth,
-      authenticationPath: AppRoutes.LOGIN,
-    };
+  useEffect(() => {
+    if (socket && auth) {
+      const messageObject = {
+        from: auth.user.username,
+        text: 'yo',
+      };
+      socket.newChatMessage(messageObject);
+    }
+  }, [socket]);
 
-    return (
-      <React.Fragment>
-        <Router>
-          <ProtectedRoute
-            isAuthenticated={!auth}
-            authenticationPath={AppRoutes.DASHBOARD}
-            component={LoginPage}
-            path={AppRoutes.LOGIN}
-            exact
-          />
-          <ProtectedRoute
-            {...defaultProtectedRouteProps}
-            component={OnboardingPage}
-            path={AppRoutes.ONBOARDING}
-            exact
-          />
-          <ProtectedRoute
-            {...defaultProtectedRouteProps}
-            component={DashboardPage}
-            path={AppRoutes.DASHBOARD}
-            exact
-          />
-          <ProtectedRoute
-            {...defaultProtectedRouteProps}
-            component={DetailsPage}
-            path={`${AppRoutes.DETAILS}/:view?/:projectId?`}
-          />
-          <ProtectedRoute
-            {...defaultProtectedRouteProps}
-            component={DesignPage}
-            path={`${AppRoutes.DESIGN}/:view?/:projectId?`}
-          />
-        </Router>
-      </React.Fragment>
-    );
-  }
+  const defaultProtectedRouteProps: ProtectedRouteProps = {
+    isAuthenticated: !!auth,
+    authenticationPath: AppRoutes.LOGIN,
+  };
+
+  return (
+    <Fragment>
+      <Router>
+        <ProtectedRoute
+          isAuthenticated={!auth}
+          authenticationPath={AppRoutes.DASHBOARD}
+          component={LoginPage}
+          path={AppRoutes.LOGIN}
+          exact
+        />
+        <ProtectedRoute
+          {...defaultProtectedRouteProps}
+          component={OnboardingPage}
+          path={AppRoutes.ONBOARDING}
+          exact
+        />
+        <ProtectedRoute
+          {...defaultProtectedRouteProps}
+          component={DashboardPage}
+          path={AppRoutes.DASHBOARD}
+          exact
+        />
+        <ProtectedRoute
+          {...defaultProtectedRouteProps}
+          component={DetailsPage}
+          path={`${AppRoutes.DETAILS}/:view?/:projectId?`}
+        />
+        <ProtectedRoute
+          {...defaultProtectedRouteProps}
+          component={DesignPage}
+          path={`${AppRoutes.DESIGN}/:view?/:projectId?`}
+        />
+      </Router>
+    </Fragment>
+  );
 }
 
 const mapStateToProps = (store: AppState) => ({
