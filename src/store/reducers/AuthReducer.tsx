@@ -1,6 +1,6 @@
 import { Reducer } from 'redux';
 
-import { store } from '../store/Store';
+import { store } from '../Store';
 
 import {
   AuthActions,

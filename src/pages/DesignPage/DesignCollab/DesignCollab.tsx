@@ -9,7 +9,7 @@ import {
   Item,
   ItemForm,
   Project,
-} from '../../../reducers/ProjectReducer';
+} from '../../../store/reducers/ProjectReducer';
 
 import DesignClient from './DesignClient';
 import DesignDesigner from './DesignDesigner';

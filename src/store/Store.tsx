@@ -5,12 +5,12 @@ import thunk from 'redux-thunk';
 import {
   AuthReducer,
   AuthState,
-} from '../reducers/AuthReducer';
+} from './reducers/AuthReducer';
 
 import {
   ProjectReducer,
   ProjectState,
-} from '../reducers/ProjectReducer';
+} from './reducers/ProjectReducer';
 
 // Create an interface for the application state
 export interface AppState {

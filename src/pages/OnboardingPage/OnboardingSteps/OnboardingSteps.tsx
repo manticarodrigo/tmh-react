@@ -3,7 +3,7 @@ import './OnboardingSteps.scss';
 
 import leftArrow from '../../../assets/images/utility/left-arrow.png';
 
-import { ProjectBudgetOptions, ProjectForm } from '../../../reducers/ProjectReducer';
+import { ProjectBudgetOptions, ProjectForm } from '../../../store/reducers/ProjectReducer';
 
 import OnboardingAccess from '../OnboardingAccess/OnboardingAccess';
 import OnboardingBudget from '../OnboardingBudget/OnboardingBudget';

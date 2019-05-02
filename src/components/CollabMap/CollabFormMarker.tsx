@@ -5,7 +5,7 @@ import { DivIcon, DragEndEvent } from 'leaflet';
 
 import Input from '../Input/Input';
 
-import { Item } from '../../reducers/ProjectReducer';
+import { Item } from '../../store/reducers/ProjectReducer';
 
 interface CollabFormMarkerProps {
   items: Item[];

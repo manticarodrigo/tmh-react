@@ -3,7 +3,7 @@ import { Route, Switch } from 'react-router-dom';
 
 import { AppRoutes } from '../../App/App';
 
-import { Detail, DetailType, Project, ProjectStatus } from '../../../reducers/ProjectReducer';
+import { Detail, DetailType, Project, ProjectStatus } from '../../../store/reducers/ProjectReducer';
 
 import CollabAlert from '../../../components/CollabAlert/CollabAlert';
 import CollabImage from '../../../components/CollabImage/CollabImage';

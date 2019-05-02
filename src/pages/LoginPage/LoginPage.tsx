@@ -5,8 +5,8 @@ import { connect } from 'react-redux';
 import { Action } from 'redux';
 import { ThunkDispatch } from 'redux-thunk';
 
-import { login, register } from '../../actions/AuthActions';
-import { AuthState, RegisterForm, User } from '../../reducers/AuthReducer';
+import { login, register } from '../../store/actions/AuthActions';
+import { AuthState, RegisterForm, User } from '../../store/reducers/AuthReducer';
 
 import Input from '../../components/Input/Input';
 

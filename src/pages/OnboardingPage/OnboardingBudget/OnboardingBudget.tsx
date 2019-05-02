@@ -2,7 +2,7 @@ import React from 'react';
 
 import { OnboardingStepsProps } from '../OnboardingSteps/OnboardingSteps';
 
-import { ProjectBudgetOptions } from '../../../reducers/ProjectReducer';
+import { ProjectBudgetOptions } from '../../../store/reducers/ProjectReducer';
 
 interface BudgetQuestion {
   value: ProjectBudgetOptions;

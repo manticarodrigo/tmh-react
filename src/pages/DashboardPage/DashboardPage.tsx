@@ -9,10 +9,10 @@ import { ThunkDispatch } from 'redux-thunk';
 import { AppState } from '../../store/Store';
 import { AppRoutes } from '../App/App';
 
-import { CurrentAuth, User } from '../../reducers/AuthReducer';
+import { CurrentAuth, User } from '../../store/reducers/AuthReducer';
 
-import { getProjects } from '../../actions/ProjectActions';
-import { Project, ProjectStatus } from '../../reducers/ProjectReducer';
+import { getProjects } from '../../store/actions/ProjectActions';
+import { Project, ProjectStatus } from '../../store/reducers/ProjectReducer';
 
 import Header from '../../components/Header/Header';
 import Loading from '../../components/Loading/Loading';

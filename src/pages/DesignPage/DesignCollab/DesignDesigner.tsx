@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { DetailType } from '../../../reducers/ProjectReducer';
+import { DetailType } from '../../../store/reducers/ProjectReducer';
 
 import { DesignCollabProps, hasApprovedDetails, hasSubmittedDetails } from './DesignCollab';
 

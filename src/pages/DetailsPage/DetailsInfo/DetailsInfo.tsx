@@ -1,7 +1,7 @@
 import React from 'react';
 import './DetailsInfo.scss';
 
-import { Project } from '../../../reducers/ProjectReducer';
+import { Project } from '../../../store/reducers/ProjectReducer';
 
 interface DetailsInfoProps {
   project: Project;

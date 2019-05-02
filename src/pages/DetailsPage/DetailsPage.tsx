@@ -9,7 +9,7 @@ import { ThunkDispatch } from 'redux-thunk';
 import { AppState } from '../../store/Store';
 import { AppRoutes } from '../App/App';
 
-import { CurrentAuth } from '../../reducers/AuthReducer';
+import { CurrentAuth } from '../../store/reducers/AuthReducer';
 
 import {
   addDetail,
@@ -18,8 +18,15 @@ import {
   getLatestProject,
   getProject,
   updateProject,
-} from '../../actions/ProjectActions';
-import { Detail, DetailStatus, DetailType, Project, ProjectStatus } from '../../reducers/ProjectReducer';
+} from '../../store/actions/ProjectActions';
+
+import {
+  Detail,
+  DetailStatus,
+  DetailType,
+  Project,
+  ProjectStatus,
+} from '../../store/reducers/ProjectReducer';
 
 import CollabWorkzone from '../../components/CollabWorkzone/CollabWorkzone';
 import Header from '../../components/Header/Header';

@@ -3,7 +3,7 @@ import { ThunkAction } from 'redux-thunk';
 
 import { protectedApi } from '../reducers/AuthReducer';
 import { Detail, Item, ItemForm, ItemStatus, Project, ProjectForm } from '../reducers/ProjectReducer';
-import { AppState } from '../store/Store';
+import { AppState } from '../Store';
 
 export enum ProjectActionTypes {
   GET_PROJECTS = 'GET_PROJECTS',

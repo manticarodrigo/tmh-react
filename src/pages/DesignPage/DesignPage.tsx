@@ -9,7 +9,7 @@ import { ThunkDispatch } from 'redux-thunk';
 import { AppState } from '../../store/Store';
 import { AppRoutes } from '../App/App';
 
-import { CurrentAuth } from '../../reducers/AuthReducer';
+import { CurrentAuth } from '../../store/reducers/AuthReducer';
 
 import {
   addDetail,
@@ -21,7 +21,7 @@ import {
   getProject,
   updateDetail,
   updateProject,
-} from '../../actions/ProjectActions';
+} from '../../store/actions/ProjectActions';
 
 import {
   Detail,
@@ -30,7 +30,7 @@ import {
   Item,
   ItemForm,
   Project,
-} from '../../reducers/ProjectReducer';
+} from '../../store/reducers/ProjectReducer';
 
 import Header from '../../components/Header/Header';
 import Loading from '../../components/Loading/Loading';

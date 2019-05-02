@@ -7,11 +7,11 @@ import { connect } from 'react-redux';
 import { Action } from 'redux';
 import { ThunkDispatch } from 'redux-thunk';
 
-import { CurrentAuth } from '../../reducers/AuthReducer';
+import { CurrentAuth } from '../../store/reducers/AuthReducer';
 import { AppState } from '../../store/Store';
 
-import { createProject } from '../../actions/ProjectActions';
-import { Project, ProjectBudgetOptions, ProjectForm } from '../../reducers/ProjectReducer';
+import { createProject } from '../../store/actions/ProjectActions';
+import { Project, ProjectBudgetOptions, ProjectForm } from '../../store/reducers/ProjectReducer';
 
 import Header from '../../components/Header/Header';
 import OnboardingSteps from './OnboardingSteps/OnboardingSteps';

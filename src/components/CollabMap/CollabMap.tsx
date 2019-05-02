@@ -11,7 +11,7 @@ import '../../../node_modules/leaflet/dist/leaflet.css';
 
 import { ImageOverlay, Map } from 'react-leaflet';
 
-import { Detail, Item, ItemForm } from '../../reducers/ProjectReducer';
+import { Detail, Item, ItemForm } from '../../store/reducers/ProjectReducer';
 
 import CollabFormMarker, { CollabFormMarkerState, ItemFieldErrors } from './CollabFormMarker';
 import CollabInfoMarker from './CollabInfoMarker';
@@ -43,7 +43,7 @@ export const CollabMap = (props: CollabMapProps) => {
       img.src = floorplan.image;
       img.onload = () => setMapBounds(img.width, img.height);
     }
-  }, []);
+  }, [floorplan]);
 
   const handleDblClick = (event: LeafletMouseEvent) => {
     const { latlng } = event;

@@ -2,7 +2,7 @@
 import React, { ReactNode } from 'react';
 import './CollabCollection.scss';
 
-import { Item } from '../../reducers/ProjectReducer';
+import { Item } from '../../store/reducers/ProjectReducer';
 
 import Modal from '../Modal/Modal';
 

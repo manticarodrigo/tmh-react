@@ -1,7 +1,7 @@
 import React, { ReactNode } from 'react';
 import './CollabImage.scss';
 
-import { Detail } from '../../reducers/ProjectReducer';
+import { Detail } from '../../store/reducers/ProjectReducer';
 
 interface CollabImageProps {
   children?: ReactNode;

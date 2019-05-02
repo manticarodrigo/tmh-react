@@ -4,7 +4,7 @@ import { BrowserRouter as Router } from 'react-router-dom';
 
 import { AppState } from '../../store/Store';
 
-import { CurrentAuth } from '../../reducers/AuthReducer';
+import { CurrentAuth } from '../../store/reducers/AuthReducer';
 
 import {
   ProtectedRoute,
