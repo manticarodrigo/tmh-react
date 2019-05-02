@@ -1,4 +1,4 @@
-import React, { Fragment, useEffect, useState } from 'react';
+import React, { Fragment, useEffect } from 'react';
 import { connect } from 'react-redux';
 import { BrowserRouter as Router } from 'react-router-dom';
 
@@ -17,7 +17,7 @@ import DetailsPage from '../DetailsPage/DetailsPage';
 import LoginPage from '../LoginPage/LoginPage';
 import OnboardingPage from '../OnboardingPage/OnboardingPage';
 
-import WebSocketService, { startConnection } from '../../store/sockets/WebSocket';
+import useChatSocket from '../../hooks/useChatSocket';
 
 interface AppProps {
   auth?: CurrentAuth;
@@ -34,40 +34,17 @@ export enum AppRoutes {
 
 const App = (props: AppProps) => {
   const { auth } = props;
-  const [socket, setSocket] = useState();
-  
-  useEffect(() => {
-    console.log(auth);
-    if (auth) {
-      startConnection()
-        .then((instance: WebSocketService) => {
-            console.log('socket', instance);
-            setSocket(instance);
-            instance.initChatUser(auth.user.username);
-            instance.addCallbacks(
-              (messages) => {
-                console.log('messages', messages);
-              },
-              (message) => {
-                console.log(message);
-              });
-            instance.fetchMessages(auth.user.username);
-          })
-          .catch(error => {
-            console.log(error);
-        });
-    }
-  }, [auth]);
+  // const socket = useChatSocket(auth);
 
-  useEffect(() => {
-    if (socket && auth) {
-      const messageObject = {
-        from: auth.user.username,
-        text: 'yo',
-      };
-      socket.newChatMessage(messageObject);
-    }
-  }, [socket]);
+  // useEffect(() => {
+  //   if (socket && auth) {
+  //     const messageObject = {
+  //       from: auth.user.username,
+  //       text: 'test message',
+  //     };
+  //     socket.newChatMessage(messageObject);
+  //   }
+  // }, [socket]);
 
   const defaultProtectedRouteProps: ProtectedRouteProps = {
     isAuthenticated: !!auth,
