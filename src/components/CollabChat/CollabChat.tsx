@@ -1,4 +1,4 @@
-import React, { memo, useEffect } from 'react';
+import React, { ChangeEvent, FormEvent, memo, useState } from 'react';
 import './CollabChat.scss';
 
 import { CurrentAuth } from '../../store/reducers/AuthReducer';
@@ -14,16 +14,22 @@ interface CollabChatProps {
 const CollabChat = (props: CollabChatProps) => {
   const { auth, project } = props;
   const { socket, messages } = useChatSocket(auth);
-  console.log(messages);
-  // useEffect(() => {
-  //   if (socket && auth && project) {
-  //     const messageObject = {
-  //       from: auth.user.username,
-  //       text: 'test message',
-  //     };
-  //     socket.newChatMessage(messageObject);
-  //   }
-  // }, [socket, auth, project]);
+  const [message, setMessage] = useState('');
+
+  const handleMessageChanged = (e: ChangeEvent<HTMLInputElement>) => setMessage(e.target.value);
+
+  const handleSendMessage = (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    if (auth && socket) {
+      const messageObject = {
+        from: auth.user.username,
+        text: message,
+      };
+      socket.newChatMessage(messageObject);
+      setMessage('');
+    }
+  };
 
   return (
     <footer>
@@ -37,15 +43,21 @@ const CollabChat = (props: CollabChatProps) => {
             <button className="chat__header__button" />
           </div>
           <div className="chat__messages">
-            {messages.map((message, index) => (
-              <p className="u-margin-hug--vert" key={index}>{message.content}</p>
+            {messages.map((msg, index) => (
+              <p className="u-margin-hug--vert" key={index}>{msg.content}</p>
             ))}
           </div>
-          <div className="chat__util">
-            <button className="chat__util__attachment" />
-            <input className="chat__util__input" type="text" placeholder="Send a message" />
-            <button className="chat__util__submit">Send</button>
-          </div>
+          <form className="chat__form" onSubmit={handleSendMessage}>
+            <button className="chat__form__attachment" />
+            <input
+              className="chat__form__input"
+              type="text"
+              placeholder="Send a message"
+              value={message}
+              onChange={handleMessageChanged}
+            />
+            <button className="chat__form__submit" type="submit">Send</button>
+          </form>
         </div>
       </aside>
     </footer>

@@ -55,7 +55,7 @@ const useChatSocket = (auth?: CurrentAuth) => {
             instance.addCallbacks(
               (messages) => {
                 console.log('messages', messages);
-                dispatch({ type: 'messages', payload: messages });
+                dispatch({ type: 'messages', payload: messages.reverse() });
               },
               (message) => {
                 console.log('message', message);
