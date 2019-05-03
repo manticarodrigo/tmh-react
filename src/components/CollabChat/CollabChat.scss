@@ -1,0 +1,83 @@
+@import '../../styles/global';
+
+.chat {
+  position: fixed;
+  right: 20px;
+  bottom: 20px;
+  box-shadow: $box-shadow;
+  overflow: hidden;
+
+  &__container {
+    display: flex;
+    flex-direction: column;
+    background-color: color(default, light);
+    min-width: 350px;
+  }
+
+  &__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid color(secondary, light);
+    padding: 10px 20px;
+
+    &__title {
+
+      & > * {
+        display: inline-block;
+        margin-right: 10px;
+      }
+
+      img {
+        width: 30px;
+        height: 30px;
+      }
+    }
+
+    &__button {
+      background: url('../../assets/images/utility/down-arrow.png') no-repeat center;
+      background-size: 26px;
+      width: 30px;
+      height: 30px;
+    }
+  }
+
+  &__messages {
+    flex-basis: 350px;
+    padding: 20px;
+    overflow-y: scroll;
+  }
+
+  &__util {
+    display: flex;
+    padding: 10px;
+
+    > *:focus {
+      z-index: 2;
+    }
+
+    &__attachment {
+      border: 2px solid color(secondary, base);
+      background: url('../../assets/images/utility/attach.png') no-repeat center;
+      background-color: color(default, light);
+      background-size: 20px;
+      max-width: 56px;
+      height: 56px;
+    }
+
+    &__input {
+      border-top: 2px solid color(secondary, base);
+      border-bottom: 2px solid color(secondary, base);
+      background-color: color(default, light);
+    }
+
+    &__submit {
+      border: 2px solid color(secondary, base);
+      background-color: color(default, light);
+      max-width: 70px;
+      height: 56px;
+      text-transform: uppercase;
+      color: color(secondary, darker);
+    }
+  }
+}

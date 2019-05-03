@@ -11,6 +11,8 @@ import { AppRoutes } from '../App/App';
 
 import { CurrentAuth } from '../../store/reducers/AuthReducer';
 
+import CollabChat from '../../components/CollabChat/CollabChat';
+
 import {
   addDetail,
   deleteDetail,
@@ -235,6 +237,9 @@ class DetailsPage extends Component<DetailsPageProps, DetailsPageState> {
           </CollabWorkzone>
           <DetailsInfo project={project} />
         </main>
+        {auth && project && (
+          <CollabChat auth={auth} project={project} />
+        )}
       </React.Fragment>
     ) : <Loading />;
   }

@@ -1,4 +1,4 @@
-import React, { Fragment, useEffect } from 'react';
+import React, { Fragment } from 'react';
 import { connect } from 'react-redux';
 import { BrowserRouter as Router } from 'react-router-dom';
 
@@ -17,8 +17,6 @@ import DetailsPage from '../DetailsPage/DetailsPage';
 import LoginPage from '../LoginPage/LoginPage';
 import OnboardingPage from '../OnboardingPage/OnboardingPage';
 
-import useChatSocket from '../../hooks/useChatSocket';
-
 interface AppProps {
   auth?: CurrentAuth;
 }
@@ -34,17 +32,6 @@ export enum AppRoutes {
 
 const App = (props: AppProps) => {
   const { auth } = props;
-  // const socket = useChatSocket(auth);
-
-  // useEffect(() => {
-  //   if (socket && auth) {
-  //     const messageObject = {
-  //       from: auth.user.username,
-  //       text: 'test message',
-  //     };
-  //     socket.newChatMessage(messageObject);
-  //   }
-  // }, [socket]);
 
   const defaultProtectedRouteProps: ProtectedRouteProps = {
     isAuthenticated: !!auth,

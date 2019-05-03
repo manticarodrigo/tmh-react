@@ -1,3 +1,10 @@
+import { ChatMessage } from '../../hooks/useChatSocket';
+
+export interface ChatMessageForm {
+  from: string;
+  text: string;
+}
+
 type Nullable<T> = T | null;
 
 enum CallbackOptions {
@@ -55,11 +62,14 @@ export default class WebSocketService {
     this.sendMessage({ username, command: 'fetch_messages' });
   }
 
-  newChatMessage(message: any) {
+  newChatMessage(message: ChatMessageForm) {
     this.sendMessage({ command: 'new_message', from: message.from, text: message.text });
   }
 
-  addCallbacks(messagesCallback: (messages: string[]) => void, newMessageCallback: (message: string) => void) {
+  addCallbacks(
+    messagesCallback: (messages: ChatMessage[]) => void,
+    newMessageCallback: (message: ChatMessage) => void,
+  ) {
     this.callbacks[CallbackOptions.MESSAGES] = messagesCallback;
     this.callbacks[CallbackOptions.NEW_MESSAGE] = newMessageCallback;
   }
