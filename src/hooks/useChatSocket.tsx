@@ -34,7 +34,7 @@ const chatReducer = (state: ChatSocketState, action: ChatSocketActions) => {
   }
 };
 
-const useChatSocket = (auth?: CurrentAuth) => {
+const useChatSocket = (auth?: CurrentAuth, projectId?: string) => {
   const [state, dispatch] = useReducer(chatReducer, { messages: []});
 
   const closeSocket = () => {
@@ -45,31 +45,25 @@ const useChatSocket = (auth?: CurrentAuth) => {
   };
 
   useEffect(() => {
-    if (auth) {
-      startConnection()
+    if (auth && projectId) {
+      startConnection(projectId)
         .then((instance: WebSocketService) => {
-            console.log('socket', instance);
             dispatch({ type: 'socket', payload: instance });
 
             instance.initChatUser(auth.user.username);
             instance.addCallbacks(
               (messages) => {
-                console.log('messages', messages);
                 dispatch({ type: 'messages', payload: messages.reverse() });
               },
               (message) => {
-                console.log('message', message);
                 dispatch({ type: 'message', payload: message });
               });
             instance.fetchMessages(auth.user.username);
-          })
-          .catch(error => {
-            console.log(error);
-        });
+          });
     }
 
     return closeSocket();
-  }, [auth]);
+  }, [auth, projectId]);
 
   return state;
 };

@@ -18,7 +18,7 @@ $chat-width: 350px;
     min-width: $chat-width;
 
     .chat--collapsed & {
-      min-width: 110px;
+      min-width: $chat-width / 3;
     }
   }
 
@@ -30,7 +30,7 @@ $chat-width: 350px;
     padding: 10px 20px;
 
     .chat--collapsed & {
-      transition: background-color ($duration / 2);
+      transition: background-color ($duration / 2), flex-direction $duration;
       border-bottom: 0;
       background-color: color(primary, base);
       transition-delay: $duration;

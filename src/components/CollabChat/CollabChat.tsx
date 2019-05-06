@@ -13,7 +13,7 @@ interface CollabChatProps {
 
 const CollabChat = (props: CollabChatProps) => {
   const { auth, project } = props;
-  const { socket, messages } = useChatSocket(auth);
+  const { socket, messages } = useChatSocket(auth, project.id);
   const [message, setMessage] = useState('');
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [messageListRef, setMessageListRef] = useState();

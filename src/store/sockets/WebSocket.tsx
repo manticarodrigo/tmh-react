@@ -22,8 +22,8 @@ export default class WebSocketService {
   socketRef: Nullable<WebSocket> = null;
   callbacks: Callbacks = {};
 
-  constructor() {
-    const path = 'ws://localhost:8000/ws/chat/';
+  constructor(projectId: string) {
+    const path = `ws://localhost:8000/ws/chat/${projectId}/`;
 
     if (path) {
       this.connect(path);
@@ -83,8 +83,8 @@ export default class WebSocketService {
   }
 }
 
-export const startConnection = (): Promise<WebSocketService> => {
-  const instance = new WebSocketService();
+export const startConnection = (projectId: string): Promise<WebSocketService> => {
+  const instance = new WebSocketService(projectId);
 
   return new Promise((resolve) => {
     const tryConnection = () => {
