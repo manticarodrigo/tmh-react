@@ -28,7 +28,7 @@ const CollabChat = (props: CollabChatProps) => {
         from: auth.user.username,
         text: message,
       };
-      socket.newChatMessage(messageObject);
+      socket.sendMessage(messageObject);
       setMessage('');
     }
   };

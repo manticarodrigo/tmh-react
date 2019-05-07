@@ -1,7 +1,7 @@
 import { useEffect, useReducer } from 'react';
 
 import { CurrentAuth } from '../store/reducers/AuthReducer';
-import WebSocketService, { startConnection } from '../store/sockets/WebSocket';
+import ChatSocketService, { startConnection } from '../store/sockets/ChatSocketService';
 
 export interface ChatMessage {
   id: string;
@@ -12,14 +12,16 @@ export interface ChatMessage {
 }
 
 interface ChatSocketState {
-  socket?: WebSocketService;
+  socket?: ChatSocketService;
   messages: ChatMessage[];
 }
 
 type ChatSocketActions =
-  | { type: 'socket', payload: WebSocketService }
+  | { type: 'socket', payload: ChatSocketService }
   | { type: 'message', payload: ChatMessage }
   | { type: 'messages', payload: ChatMessage[] };
+
+const openSockets: ChatSocketService[] = [];
 
 const chatReducer = (state: ChatSocketState, action: ChatSocketActions) => {
   switch (action.type) {
@@ -37,20 +39,13 @@ const chatReducer = (state: ChatSocketState, action: ChatSocketActions) => {
 const useChatSocket = (auth?: CurrentAuth, projectId?: string) => {
   const [state, dispatch] = useReducer(chatReducer, { messages: []});
 
-  const closeSocket = () => {
-    const { socket } = state;
-    if (socket && socket.socketRef) {
-      socket.socketRef.close();
-    }
-  };
-
   useEffect(() => {
     if (auth && projectId) {
       startConnection(projectId)
-        .then((instance: WebSocketService) => {
+        .then((instance: ChatSocketService) => {
             dispatch({ type: 'socket', payload: instance });
+            openSockets.push(instance);
 
-            instance.initChatUser(auth.user.username);
             instance.addCallbacks(
               (messages) => {
                 dispatch({ type: 'messages', payload: messages.reverse() });
@@ -58,11 +53,15 @@ const useChatSocket = (auth?: CurrentAuth, projectId?: string) => {
               (message) => {
                 dispatch({ type: 'message', payload: message });
               });
-            instance.fetchMessages(auth.user.username);
+            instance.fetchMessages();
           });
     }
 
-    return closeSocket();
+    return () => {
+      openSockets.forEach((socket) => {
+        socket.close();
+      });
+    };
   }, [auth, projectId]);
 
   return state;
