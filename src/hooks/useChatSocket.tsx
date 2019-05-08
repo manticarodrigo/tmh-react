@@ -47,11 +47,11 @@ const useChatSocket = (auth?: CurrentAuth, projectId?: string) => {
             openSockets.push(instance);
 
             instance.addCallbacks(
-              (messages) => {
-                dispatch({ type: 'messages', payload: messages.reverse() });
+              (data: any) => {
+                dispatch({ type: 'messages', payload: data.messages });
               },
-              (message) => {
-                dispatch({ type: 'message', payload: message });
+              (data: any) => {
+                dispatch({ type: 'message', payload: data.message });
               });
             instance.fetchMessages();
           });

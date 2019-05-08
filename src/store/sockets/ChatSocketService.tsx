@@ -14,13 +14,17 @@ enum CallbackOptions {
 
 export default class ChatSocketSerivce extends WebSocketService {
 
-  isReady = () => this.socketRef && this.socketRef.readyState === 1;
+  isReady = () => (
+    this.socketRef && this.socketRef.readyState === 1
+  )
 
-  fetchMessages = () => this.send({ command: 'fetch_messages' });
+  fetchMessages = () => (
+    this.send({ command: CallbackOptions.FETCH_MESSAGES })
+  )
 
-  sendMessage = (message: ChatMessageForm) => {
-    this.send({ command: 'new_message', from: message.from, text: message.text });
-  }
+  sendMessage = (message: ChatMessageForm) => (
+    this.send({ command: CallbackOptions.NEW_MESSAGE, from: message.from, text: message.text })
+  )
 
   addCallbacks(
     messagesCallback: (messages: ChatMessage[]) => void,
@@ -28,23 +32,6 @@ export default class ChatSocketSerivce extends WebSocketService {
   ) {
     this.callbacks[CallbackOptions.MESSAGES] = messagesCallback;
     this.callbacks[CallbackOptions.NEW_MESSAGE] = newMessageCallback;
-  }
-
-  send(data: any) {
-    const { stringify } = JSON;
-
-    try {
-      this.socketRef!.send(stringify({ ...data }));
-    } catch (err) {
-      console.log(err.message);
-    }
-  }
-
-  close() {
-    console.log(this.socketRef);
-    if (this.socketRef) {
-      this.socketRef.close();
-    }
   }
 }
 
