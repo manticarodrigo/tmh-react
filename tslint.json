@@ -10,7 +10,8 @@
     "jsx-no-multiline-js": false,
     "jsx-boolean-value": false,
     "member-access": [true, "no-public"],
-    "interface-name": [false, "always-prefix"],
-    "variable-name": [true, "allow-snake-case", "allow-pascal-case"]
+    "variable-name": [true, "allow-snake-case", "allow-pascal-case"],
+    "no-implicit-dependencies": [true, ["assets", "components", "hooks", "pages", "services", "store", "styles"]],
+    "no-submodule-imports": false
   }
 }
