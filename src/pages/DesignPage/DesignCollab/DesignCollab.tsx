@@ -1,7 +1,7 @@
 import React from 'react';
 import { Route, Switch } from 'react-router-dom';
 
-import { AppRoutes } from '../../App/App';
+import { AppRoutes } from 'pages/App/App';
 
 import {
   Detail,
@@ -9,12 +9,12 @@ import {
   Item,
   ItemForm,
   Project,
-} from '../../../store/reducers/ProjectReducer';
+} from 'store/reducers/ProjectReducer';
 
 import DesignClient from './DesignClient';
 import DesignDesigner from './DesignDesigner';
 
-export interface DesignCollabProps {
+export type DesignCollabProps = {
   project: Project;
   conceptboards?: Detail[];
   floorplan?: Detail;
@@ -27,7 +27,7 @@ export interface DesignCollabProps {
   handleApproveDetailClicked: (detail: Detail) => void;
   handleGetItems: () => void;
   handleAddItem: (itemForm: ItemForm) => void;
-}
+};
 
 export const hasFinishedDetails = (details: Detail[]) => hasSubmittedDetails(details) || hasApprovedDetails(details);
 
@@ -58,4 +58,4 @@ const DesignCollab = (props: DesignCollabProps) => {
   );
 };
 
-export default React.memo(DesignCollab);
+export default DesignCollab;

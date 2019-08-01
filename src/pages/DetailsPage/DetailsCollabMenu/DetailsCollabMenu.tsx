@@ -3,11 +3,11 @@ import './DetailsCollabMenu.scss';
 
 import { Project } from '../../../store/reducers/ProjectReducer';
 
-interface DetailsCollabMenuProps {
+type DetailsCollabMenuProps = {
   project: Project;
   view: string;
   handleViewChanged: (e: React.SyntheticEvent<HTMLButtonElement>) => void;
-}
+};
 
 const tabs = [
   {
@@ -49,4 +49,4 @@ const DetailsCollabMenu = (props: DetailsCollabMenuProps) => (
   </div>
 );
 
-export default React.memo(DetailsCollabMenu);
+export default DetailsCollabMenu;

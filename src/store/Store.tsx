@@ -1,34 +1,41 @@
-import { applyMiddleware, combineReducers, compose, createStore, Store } from 'redux';
-import thunk from 'redux-thunk';
+import React, { createContext, ReactNode, Dispatch } from 'react';
 
-// Import reducers and state type
-import {
-  AuthReducer,
-  AuthState,
-} from './reducers/AuthReducer';
+import { useAsyncReducer } from 'hooks/useAppState';
+import { AuthAction } from 'store/actions/AuthActions';
+import { ProjectAction } from 'store/actions/ProjectActions';
+import { AuthState, authReducer, loadLocalUserState } from 'store/reducers/AuthReducer';
+import { ProjectState, projectReducer } from 'store/reducers/ProjectReducer';
 
-import {
-  ProjectReducer,
-  ProjectState,
-} from './reducers/ProjectReducer';
+type AppState = {
+  authState: AuthState,
+  projectState: ProjectState,
+};
 
-// Create an interface for the application state
-export interface AppState {
-  authState: AuthState;
-  projectState: ProjectState;
-}
+type AppAction = AuthAction | ProjectAction;
 
-// Create the root reducer
-const rootReducer = combineReducers<AppState>({
-  authState: AuthReducer,
-  projectState: ProjectReducer,
+type ProviderProps = {
+  children: ReactNode;
+};
+
+type ProviderAsyncAction = (dispatch: Dispatch<AppAction>) => any;
+type ProviderDispatch = (action: AppAction | ProviderAsyncAction) => any;
+
+type ProviderValue = [AppState, ProviderDispatch];
+
+const rootReducer = (state: AppState, action: AppAction) => ({
+  authState: authReducer(state.authState, action as AuthAction),
+  projectState: projectReducer(state.projectState, action as ProjectAction),
 });
 
-// Create a configure store function of type `AppState`
-function configureStore(initialState?: {}): Store<AppState, any> {
-  const composeEnhancers = (window as any).__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
-  return createStore(rootReducer, initialState, composeEnhancers(applyMiddleware(thunk)));
-}
+const initialState: AppState = {
+  authState: loadLocalUserState(),
+  projectState: {},
+};
 
-// Generate the store
-export const store = configureStore();
+export const AppStateContext = createContext<ProviderValue>([initialState, () => undefined]);
+
+export const AppStateProvider = ({ children }: ProviderProps) => (
+  <AppStateContext.Provider value={useAsyncReducer(rootReducer, initialState)}>
+    {children}
+  </AppStateContext.Provider>
+);

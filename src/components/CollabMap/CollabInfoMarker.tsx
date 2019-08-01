@@ -1,11 +1,11 @@
 import React, { useEffect } from 'react';
 import { Marker, Popup } from 'react-leaflet';
-
 import { DivIcon, LatLngBounds } from 'leaflet';
 
-interface CollabInfoMarkerProps {
+type CollabInfoMarkerProps = {
   bounds: LatLngBounds;
-}
+};
+
 const CollabInfoMarker = (props: CollabInfoMarkerProps) => {
   let markerRef: Marker;
 
@@ -34,4 +34,4 @@ const CollabInfoMarker = (props: CollabInfoMarkerProps) => {
   );
 };
 
-export default React.memo(CollabInfoMarker);
+export default CollabInfoMarker;

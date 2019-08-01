@@ -5,24 +5,24 @@ import { CurrentAuth } from 'store/reducers/AuthReducer';
 import { Project } from 'store/reducers/ProjectReducer';
 
 import useChatSocket from 'hooks/useChatSocket';
-import { IChatMessage } from 'services/ChatSocketService';
+import { ChatMessage } from 'services/ChatSocketService';
 
-interface ICollabChatProps {
+type CollabChatProps = {
   auth: CurrentAuth;
   project: Project;
-}
+};
 
-const CollabChat = (props: ICollabChatProps) => {
+const CollabChat = (props: CollabChatProps) => {
   const { auth, project } = props;
   const { socket, messages } = useChatSocket(auth, project.id);
   const [message, setMessage] = useState('');
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [messageListRef, setMessageListRef] = useState();
 
-  const handleMessageChanged = (e: ChangeEvent<HTMLInputElement>) => setMessage(e.target.value);
+  const handleMessageChanged = ({ target }: ChangeEvent<HTMLInputElement>) => setMessage(target.value);
 
-  const handleSendMessage = (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
+  const handleSendMessage = (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
 
     if (auth && socket) {
       const messageObject = {
@@ -48,10 +48,10 @@ const CollabChat = (props: ICollabChatProps) => {
 
   useEffect(() => scrollToBottom(), [messages]);
 
-  const isConsecutiveMessage = (msg: IChatMessage, index: number) =>
+  const isConsecutiveMessage = (msg: ChatMessage, index: number) =>
     index > 0 && messages[index - 1].author === msg.author;
 
-  const groupedMessages = messages.reduce((acc: IChatMessage[][], msg: IChatMessage, index: number) => {
+  const groupedMessages: ChatMessage[][] = messages.reduce((acc: ChatMessage[][], msg: ChatMessage, index: number) => {
     if (isConsecutiveMessage(msg, index)) {
       const lastArr = [...(acc.pop() || []), msg];
       return [...acc, lastArr];
@@ -66,7 +66,7 @@ const CollabChat = (props: ICollabChatProps) => {
         <div className="chat__container">
           <div className="chat__header">
             <div className="chat__header__image">
-              <img src={require('../../assets/images/utility/chat.png')} />
+              <img src={require('assets/images/utility/chat.png')} />
             </div>
             <button className="chat__header__button" onClick={handleToggleButton} />
           </div>

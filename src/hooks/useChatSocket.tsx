@@ -1,21 +1,21 @@
 import { useEffect, useReducer } from 'react';
 
-import ChatSocketService, { IChatMessage, startConnection } from 'services/ChatSocketService';
+import ChatSocketService, { ChatMessage, startConnection } from 'services/ChatSocketService';
 import { CurrentAuth } from 'store/reducers/AuthReducer';
 
-interface IChatSocketState {
+type ChatSocketState = {
   socket?: ChatSocketService;
-  messages: IChatMessage[];
-}
+  messages: ChatMessage[];
+};
 
-type ChatSocketActions =
+type ChatSocketAction =
   | { type: 'socket', payload: ChatSocketService }
-  | { type: 'message', payload: IChatMessage }
-  | { type: 'messages', payload: IChatMessage[] };
+  | { type: 'message', payload: ChatMessage }
+  | { type: 'messages', payload: ChatMessage[] };
 
 const openSockets: ChatSocketService[] = [];
 
-const chatReducer = (state: IChatSocketState, action: ChatSocketActions) => {
+const chatReducer = (state: ChatSocketState, action: ChatSocketAction) => {
   switch (action.type) {
     case 'socket':
       return { ...state, socket: action.payload };

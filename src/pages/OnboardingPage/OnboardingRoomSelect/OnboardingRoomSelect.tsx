@@ -3,10 +3,10 @@ import './OnboardingRoomSelect.scss';
 
 import { OnboardingStepsProps } from '../OnboardingSteps/OnboardingSteps';
 
-interface RoomType {
+type RoomType = {
   type: string;
   title: string;
-}
+};
 
 const rooms: RoomType[] = [
   {
@@ -48,7 +48,7 @@ const OnboardingRoomSelect = (props: OnboardingStepsProps) => (
           readOnly
         />
         <label className="onboarding__steps__rooms__item" htmlFor={room.type}>
-          <img src={require(`../../../assets/images/rooms/${room.type}.png`)} />
+          <img src={require(`assets/images/rooms/${room.type}.png`)} />
           <p className="u-margin-hug--bottom">{room.title}</p>
         </label>
       </div>
@@ -56,4 +56,4 @@ const OnboardingRoomSelect = (props: OnboardingStepsProps) => (
   </div>
 );
 
-export default React.memo(OnboardingRoomSelect);
+export default OnboardingRoomSelect;

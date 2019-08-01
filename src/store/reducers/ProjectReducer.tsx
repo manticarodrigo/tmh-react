@@ -1,10 +1,4 @@
-import { Reducer } from 'redux';
-
-import {
-  ProjectActions,
-  ProjectActionTypes,
-} from '../actions/ProjectActions';
-
+import { ProjectAction } from 'store/actions/ProjectActions';
 import { User } from './AuthReducer';
 
 export class Project {
@@ -27,7 +21,7 @@ export class Project {
   final_note!: string;
   revision_count!: string;
 
-  constructor(init?: Partial<User>) {
+  constructor(init?: Partial<Project>) {
     Object.assign(this, init);
   }
 
@@ -80,7 +74,7 @@ export class Project {
   }
 }
 
-export interface ProjectForm {
+export type ProjectOnboardingForm = {
   room: string;
   styles: object;
   package: string;
@@ -89,7 +83,20 @@ export interface ProjectForm {
   pet_friendly: boolean | undefined;
   limited_access: boolean | undefined;
   budget: ProjectBudgetOptions;
-}
+};
+
+export type ProjectSubmitForm = {
+  room: string;
+  shared_with: string;
+  budget: ProjectBudgetOptions;
+  zipcode: string;
+  style: string;
+  pet_friendly: boolean;
+  limited_access: boolean;
+  status: ProjectStatus;
+  end_date: string;
+  client: string;
+};
 
 export enum ProjectStatus {
   DETAILS = 'DETAILS',
@@ -112,7 +119,7 @@ export enum ProjectBudgetOptions {
   UNLIMITED = '4',
 }
 
-export interface Detail {
+export type Detail = {
   readonly id: string;
   readonly created_date: string;
   readonly modified_date: string;
@@ -120,7 +127,7 @@ export interface Detail {
   image: string;
   status: DetailStatus;
   type: DetailType;
-}
+};
 
 export enum DetailStatus {
   APPROVED = 'APPROVED',
@@ -128,16 +135,15 @@ export enum DetailStatus {
   SUBMITTED = 'SUBMITTED',
 }
 
-export enum DetailType {
-  DRAWING = 'DRAWING',
-  INSPIRATION = 'INSPIRATION',
-  FURNITURE = 'FURNITURE',
-  CONCEPT = 'CONCEPT',
-  FLOOR_PLAN = 'FLOOR_PLAN',
-  FINAL_SNAPSHOT = 'FINAL_SNAPSHOT',
-}
+export type DetailType =
+  | 'DRAWING'
+  | 'INSPIRATION'
+  | 'FURNITURE'
+  | 'CONCEPT'
+  | 'FLOOR_PLAN'
+  | 'FINAL_SNAPSHOT';
 
-export interface Item {
+export type Item = {
   readonly id: string;
   readonly created_date: string;
   readonly modified_date: string;
@@ -151,9 +157,9 @@ export interface Item {
   inspiration: string;
   lat: number;
   lng: number;
-}
+};
 
-export interface ItemForm {
+export type ItemForm = {
   make: string;
   type: string;
   price: string;
@@ -161,7 +167,7 @@ export interface ItemForm {
   file?: File;
   lat: number;
   lng: number;
-}
+};
 
 export enum ItemStatus {
   APPROVED = 'APPROVED',
@@ -171,31 +177,27 @@ export enum ItemStatus {
   ALTERNATE_READY = 'ALTERNATE_READY',
 }
 
-export interface ProjectState {
+export type ProjectState = {
   readonly projects?: Project[];
-}
-
-const defaultProjectState: ProjectState = {
-  projects: undefined,
 };
 
-export const ProjectReducer: Reducer<ProjectState, ProjectActions> = (
-  state = defaultProjectState,
-  action,
+export const projectReducer = (
+  state: ProjectState = {},
+  action: ProjectAction,
 ) => {
   switch (action.type) {
-    case ProjectActionTypes.GET_PROJECTS: {
+    case 'GET_PROJECTS': {
       return {
         ...state,
-        projects: action.projects,
+        projects: action.payload,
       };
     }
-    case ProjectActionTypes.CREATE_PROJECT: {
+    case 'CREATE_PROJECT': {
       return {
         ...state,
         projects: [
           ...(state.projects || []),
-          action.project,
+          action.payload,
         ],
       };
     }

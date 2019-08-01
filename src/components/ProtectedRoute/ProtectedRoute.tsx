@@ -1,21 +1,17 @@
 import * as React from 'react';
 import { Redirect, Route, RouteProps } from 'react-router-dom';
 
-export interface ProtectedRouteProps extends RouteProps {
+export type ProtectedRouteProps = RouteProps & {
   isAuthenticated: boolean;
   authenticationPath: string;
-}
+};
 
-export class ProtectedRoute extends Route<ProtectedRouteProps> {
-  render() {
-      const { isAuthenticated, authenticationPath } = this.props;
-      const redirectPath: string = !isAuthenticated ? authenticationPath : '';
+const ProtectedRoute = ({ isAuthenticated, authenticationPath, ...props }: ProtectedRouteProps) => {
+  const renderRedirect = () => <Redirect to={{ pathname: authenticationPath }}/>;
 
-      if (redirectPath) {
-          const render = () => (<Redirect to={{ pathname: redirectPath }}/>);
-          return <Route {...this.props} component={render} render={undefined}/>;
-      }
+  return !isAuthenticated
+    ? <Route {...props} component={renderRedirect} render={undefined}/>
+    : <Route {...props}/>;
+};
 
-      return <Route {...this.props}/>;
-  }
-}
+export default ProtectedRoute;

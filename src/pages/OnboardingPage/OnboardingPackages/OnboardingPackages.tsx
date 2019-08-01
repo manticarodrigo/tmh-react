@@ -3,12 +3,12 @@ import './OnboardingPackages.scss';
 
 import { OnboardingStepsProps } from '../OnboardingSteps/OnboardingSteps';
 
-interface PackageType {
+type PackageType = {
   type: string;
   title: string;
   subtitle: string;
   price: number;
-}
+};
 
 const packages: PackageType[] = [
   {
@@ -37,7 +37,7 @@ const OnboardingPackages = (props: OnboardingStepsProps) => (
       {packages.map((pckg, index) => (
         <div key={index} className="onboarding__steps__packages__options__item">
           <div>
-            <img src={require(`../../../assets/images/onboarding/packages/${pckg.type}.png`)} />
+            <img src={require(`assets/images/onboarding/packages/${pckg.type}.png`)} />
           </div>
           <p className="h2 u-text-bold u-text-uppercase">{pckg.title}</p>
           <p>{pckg.subtitle}</p>
@@ -78,4 +78,4 @@ const OnboardingPackages = (props: OnboardingStepsProps) => (
   </div>
 );
 
-export default React.memo(OnboardingPackages);
+export default OnboardingPackages;

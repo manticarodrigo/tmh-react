@@ -1,13 +1,13 @@
 import React from 'react';
 
+import { ProjectBudgetOptions } from 'store/reducers/ProjectReducer';
 import { OnboardingStepsProps } from '../OnboardingSteps/OnboardingSteps';
 
-import { ProjectBudgetOptions } from '../../../store/reducers/ProjectReducer';
-
-interface BudgetQuestion {
+type BudgetQuestion = {
   value: ProjectBudgetOptions;
   label: string;
-}
+};
+
 const questions: BudgetQuestion[] = [
   {
     value: ProjectBudgetOptions.LOW,
@@ -28,8 +28,8 @@ const questions: BudgetQuestion[] = [
 ];
 
 const OnboardingBudget = (props: OnboardingStepsProps) => {
-  const handleBudgetClicked = (e: React.SyntheticEvent<HTMLInputElement>) => {
-    const { value } = e.currentTarget;
+  const handleBudgetClicked = ({ currentTarget }: React.SyntheticEvent<HTMLInputElement>) => {
+    const { value } = currentTarget;
     props.handleBudgetClicked(value as ProjectBudgetOptions);
   };
 
@@ -57,4 +57,4 @@ const OnboardingBudget = (props: OnboardingStepsProps) => {
   );
 };
 
-export default React.memo(OnboardingBudget);
+export default OnboardingBudget;

@@ -1,73 +1,44 @@
+import { Dispatch } from 'react';
 import axios from 'axios';
-import { ActionCreator, Dispatch } from 'redux';
-import { ThunkAction } from 'redux-thunk';
 
-import { AuthState, CurrentAuth, RegisterForm, saveUserState } from '../reducers/AuthReducer';
+import { CurrentAuth, RegisterFields, saveLocalUserState } from 'store/reducers/AuthReducer';
 
-export enum AuthActionTypes {
-  LOGIN = 'LOGIN',
-  REGISTER = 'REGISTER',
-  LOGOUT = 'LOGOUT',
-}
+export type AuthAction =
+  | { type: 'LOGIN', payload: CurrentAuth }
+  | { type: 'REGISTER', payload: CurrentAuth }
+  | { type: 'LOGOUT' };
 
-export interface AuthLoginAction {
-  type: AuthActionTypes.LOGIN;
-  auth: CurrentAuth;
-}
-
-export const login: ActionCreator<
-  ThunkAction<Promise<any>, AuthState, void, AuthLoginAction>
-> = (username: string, password: string) => (async (dispatch: Dispatch) => {
+export const login = (username: string, password: string) => (async (dispatch: Dispatch<AuthAction>) => {
   try {
-    const response = await axios.post(
+    const { data } = await axios.post(
       `${process.env.REACT_APP_API_URL}/rest-auth/login/`,
       { username, password },
     );
 
-    saveUserState(response.data);
+    saveLocalUserState(data);
+    dispatch({ type: 'LOGIN', payload: data });
 
-    dispatch({
-      auth: response.data,
-      type: AuthActionTypes.LOGIN,
-    });
-
-  } catch (error) {
-    throw error;
-  }
-});
-
-export interface UserRegisterAction {
-  type: AuthActionTypes.REGISTER;
-  auth: CurrentAuth;
-}
-
-export const register: ActionCreator<
-  ThunkAction<Promise<any>, AuthState, void, UserRegisterAction>
-> = (registerForm: RegisterForm) => (async (dispatch: Dispatch) => {
-  try {
-    const response = await axios.post(
-      `${process.env.REACT_APP_API_URL}/rest-auth/registration/`,
-      registerForm,
-    );
-
-    saveUserState(response.data);
-
-    dispatch({
-      auth: response.data,
-      type: AuthActionTypes.LOGIN,
-    });
   } catch (error) {
     return error;
   }
 });
 
-export interface UserLogoutAction {
-  type: AuthActionTypes.LOGOUT;
-}
+export const register = (registerForm: RegisterFields) => (async (dispatch: Dispatch<AuthAction>) => {
+  try {
+    const { data } = await axios.post(
+      `${process.env.REACT_APP_API_URL}/rest-auth/registration/`,
+      registerForm,
+    );
 
-export const logout: ActionCreator<any> = () => ((dispatch: Dispatch) => {
-  saveUserState(undefined);
-  dispatch({ type: AuthActionTypes.LOGOUT });
+    saveLocalUserState(data);
+    dispatch({ type: 'REGISTER', payload: data });
+
+  } catch (error) {
+    return error;
+  }
 });
 
-export type AuthActions = AuthLoginAction | UserRegisterAction | UserLogoutAction;
+export const logout = () => ((dispatch: Dispatch<AuthAction>) => {
+  saveLocalUserState(undefined);
+  dispatch({ type: 'LOGOUT' });
+});

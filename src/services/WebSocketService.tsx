@@ -1,8 +1,8 @@
 type Nullable<T> = T | null;
 
-interface Callbacks {
+type Callbacks = {
   [propName: string]: (data: any) => void | undefined;
-}
+};
 
 export default class WebSocketService {
   callbacks: Callbacks = {};

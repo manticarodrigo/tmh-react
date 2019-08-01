@@ -1,15 +1,12 @@
-import React from 'react';
-
-import { DetailType } from '../../../store/reducers/ProjectReducer';
+import React, { Fragment } from 'react';
 
 import { DesignCollabProps, hasApprovedDetails, hasSubmittedDetails } from './DesignCollab';
 
-import CollabAlert from '../../../components/CollabAlert/CollabAlert';
-import CollabImage from '../../../components/CollabImage/CollabImage';
-import CollabMap from '../../../components/CollabMap/CollabMap';
-import CollabWorkzone from '../../../components/CollabWorkzone/CollabWorkzone';
-
-import Modal from '../../../components/Modal/Modal';
+import CollabAlert from 'components/CollabAlert/CollabAlert';
+import CollabImage from 'components/CollabImage/CollabImage';
+import CollabMap from 'components/CollabMap/CollabMap';
+import CollabWorkzone from 'components/CollabWorkzone/CollabWorkzone';
+import Modal from 'components/Modal/Modal';
 
 const DesignDesigner = (props: DesignCollabProps) => {
   const handleSubmitConceptboards = () => (
@@ -27,7 +24,7 @@ const DesignDesigner = (props: DesignCollabProps) => {
       return (
         <CollabWorkzone>
           <CollabAlert
-            type={DetailType.CONCEPT}
+            type={'CONCEPT'}
             handleFileChanged={props.handleFileChanged}
           >
             <p className="h1 u-text-uppercase u-margin-hug--top">Welcome to the Design Stage!</p>
@@ -40,7 +37,7 @@ const DesignDesigner = (props: DesignCollabProps) => {
       return (
         <CollabWorkzone>
           <CollabImage
-            type={DetailType.CONCEPT}
+            type={'CONCEPT'}
             details={props.conceptboards!}
             index={props.selectedIndex}
             handleFileChanged={props.conceptboards!.length < 2 ? props.handleFileChanged : undefined}
@@ -53,7 +50,7 @@ const DesignDesigner = (props: DesignCollabProps) => {
                 ariaLabel="Submit Concepts Confirmation"
                 centered
               >
-                <img src={require('../../../assets/images/utility/confirm.png')} />
+                <img src={require('assets/images/utility/confirm.png')} />
                 <p>By selecting the confimation below, the concept boards will be submitted to your client.</p>
                 <button onClick={handleSubmitConceptboards} className="u-text-uppercase">
                   Approve	&amp; Submit
@@ -67,7 +64,7 @@ const DesignDesigner = (props: DesignCollabProps) => {
       return (
         <CollabWorkzone>
           <CollabAlert
-            type={DetailType.FLOOR_PLAN}
+            type={'FLOOR_PLAN'}
             handleFileChanged={props.handleFileChanged}
           >
             <p>
@@ -81,7 +78,7 @@ const DesignDesigner = (props: DesignCollabProps) => {
       return (
         <CollabWorkzone>
           <CollabImage
-            type={DetailType.FLOOR_PLAN}
+            type={'FLOOR_PLAN'}
             details={[props.floorplan!]}
             index={props.selectedIndex}
             handleThumbClicked={props.handleThumbClicked}
@@ -93,7 +90,7 @@ const DesignDesigner = (props: DesignCollabProps) => {
                 ariaLabel="Submit Floorplan Confirmation"
                 centered
               >
-                <img src={require('../../../assets/images/utility/confirm.png')} />
+                <img src={require('assets/images/utility/confirm.png')} />
                 <p>By selecting the confimation below, the floorplan will be submitted to your client.</p>
                 <button onClick={handleSubmitFloorplan} className="u-text-uppercase">
                   Approve	&amp; Submit
@@ -115,8 +112,8 @@ const DesignDesigner = (props: DesignCollabProps) => {
         </CollabWorkzone>
       );
     default:
-      return <React.Fragment />;
+      return <Fragment />;
   }
 };
 
-export default React.memo(DesignDesigner);
+export default DesignDesigner;

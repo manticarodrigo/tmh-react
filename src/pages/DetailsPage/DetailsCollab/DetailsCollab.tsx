@@ -1,14 +1,14 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import { Route, Switch } from 'react-router-dom';
 
-import { AppRoutes } from '../../App/App';
+import { AppRoutes } from 'pages/App/App';
 
-import { Detail, DetailType, Project, ProjectStatus } from '../../../store/reducers/ProjectReducer';
+import { Detail, Project, ProjectStatus } from 'store/reducers/ProjectReducer';
 
-import CollabAlert from '../../../components/CollabAlert/CollabAlert';
-import CollabImage from '../../../components/CollabImage/CollabImage';
+import CollabAlert from 'components/CollabAlert/CollabAlert';
+import CollabImage from 'components/CollabImage/CollabImage';
 
-interface DetailsCollabProps {
+type DetailsCollabProps = {
   project: Project;
   drawings: Detail[];
   inspirations: Detail[];
@@ -19,7 +19,7 @@ interface DetailsCollabProps {
   handleThumbClicked: (e: React.SyntheticEvent<HTMLElement>) => void;
   handleDeleteClicked: (e: React.SyntheticEvent<HTMLElement>) => void;
   handleSubmitClicked: (project: Project) => void;
-}
+};
 
 const DetailsCollab = (props: DetailsCollabProps) => {
   const Client = () => <DetailsClientCollab {...props} />;
@@ -49,7 +49,7 @@ const DetailsClientCollab = (props: DetailsCollabProps) => {
   const handleSubmit = () => props.handleSubmitClicked(props.project);
 
   switch (props.view) {
-    case DetailType.DRAWING:
+    case 'DRAWING':
       return props.drawings.length ? (
         <CollabImage
           details={props.drawings}
@@ -75,7 +75,7 @@ const DetailsClientCollab = (props: DetailsCollabProps) => {
           <p className="u-color--secondary-darker">( 2 Picture Limit )</p>
         </CollabAlert>
       );
-    case DetailType.INSPIRATION:
+    case 'INSPIRATION':
       return props.inspirations.length ? (
         <CollabImage
           details={props.inspirations}
@@ -98,7 +98,7 @@ const DetailsClientCollab = (props: DetailsCollabProps) => {
           <p>Upload inspiration images that you would like your designer to reference for your space.</p>
         </CollabAlert>
       );
-    case DetailType.FURNITURE:
+    case 'FURNITURE':
       return props.furnitures.length ? (
         <CollabImage
           details={props.furnitures}
@@ -128,7 +128,7 @@ const DetailsClientCollab = (props: DetailsCollabProps) => {
 
 const DetailsDesignerCollab = (props: DetailsCollabProps) => {
   switch (props.view) {
-    case DetailType.DRAWING:
+    case 'DRAWING':
       return props.drawings.length ? (
         <CollabImage
           details={props.drawings}
@@ -142,7 +142,7 @@ const DetailsDesignerCollab = (props: DetailsCollabProps) => {
           <p>Feel free to chat with your client to prepare for the design phase and to help them prepare as well.</p>
         </CollabAlert>
       );
-    case DetailType.INSPIRATION:
+    case 'INSPIRATION':
       return props.inspirations.length ? (
         <CollabImage
           details={props.inspirations}
@@ -155,7 +155,7 @@ const DetailsDesignerCollab = (props: DetailsCollabProps) => {
           <p>Your client has not uploaded inspiration images yet.</p>
         </CollabAlert>
       );
-    case DetailType.FURNITURE:
+    case 'FURNITURE':
       return props.furnitures.length ? (
         <CollabImage
           details={props.furnitures}
@@ -169,8 +169,8 @@ const DetailsDesignerCollab = (props: DetailsCollabProps) => {
         </CollabAlert>
       );
     default:
-      return <React.Fragment />;
+      return <Fragment />;
   }
 };
 
-export default React.memo(DetailsCollab);
+export default DetailsCollab;

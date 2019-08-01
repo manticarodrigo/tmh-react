@@ -38,4 +38,4 @@ const OnboardingAccess = (props: OnboardingStepsProps) => (
   </div>
 );
 
-export default React.memo(OnboardingAccess);
+export default OnboardingAccess;

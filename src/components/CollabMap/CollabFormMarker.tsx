@@ -3,20 +3,19 @@ import { Marker, Popup } from 'react-leaflet';
 
 import { DivIcon, DragEndEvent } from 'leaflet';
 
-import Input from '../Input/Input';
+import { Item } from 'store/reducers/ProjectReducer';
+import Input from 'components/Input/Input';
 
-import { Item } from '../../store/reducers/ProjectReducer';
-
-interface CollabFormMarkerProps {
+type CollabFormMarkerProps = {
   items: Item[];
   position: [number, number];
   handleSubmit: (
     form: CollabFormMarkerState,
     callback: (fieldErrors: ItemFieldErrors) => void,
   ) => void;
-}
+};
 
-export interface CollabFormMarkerState {
+export type CollabFormMarkerState = {
   position: [number, number];
   make: string;
   type: string;
@@ -24,9 +23,9 @@ export interface CollabFormMarkerState {
   inspiration: string;
   file?: File;
   fieldErrors: ItemFieldErrors;
-}
+};
 
-export interface ItemFieldErrors {
+export type ItemFieldErrors = {
   make?: string[];
   type?: string[];
   price?: string[];
@@ -34,7 +33,7 @@ export interface ItemFieldErrors {
   file?: string[];
 
   [propName: string]: string[] | undefined;
-}
+};
 
 const CollabFormMarker = (props: CollabFormMarkerProps) => {
   const { position, items } = props;
@@ -64,8 +63,8 @@ const CollabFormMarker = (props: CollabFormMarkerProps) => {
 
   const handleClickFileInput = () => fileInput.click();
 
-  const handleFileChanged = (e: React.SyntheticEvent<HTMLInputElement>) =>  {
-    const { files } = e.currentTarget;
+  const handleFileChanged = ({ currentTarget }: React.SyntheticEvent<HTMLInputElement>) =>  {
+    const { files } = currentTarget;
 
     if (files) {
       const file = files[0];
@@ -80,8 +79,8 @@ const CollabFormMarker = (props: CollabFormMarkerProps) => {
     }
   };
 
-  const handleInputChanged = (e: React.SyntheticEvent<HTMLInputElement>) => {
-    const { name, value } = e.currentTarget;
+  const handleInputChanged = ({ currentTarget }: React.SyntheticEvent<HTMLInputElement>) => {
+    const { name, value } = currentTarget;
 
     setState({
       ...state,
@@ -174,4 +173,4 @@ const CollabFormMarker = (props: CollabFormMarkerProps) => {
   );
 };
 
-export default React.memo(CollabFormMarker);
+export default CollabFormMarker;

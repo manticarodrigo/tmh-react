@@ -1,23 +1,18 @@
-import React from 'react';
+import React, { Ref, forwardRef } from 'react';
 
-interface ModalTriggerProps {
-  buttonRef: (node: HTMLButtonElement) => void;
+type ModalTriggerProps = {
   onOpen: () => void;
   text: string;
-}
+};
 
-const ModalTrigger = ({
-  buttonRef,
-  onOpen,
-  text,
-}: ModalTriggerProps) => (
+const ModalTrigger = ({ onOpen, text }: ModalTriggerProps, ref: Ref<HTMLButtonElement>) => (
   <button
     className="u-text-uppercase modal__trigger"
-    ref={buttonRef}
+    ref={ref}
     onClick={onOpen}
   >
     {text}
   </button>
 );
 
-export default React.memo(ModalTrigger);
+export default forwardRef(ModalTrigger);

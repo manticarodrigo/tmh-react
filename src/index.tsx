@@ -1,24 +1,14 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import 'styles/main.scss';
 
-import { Provider } from 'react-redux';
-import { Store } from 'redux';
+import { AppStateProvider } from 'store/Store';
+import App from 'pages/App/App';
 
-import { AppState, store } from './store/Store';
+const Root = () => (
+  <AppStateProvider>
+    <App />
+  </AppStateProvider>
+);
 
-import App from './pages/App/App';
-import './styles/main.scss';
-
-interface AppProps {
-  store: Store<AppState>;
-}
-
-const Root = (props: AppProps) => {
-  return (
-    <Provider store={props.store}>
-      <App />
-    </Provider>
-  );
-};
-
-ReactDOM.render(<Root store={store} />, document.getElementById('root') as HTMLElement);
+ReactDOM.render(<Root />, document.getElementById('root') as HTMLElement);

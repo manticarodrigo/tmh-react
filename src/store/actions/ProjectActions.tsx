@@ -1,238 +1,150 @@
-import { ActionCreator, Dispatch } from 'redux';
-import { ThunkAction } from 'redux-thunk';
+import { Dispatch } from 'react';
+import { protectedApi } from 'store/reducers/AuthReducer';
+import { Detail, Item, ItemForm, ItemStatus, Project, ProjectSubmitForm } from 'store/reducers/ProjectReducer';
 
-import { protectedApi } from '../reducers/AuthReducer';
-import { Detail, Item, ItemForm, ItemStatus, Project, ProjectForm } from '../reducers/ProjectReducer';
-import { AppState } from '../Store';
+export type ProjectAction =
+  | { type: 'GET_PROJECTS', payload: Project[] }
+  | { type: 'GET_PROJECT', payload: Project }
+  | { type: 'GET_LATEST_PROJECT', payload: Project }
+  | { type: 'CREATE_PROJECT', payload: Project }
+  | { type: 'UPDATE_PROJECT', payload: Project }
+  | { type: 'GET_DETAILS', payload: Detail[] }
+  | { type: 'ADD_DETAIL', payload: Detail }
+  | { type: 'UPDATE_DETAIL', payload: Detail }
+  | { type: 'DELETE_DETAIL', payload: Detail }
+  | { type: 'GET_ITEMS', payload: Item[] }
+  | { type: 'ADD_ITEM', payload: Item }
+  | { type: 'LOGOUT' };
 
-export enum ProjectActionTypes {
-  GET_PROJECTS = 'GET_PROJECTS',
-  GET_PROJECT = 'GET_PROJECT',
-  GET_LATEST_PROJECT = 'GET_LATEST_PROJECT',
-  CREATE_PROJECT = 'CREATE_PROJECT',
-  UPDATE_PROJECT = 'UPDATE_PROJECT',
-  GET_DETAILS = 'GET_DETAILS',
-  ADD_DETAIL = 'ADD_DETAIL',
-  UPDATE_DETAIL = 'UPDATE_DETAIL',
-  DELETE_DETAIL = 'DELETE_DETAIL',
-  GET_ITEMS = 'GET_ITEMS',
-  ADD_ITEM = 'ADD_ITEM',
-}
-
-export interface ProjectGetProjectsAction {
-  type: ProjectActionTypes.GET_PROJECTS;
-  projects: Project[];
-}
-
-export const getProjects: ActionCreator<
-  ThunkAction<Promise<any>, AppState, void, ProjectGetProjectsAction>
-> = () => (async (dispatch: Dispatch) => {
+export const getProjects = () => (async (dispatch: Dispatch<ProjectAction>) => {
   try {
-    const response = await protectedApi.get('projects/me/');
+    const { data } = await protectedApi.get('projects/me/');
 
-    dispatch({
-      projects: response.data,
-      type: ProjectActionTypes.GET_PROJECTS,
-    });
+    dispatch({ type: 'GET_PROJECTS', payload: data });
 
-    return response.data;
+    return data;
   } catch (error) {
     throw error;
   }
 });
 
-export interface ProjectGetProjectAction {
-  type: ProjectActionTypes.GET_PROJECT;
-  project: Project;
-}
-
-export const getProject: ActionCreator<
-  ThunkAction<Promise<any>, AppState, void, ProjectGetProjectAction>
-> = (id: string) => (async (dispatch: Dispatch) => {
+export const getProject = (id: string) => (async (dispatch: Dispatch<ProjectAction>) => {
   try {
-    const response = await protectedApi.get(`projects/${id}/`);
+    const { data } = await protectedApi.get(`projects/${id}/`);
 
-    dispatch({ type: ProjectActionTypes.GET_PROJECT });
+    dispatch({ type: 'GET_PROJECT', payload: data });
 
-    return response.data;
+    return data;
   } catch (error) {
     throw error;
   }
 });
 
-export interface ProjectGetLatestProjectAction {
-  type: ProjectActionTypes.GET_LATEST_PROJECT;
-  project: Project;
-}
-
-export const getLatestProject: ActionCreator<
-  ThunkAction<Promise<any>, AppState, void, ProjectGetLatestProjectAction>
-> = () => (async (dispatch: Dispatch) => {
+export const getLatestProject = () => (async (dispatch: Dispatch<ProjectAction>) => {
   try {
-    const response = await protectedApi.get(`projects/latest/`);
+    const { data } = await protectedApi.get(`projects/latest/`);
 
-    dispatch({ type: ProjectActionTypes.GET_LATEST_PROJECT });
+    dispatch({ type: 'GET_LATEST_PROJECT', payload: data });
 
-    return response.data;
+    return data;
   } catch (error) {
     throw error;
   }
 });
 
-export interface ProjectCreateProjectAction {
-  type: ProjectActionTypes.CREATE_PROJECT;
-  project: Project;
-}
-
-export const createProject: ActionCreator<
-  ThunkAction<Promise<any>, AppState, void, ProjectCreateProjectAction>
-> = (projectForm: ProjectForm) => (async (dispatch: Dispatch) => {
+export const createProject = (projectForm: ProjectSubmitForm) => (async (dispatch: Dispatch<ProjectAction>) => {
   try {
-    const response = await protectedApi.post(`projects/`, projectForm);
+    const { data } = await protectedApi.post(`projects/`, projectForm);
 
-    dispatch({
-      project: response.data,
-      type: ProjectActionTypes.CREATE_PROJECT,
-    });
+    dispatch({ type: 'CREATE_PROJECT', payload: data });
 
-    return response.data;
+    return data;
   } catch (error) {
-    return error;
+    throw error;
   }
 });
 
-export interface ProjectUpdateProjectAction {
-  type: ProjectActionTypes.UPDATE_PROJECT;
-  project: Project;
-}
-
-export const updateProject: ActionCreator<
-  ThunkAction<Promise<any>, AppState, void, ProjectUpdateProjectAction>
-> = (project) => (async (dispatch: Dispatch) => {
+export const updateProject = (project: Partial<Project>) => (async (dispatch: Dispatch<ProjectAction>) => {
   try {
-    const response = await protectedApi.patch(`projects/${project.id}/`, project);
+    const { data } = await protectedApi.patch(`projects/${project.id}/`, project);
 
-    dispatch({
-      project: response.data,
-      type: ProjectActionTypes.UPDATE_PROJECT,
-    });
+    dispatch({ type: 'UPDATE_PROJECT', payload: data });
 
-    return response.data;
+    return data;
   } catch (error) {
-    return error;
+    throw error;
   }
 });
 
-export interface ProjectGetDetailsAction {
-  type: ProjectActionTypes.GET_DETAILS;
-  details: Detail[];
-}
-
-export const getDetails: ActionCreator<
-  ThunkAction<Promise<any>, AppState, void, ProjectGetDetailsAction>
-> = (projectId: string) => (async (dispatch: Dispatch) => {
+export const getDetails = (projectId: string) => (async (dispatch: Dispatch<ProjectAction>) => {
   try {
-    const response = await protectedApi.get(`details/project/?project=${projectId}`);
+    const { data } = await protectedApi.get(`details/project/?project=${projectId}`);
 
-    dispatch({ type: ProjectActionTypes.GET_DETAILS });
+    dispatch({ type: 'GET_DETAILS', payload: data });
 
-    return response.data;
+    return data;
   } catch (error) {
-    return error;
+    throw error;
   }
 });
 
-export interface ProjectAddDetailAction {
-  type: ProjectActionTypes.ADD_DETAIL;
-  detail: Detail;
-}
+export const addDetail = (project: Project, file: File, type: string, status: string) =>
+  (async (dispatch: Dispatch<ProjectAction>) => {
+    try {
+      const formData = new FormData();
 
-export const addDetail: ActionCreator<
-  ThunkAction<Promise<any>, AppState, void, ProjectAddDetailAction>
-> = (project, file, type, status) => (async (dispatch: Dispatch) => {
+      formData.append('image', file);
+      formData.append('type', type);
+      formData.append('project', project.id);
+      formData.append('status', status);
+
+      const { data } = await protectedApi.post(`details/`, formData);
+
+      dispatch({ type: 'ADD_DETAIL', payload: data });
+
+      return data;
+    } catch (error) {
+      throw error;
+    }
+  });
+
+export const updateDetail = (detail: Partial<Detail>) => (async (dispatch: Dispatch<ProjectAction>) => {
   try {
-    const formData = new FormData();
+    const { data } = await protectedApi.patch(`details/${detail.id}/`, detail);
 
-    formData.append('image', file);
-    formData.append('type', type);
-    formData.append('project', project.id);
-    formData.append('status', status);
+    dispatch({ type: 'UPDATE_DETAIL', payload: data });
 
-    const response = await protectedApi.post(`details/`, formData);
-
-    dispatch({ type: ProjectActionTypes.ADD_DETAIL });
-
-    return response.data;
+    return data;
   } catch (error) {
-    return error;
+    throw error;
   }
 });
 
-export interface ProjectUpdateDetailAction {
-  type: ProjectActionTypes.UPDATE_DETAIL;
-  detail: Detail;
-}
-
-export const updateDetail: ActionCreator<
-  ThunkAction<Promise<any>, AppState, void, ProjectAddDetailAction>
-> = (detail) => (async (dispatch: Dispatch) => {
+export const deleteDetail = (id: string) => (async (dispatch: Dispatch<ProjectAction>) => {
   try {
-    const response = await protectedApi.patch(`details/${detail.id}/`, detail);
+    const { data } = await protectedApi.delete(`details/${id}/`);
 
-    dispatch({ type: ProjectActionTypes.UPDATE_DETAIL });
+    dispatch({ type: 'DELETE_DETAIL', payload: data });
 
-    return response.data;
+    return data;
   } catch (error) {
-    return error;
+    throw error;
   }
 });
 
-export interface ProjectDeleteDetailAction {
-  type: ProjectActionTypes.DELETE_DETAIL;
-  detail: Detail;
-}
-
-export const deleteDetail: ActionCreator<
-  ThunkAction<Promise<any>, AppState, void, ProjectDeleteDetailAction>
-> = (id) => (async (dispatch: Dispatch) => {
+export const getItems = (projectId: string) => (async (dispatch: Dispatch<ProjectAction>) => {
   try {
-    const response = await protectedApi.delete(`details/${id}/`);
+    const { data } = await protectedApi.get(`items/project/?project=${projectId}`);
 
-    dispatch({ type: ProjectActionTypes.DELETE_DETAIL });
+    dispatch({ type: 'GET_ITEMS', payload: data });
 
-    return response.data;
+    return data;
   } catch (error) {
-    return error;
+    throw error;
   }
 });
 
-export interface ProjectGetItemsAction {
-  type: ProjectActionTypes.GET_ITEMS;
-  details: Item[];
-}
-
-export const getItems: ActionCreator<
-  ThunkAction<Promise<any>, AppState, void, ProjectGetItemsAction>
-> = (projectId: string) => (async (dispatch: Dispatch) => {
-  try {
-    const response = await protectedApi.get(`items/project/?project=${projectId}`);
-
-    dispatch({ type: ProjectActionTypes.GET_ITEMS });
-
-    return response.data;
-  } catch (error) {
-    return error;
-  }
-});
-
-export interface ProjectAddItemAction {
-  type: ProjectActionTypes.ADD_ITEM;
-  item: Item;
-}
-
-export const addItem: ActionCreator<
-  ThunkAction<Promise<any>, AppState, void, ProjectAddItemAction>
-> = (itemForm: ItemForm, project: Project) => (async (dispatch: Dispatch) => {
+export const addItem = (itemForm: ItemForm, project: Project) => (async (dispatch: Dispatch<ProjectAction>) => {
   try {
     const formData = new FormData();
 
@@ -246,26 +158,12 @@ export const addItem: ActionCreator<
     formData.append('lng', itemForm.lng.toString());
     formData.append('project', project.id);
 
-    const response = await protectedApi.post(`items/`, formData);
+    const { data } = await protectedApi.post(`items/`, formData);
 
-    dispatch({ type: ProjectActionTypes.ADD_ITEM });
+    dispatch({ type: 'ADD_ITEM', payload: data });
 
-    return response.data;
+    return data;
   } catch (error) {
     throw error;
   }
 });
-
-export type ProjectActions = (
-  ProjectGetProjectsAction |
-  ProjectGetProjectAction |
-  ProjectGetLatestProjectAction |
-  ProjectCreateProjectAction |
-  ProjectUpdateProjectAction |
-  ProjectGetDetailsAction |
-  ProjectAddDetailAction |
-  ProjectUpdateDetailAction |
-  ProjectDeleteDetailAction |
-  ProjectGetItemsAction |
-  ProjectAddItemAction
-);

@@ -1,19 +1,5 @@
-import { Reducer } from 'redux';
-
-import { store } from '../Store';
-
-import {
-  AuthActions,
-  AuthActionTypes,
-  logout,
-} from '../actions/AuthActions';
-
 import axios from 'axios';
-
-export interface CurrentAuth {
-  user: User;
-  key: string;
-}
+import { AuthAction } from 'store/actions/AuthActions';
 
 export class User {
   readonly id?: string;
@@ -36,50 +22,47 @@ export class User {
   getFullName = (): string => `${this.first_name} ${this.last_name}`;
 }
 
-export interface RegisterForm {
+export type CurrentAuth = {
+  user: User;
+  key: string;
+};
+
+export type RegisterFields = {
   username: string;
   first_name: string;
   last_name: string;
   email: string;
   password1: string;
   password2: string;
-
-  [propName: string]: string;
-}
-
-export interface AuthState {
-  readonly auth?: CurrentAuth;
-}
-
-const defaultUserState: AuthState = {
-  auth: undefined,
 };
 
-const loadUserState = () => {
+const LOCAL_USER_STATE = 'LOCAL_USER_STATE';
+
+export const loadLocalUserState = () => {
   try {
-    const serializedState = localStorage.getItem('initialUserState');
+    const serializedState = localStorage.getItem(LOCAL_USER_STATE);
     if (serializedState === null) {
-      return defaultUserState;
+      return {};
     }
 
-    const deserializedState = JSON.parse(serializedState);
-    setAuthHeaders(deserializedState.auth);
+    const { auth } = JSON.parse(serializedState);
+    setAuthHeaders(auth);
 
-    return deserializedState;
-  } catch (err) {
-    return defaultUserState;
+    return { auth };
+  } catch (error) {
+    throw error;
   }
 };
 
-export const saveUserState = (auth?: CurrentAuth) => {
+export const saveLocalUserState = (auth?: CurrentAuth) => {
   try {
     const state = { auth };
     const serializedState = JSON.stringify(state);
-    localStorage.setItem('initialUserState', serializedState);
+    localStorage.setItem(LOCAL_USER_STATE, serializedState);
 
     setAuthHeaders(auth);
-  } catch {
-    // ignore write errors
+  } catch (error) {
+    throw error;
   }
 };
 
@@ -91,34 +74,28 @@ export const protectedApi = axios.create({
   baseURL: `${process.env.REACT_APP_API_URL}/api/v1/`,
 });
 
-protectedApi.interceptors.response.use(undefined, (err) => {
-  const error = err.response;
-  // if response is unauthorized
-  if (error.status === 403) {
-    return store.dispatch(logout());
-  }
+export type AuthState = {
+  readonly auth?: CurrentAuth;
+};
 
-  throw error;
-});
-
-export const AuthReducer: Reducer<AuthState, AuthActions> = (
-  state = loadUserState(),
-  action,
+export const authReducer = (
+  state: AuthState = {},
+  action: AuthAction,
 ) => {
   switch (action.type) {
-    case AuthActionTypes.LOGIN: {
+    case 'LOGIN': {
       return {
         ...state,
-        auth: action.auth,
+        auth: action.payload,
       };
     }
-    case AuthActionTypes.REGISTER: {
+    case 'REGISTER': {
       return {
         ...state,
-        auth: action.auth,
+        auth: action.payload,
       };
     }
-    case AuthActionTypes.LOGOUT: {
+    case 'LOGOUT': {
       return {
         ...state,
         auth: undefined,

@@ -2,14 +2,13 @@
 import React, { ReactNode } from 'react';
 import './CollabCollection.scss';
 
-import { Item } from '../../store/reducers/ProjectReducer';
+import { Item } from 'store/reducers/ProjectReducer';
+import Modal from 'components/Modal/Modal';
 
-import Modal from '../Modal/Modal';
-
-interface CollabWorkzoneProps {
+type CollabWorkzoneProps = {
   children?: ReactNode;
   items?: Item[];
-}
+};
 
 const CollabCollection = (props: CollabWorkzoneProps) => (
   <div className="collab__collection">
@@ -48,4 +47,4 @@ const CollabCollection = (props: CollabWorkzoneProps) => (
   </div>
 );
 
-export default React.memo(CollabCollection);
+export default CollabCollection;

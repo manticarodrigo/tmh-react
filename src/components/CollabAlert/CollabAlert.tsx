@@ -1,11 +1,12 @@
 import React, { ReactNode } from 'react';
 import './CollabAlert.scss';
 
-interface CollabAlertProps {
+type CollabAlertProps = {
   children: ReactNode;
   type?: string;
   handleFileChanged?: (e: React.SyntheticEvent<HTMLInputElement>) => void;
-}
+};
+
 const CollabAlert = (props: CollabAlertProps) => {
   let fileInput: HTMLInputElement;
   const handleClickFileInput = () => fileInput.click();
@@ -30,4 +31,4 @@ const CollabAlert = (props: CollabAlertProps) => {
   );
 };
 
-export default React.memo(CollabAlert);
+export default CollabAlert;

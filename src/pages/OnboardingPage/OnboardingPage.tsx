@@ -1,33 +1,22 @@
-import React, { Component } from 'react';
+import React, { useState } from 'react';
+import { RouteComponentProps, withRouter } from 'react-router-dom';
 import './OnboardingPage.scss';
 
-import { RouteComponentProps, withRouter } from 'react-router-dom';
+import useAppState from 'hooks/useAppState';
+import { createProject } from 'store/actions/ProjectActions';
+import { ProjectBudgetOptions, ProjectStatus, ProjectOnboardingForm } from 'store/reducers/ProjectReducer';
 
-import { connect } from 'react-redux';
-import { Action } from 'redux';
-import { ThunkDispatch } from 'redux-thunk';
-
-import { CurrentAuth } from '../../store/reducers/AuthReducer';
-import { AppState } from '../../store/Store';
-
-import { createProject } from '../../store/actions/ProjectActions';
-import { Project, ProjectBudgetOptions, ProjectForm } from '../../store/reducers/ProjectReducer';
-
-import Header from '../../components/Header/Header';
+import Header from 'components/Header/Header';
 import OnboardingSteps from './OnboardingSteps/OnboardingSteps';
 
-interface OnboardingPageProps extends RouteComponentProps {
-  auth?: CurrentAuth;
-  createProject: (project: object) => Promise<Project>;
-}
-
-interface OnboardingPageState {
+type OnboardingPageState = {
   step: number;
-  form: ProjectForm;
-}
+  form: ProjectOnboardingForm;
+};
 
-class OnboardingPage extends Component<OnboardingPageProps, OnboardingPageState> {
-  state = {
+const OnboardingPage = ({ history }: RouteComponentProps) => {
+  const [{ authState: { auth } }, dispatch] = useAppState();
+  const [state, setState] = useState<OnboardingPageState>({
     step: 0,
     form: {
       room: '',
@@ -39,104 +28,107 @@ class OnboardingPage extends Component<OnboardingPageProps, OnboardingPageState>
       limited_access: undefined,
       budget: ProjectBudgetOptions.LOW,
     },
-  };
+  });
 
-  handleStart = () => this.setState({ step: 1 });
+  const handleStart = () => setState({ ...state, step: 1 });
 
-  handleStepBack = () => this.setState({ step: this.state.step - 1 });
+  const handleStepBack = () => setState({ ...state, step: state.step - 1 });
 
-  handleStepForward = () => this.setState({ step: this.state.step + 1 });
+  const handleStepForward = () => setState({ ...state, step: state.step + 1 });
 
-  handleRoomClicked = (e: React.SyntheticEvent<HTMLInputElement>) => (
-    this.setState({
-      step: this.state.step + 1,
+  const handleRoomClicked = ({ currentTarget }: React.SyntheticEvent<HTMLInputElement>) => (
+    setState({
+      step: state.step + 1,
       form: {
-        ...this.state.form,
-        room: e.currentTarget.name,
+        ...state.form,
+        room: currentTarget.name,
       },
     })
-  )
+  );
 
-  handleQuizImageClicked = (e: React.SyntheticEvent<HTMLButtonElement>) => {
-    const { step, choice } = e.currentTarget.dataset;
-    this.setState({
-      step: this.state.step + 1,
+  const handleQuizImageClicked = ({ currentTarget }: React.SyntheticEvent<HTMLButtonElement>) => {
+    const { step, choice } = currentTarget.dataset;
+
+    setState({
+      step: state.step + 1,
       form: {
-        ...this.state.form,
+        ...state.form,
         styles: {
-          ...this.state.form.styles,
+          ...state.form.styles,
           [step as string]: choice,
         },
       },
     });
-  }
+  };
 
-  handlePackageClicked = (e: React.SyntheticEvent<HTMLButtonElement>) => {
-    const { type } = e.currentTarget.dataset;
-    this.setState({
-      step: this.state.step + 1,
+  const handlePackageClicked = ({ currentTarget }: React.SyntheticEvent<HTMLButtonElement>) => {
+    const { type } = currentTarget.dataset;
+
+    setState({
+      step: state.step + 1,
       form: {
-        ...this.state.form,
+        ...state.form,
         package: type as string,
       },
     });
-  }
+  };
 
-  handleZipChanged = (e: React.SyntheticEvent<HTMLInputElement>) => {
+  const handleZipChanged = ({ currentTarget }: React.SyntheticEvent<HTMLInputElement>) => {
     const re = /^[0-9\b]+$/;
-    if (re.test(e.currentTarget.value)) {
-      this.setState({
+    if (re.test(currentTarget.value)) {
+      setState({
+        ...state,
         form: {
-          ...this.state.form,
-          zipcode: e.currentTarget.value,
+          ...state.form,
+          zipcode: currentTarget.value,
         },
       });
     }
-  }
+  };
 
-  handleSharedWithClicked = (e: React.SyntheticEvent<HTMLInputElement>) => (
-    this.setState({
-      step: this.state.step + 1,
+  const handleSharedWithClicked = ({ currentTarget }: React.SyntheticEvent<HTMLInputElement>) => (
+    setState({
+      step: state.step + 1,
       form: {
-        ...this.state.form,
-        shared_with: e.currentTarget.value,
+        ...state.form,
+        shared_with: currentTarget.value,
       },
     })
-  )
+  );
 
-  handlePetsClicked = (e: React.SyntheticEvent<HTMLInputElement>) => (
-    this.setState({
-      step: this.state.step + 1,
+  const handlePetsClicked = ({ currentTarget }: React.SyntheticEvent<HTMLInputElement>) => (
+    setState({
+      step: state.step + 1,
       form: {
-        ...this.state.form,
-        pet_friendly: Boolean(parseInt(e.currentTarget.value, 10)),
+        ...state.form,
+        pet_friendly: Boolean(parseInt(currentTarget.value, 10)),
       },
     })
-  )
+  );
 
-  handleAccessClicked = (e: React.SyntheticEvent<HTMLInputElement>) => (
-    this.setState({
-      step: this.state.step + 1,
+  const handleAccessClicked = ({ currentTarget }: React.SyntheticEvent<HTMLInputElement>) => (
+    setState({
+      step: state.step + 1,
       form: {
-        ...this.state.form,
-        limited_access: Boolean(parseInt(e.currentTarget.value, 10)),
+        ...state.form,
+        limited_access: Boolean(parseInt(currentTarget.value, 10)),
       },
     })
-  )
+  );
 
-  handleBudgetClicked = (budget: ProjectBudgetOptions) => {
-    this.setState({
-      step: this.state.step + 1,
+  const handleBudgetClicked = (budget: ProjectBudgetOptions) => {
+    setState({
+      step: state.step + 1,
       form: {
-        ...this.state.form,
+        ...state.form,
         budget,
       },
     });
 
-    setTimeout(() => this.handleSubmit());
-  }
+    setTimeout(() => handleSubmit());
+  };
 
-  handleSubmit = async () => {
+  const handleSubmit = async () => {
     const {
       room,
       zipcode,
@@ -144,7 +136,7 @@ class OnboardingPage extends Component<OnboardingPageProps, OnboardingPageState>
       pet_friendly,
       limited_access,
       budget,
-    } = this.state.form;
+    } = state.form;
 
     const endDate = new Date();
     endDate.setDate(endDate.getDate() + 15);
@@ -153,69 +145,56 @@ class OnboardingPage extends Component<OnboardingPageProps, OnboardingPageState>
       room,
       shared_with,
       budget,
-      zipcode: zipcode!,
+      zipcode,
       style: 'Style goes here...',
       pet_friendly: pet_friendly!,
       limited_access: limited_access!,
-      status: 'DETAILS',
+      status: ProjectStatus.DETAILS,
       end_date: endDate.toISOString(),
-      client: this.props.auth!.user.id,
+      client: auth!.user.id!,
     };
 
-    await this.props.createProject(project);
+    await dispatch(createProject(project));
 
-    this.props.history.push('/');
-  }
+    history.push('/');
+  };
 
-  render() {
-    const { auth } = this.props;
-    const { step } = this.state;
+  return (
+    <React.Fragment>
+      <Header auth={auth} />
+      <main className="onboarding">
+        <div className="onboarding__container">
+          {state.step === 0 && (
+            <div className="onboarding__welcome">
+              <h1 className="onboarding__welcome__headline">WELCOME TO<br />THE MAN HOME</h1>
+              <p className="onboarding__welcome__subheadline">Time to like where you wake up</p>
+              <button
+                className="onboarding__welcome__button"
+                onClick={handleStart}
+              >
+                START YOUR PROJECT
+              </button>
+            </div>
+          )}
+          {state.step > 0 && (
+            <OnboardingSteps
+              {...state}
+              handleStepBack={handleStepBack}
+              handleStepForward={handleStepForward}
+              handleRoomClicked={handleRoomClicked}
+              handleQuizImageClicked={handleQuizImageClicked}
+              handlePackageClicked={handlePackageClicked}
+              handleZipChanged={handleZipChanged}
+              handleSharedWithClicked={handleSharedWithClicked}
+              handlePetsClicked={handlePetsClicked}
+              handleAccessClicked={handleAccessClicked}
+              handleBudgetClicked={handleBudgetClicked}
+            />
+          )}
+        </div>
+      </main>
+    </React.Fragment>
+  );
+};
 
-    return (
-      <React.Fragment>
-        <Header auth={auth} />
-        <main className="onboarding">
-          <div className="onboarding__container">
-            {step === 0 && (
-              <div className="onboarding__welcome">
-                <h1 className="onboarding__welcome__headline">WELCOME TO<br />THE MAN HOME</h1>
-                <p className="onboarding__welcome__subheadline">Time to like where you wake up</p>
-                <button
-                  className="onboarding__welcome__button"
-                  onClick={this.handleStart}
-                >
-                  START YOUR PROJECT
-                </button>
-              </div>
-            )}
-            {step > 0 && (
-              <OnboardingSteps
-                {...this.state}
-                handleStepBack={this.handleStepBack}
-                handleStepForward={this.handleStepForward}
-                handleRoomClicked={this.handleRoomClicked}
-                handleQuizImageClicked={this.handleQuizImageClicked}
-                handlePackageClicked={this.handlePackageClicked}
-                handleZipChanged={this.handleZipChanged}
-                handleSharedWithClicked={this.handleSharedWithClicked}
-                handlePetsClicked={this.handlePetsClicked}
-                handleAccessClicked={this.handleAccessClicked}
-                handleBudgetClicked={this.handleBudgetClicked}
-              />
-            )}
-          </div>
-        </main>
-      </React.Fragment>
-    );
-  }
-}
-
-const mapStateToProps = (store: AppState) => ({
-  auth: store.authState.auth,
-});
-
-const mapDispatchToProps = (dispatch: ThunkDispatch<AppState, void, Action>) => ({
-  createProject: (project: object) => dispatch(createProject(project)),
-});
-
-export default withRouter(connect(mapStateToProps, mapDispatchToProps)(OnboardingPage));
+export default withRouter(OnboardingPage);

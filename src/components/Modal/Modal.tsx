@@ -1,63 +1,54 @@
-import React, { Component, Fragment, ReactNode } from 'react';
+import React, { Fragment, ReactNode, RefObject, createRef, useState, useEffect } from 'react';
 import './Modal.scss';
 
 import ModalContent from './ModalContent';
 import ModalTrigger from './ModalTrigger';
 
-interface ModalProps {
+type ModalProps = {
   children?: ReactNode;
   role?: string;
   triggerText: string;
   ariaLabel: string;
   centered?: boolean;
-}
+};
 
-class Modal extends Component<ModalProps, any> {
-  state = { isOpen: false };
-  modalNode?: HTMLElement;
-  openButtonNode?: HTMLButtonElement;
-  closeButtonNode?: HTMLButtonElement;
+const Modal = ({ ariaLabel, children, triggerText, role, centered }: ModalProps) => {
+  const [isOpen, setIsOpen] = useState(false);
+  const openButtonRef: RefObject<HTMLButtonElement> = createRef();
+  const closeButtonRef: RefObject<HTMLButtonElement> = createRef();
 
-  onOpen = () => {
-    this.setState({ isOpen: true }, () => this.closeButtonNode!.focus());
-    document.querySelector('html')!.classList.add('u-lock-scroll');
-  }
+  useEffect(() => {
+    if (isOpen) {
+      closeButtonRef.current!.focus();
+      document.querySelector('html')!.classList.add('u-lock-scroll');
+    } else {
+      openButtonRef.current!.focus();
+      document.querySelector('html')!.classList.remove('u-lock-scroll');
+    }
+  }, [isOpen]);
 
-  onClose = () => {
-    this.setState({ isOpen: false });
-    this.openButtonNode!.focus();
-    document.querySelector('html')!.classList.remove('u-lock-scroll');
-  }
+  const onOpen = () => setIsOpen(true);
+  const onClose = () => setIsOpen(false);
 
-  render() {
-    const { isOpen } = this.state;
-    const { ariaLabel, children, triggerText, role, centered } = this.props;
-
-    const modalRef = (node: HTMLElement) => this.modalNode = node;
-    const openButtonRef = (node: HTMLButtonElement) => this.openButtonNode = node;
-    const closeButtonRef = (node: HTMLButtonElement) => this.closeButtonNode = node;
-
-    return (
-      <Fragment>
-        <ModalTrigger
-          onOpen={this.onOpen}
-          buttonRef={openButtonRef}
-          text={triggerText}
+  return (
+    <Fragment>
+      <ModalTrigger
+        ref={openButtonRef}
+        onOpen={onOpen}
+        text={triggerText}
+      />
+      {isOpen &&
+        <ModalContent
+          ref={closeButtonRef}
+          ariaLabel={ariaLabel}
+          content={children}
+          role={role}
+          centered={centered}
+          onClose={onClose}
         />
-        {isOpen &&
-          <ModalContent
-            ariaLabel={ariaLabel}
-            buttonRef={closeButtonRef}
-            modalRef={modalRef}
-            content={children}
-            onClose={this.onClose}
-            role={role}
-            centered={centered}
-          />
-        }
-      </Fragment>
-    );
-  }
-}
+      }
+    </Fragment>
+  );
+};
 
-export default React.memo(Modal);
+export default Modal;

@@ -2,13 +2,12 @@ import React, { Fragment } from 'react';
 
 import { DesignCollabProps, hasApprovedDetails, hasFinishedDetails } from './DesignCollab';
 
-import CollabAlert from '../../../components/CollabAlert/CollabAlert';
-import CollabCollection from '../../../components/CollabCollection/CollabCollection';
-import CollabImage from '../../../components/CollabImage/CollabImage';
-import CollabMap from '../../../components/CollabMap/CollabMap';
-import CollabWorkzone from '../../../components/CollabWorkzone/CollabWorkzone';
-
-import Modal from '../../../components/Modal/Modal';
+import CollabAlert from 'components/CollabAlert/CollabAlert';
+import CollabCollection from 'components/CollabCollection/CollabCollection';
+import CollabImage from 'components/CollabImage/CollabImage';
+import CollabMap from 'components/CollabMap/CollabMap';
+import CollabWorkzone from 'components/CollabWorkzone/CollabWorkzone';
+import Modal from 'components/Modal/Modal';
 
 const DesignClient = (props: DesignCollabProps) => {
   const handleApproveConceptboards = () => (
@@ -43,7 +42,7 @@ const DesignClient = (props: DesignCollabProps) => {
               ariaLabel="Approve Concepts Confirmation"
               centered
             >
-              <img src={require('../../../assets/images/utility/confirm.png')} />
+              <img src={require('assets/images/utility/confirm.png')} />
               <p>By selecting the confimation below, you are approving the conceptboards.</p>
               <button onClick={handleApproveConceptboards} className="u-text-uppercase">
                 Approve &amp; Submit
@@ -74,7 +73,7 @@ const DesignClient = (props: DesignCollabProps) => {
               ariaLabel="Approve Floorplan Confirmation"
               centered
             >
-              <img src={require('../../../assets/images/utility/confirm.png')} />
+              <img src={require('assets/images/utility/confirm.png')} />
               <p>By selecting the confimation below, you are approving the floorplan.</p>
               <button onClick={handleApproveFloorplan} className="u-text-uppercase">
                 Approve &amp; Submit
@@ -111,4 +110,4 @@ const DesignClient = (props: DesignCollabProps) => {
   }
 };
 
-export default React.memo(DesignClient);
+export default DesignClient;

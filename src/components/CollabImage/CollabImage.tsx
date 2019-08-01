@@ -1,9 +1,9 @@
 import React, { ReactNode } from 'react';
 import './CollabImage.scss';
 
-import { Detail } from '../../store/reducers/ProjectReducer';
+import { Detail } from 'store/reducers/ProjectReducer';
 
-interface CollabImageProps {
+type CollabImageProps = {
   children?: ReactNode;
   type?: string;
   details: Detail[];
@@ -11,7 +11,7 @@ interface CollabImageProps {
   handleThumbClicked: (e: React.SyntheticEvent<HTMLElement>) => void;
   handleFileChanged?: (e: React.SyntheticEvent<HTMLInputElement>) => void;
   handleDeleteClicked?: (e: React.SyntheticEvent<HTMLElement>) => void;
-}
+};
 
 const CollabImage = (props: CollabImageProps) => {
   let fileInput: HTMLInputElement;
@@ -64,4 +64,4 @@ const CollabImage = (props: CollabImageProps) => {
   );
 };
 
-export default React.memo(CollabImage);
+export default CollabImage;

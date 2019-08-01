@@ -28,4 +28,4 @@ const OnboardingZip = (props: OnboardingStepsProps) => (
   </div>
 );
 
-export default React.memo(OnboardingZip);
+export default OnboardingZip;

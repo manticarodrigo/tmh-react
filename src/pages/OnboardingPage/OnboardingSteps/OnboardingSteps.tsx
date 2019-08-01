@@ -1,9 +1,7 @@
 import React from 'react';
 import './OnboardingSteps.scss';
 
-import leftArrow from '../../../assets/images/utility/left-arrow.png';
-
-import { ProjectBudgetOptions, ProjectForm } from '../../../store/reducers/ProjectReducer';
+import { ProjectBudgetOptions, ProjectOnboardingForm } from 'store/reducers/ProjectReducer';
 
 import OnboardingAccess from '../OnboardingAccess/OnboardingAccess';
 import OnboardingBudget from '../OnboardingBudget/OnboardingBudget';
@@ -14,9 +12,9 @@ import OnboardingRoomSelect from '../OnboardingRoomSelect/OnboardingRoomSelect';
 import OnboardingSharedWith from '../OnboardingSharedWith/OnboardingSharedWith';
 import OnboardingZip from '../OnboardingZip/OnboardingZip';
 
-export interface OnboardingStepsProps {
+export type OnboardingStepsProps = {
   step: number;
-  form: ProjectForm;
+  form: ProjectOnboardingForm;
   handleStepBack: () => void;
   handleStepForward: () => void;
   handleRoomClicked: (e: React.SyntheticEvent<HTMLInputElement>) => void;
@@ -27,7 +25,7 @@ export interface OnboardingStepsProps {
   handlePetsClicked: (e: React.SyntheticEvent<HTMLInputElement>) => void;
   handleAccessClicked: (e: React.SyntheticEvent<HTMLInputElement>) => void;
   handleBudgetClicked: (budget: ProjectBudgetOptions) => void;
-}
+};
 
 const OnboardingSteps = (props: OnboardingStepsProps) => {
   const { step, handleStepBack } = props;
@@ -41,7 +39,7 @@ const OnboardingSteps = (props: OnboardingStepsProps) => {
           </h1>
         </div>
         <nav className="onboarding__steps__header__nav">
-          <button onClick={handleStepBack}><img src={leftArrow} />BACK</button>
+          <button onClick={handleStepBack}><img src={require('assets/images/utility/left-arrow.png')} />BACK</button>
           <p className="u-margin-hug--vert">STEP {step}/10</p>
         </nav>
       </div>
@@ -116,4 +114,4 @@ const getFinalStep = (props: OnboardingStepsProps) => {
   }
 };
 
-export default React.memo(OnboardingSteps);
+export default OnboardingSteps;

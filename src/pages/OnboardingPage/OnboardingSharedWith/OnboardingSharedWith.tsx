@@ -44,4 +44,4 @@ const OnboardingSharedWith = (props: OnboardingStepsProps) => (
   </div>
 );
 
-export default React.memo(OnboardingSharedWith);
+export default OnboardingSharedWith;

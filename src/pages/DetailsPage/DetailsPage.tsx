@@ -1,17 +1,8 @@
-import React, { Component } from 'react';
+import React, { Fragment, useState, useEffect } from 'react';
 import { RouteComponentProps, withRouter } from 'react-router-dom';
 import './DetailsPage.scss';
 
-import { connect } from 'react-redux';
-import { Action } from 'redux';
-import { ThunkDispatch } from 'redux-thunk';
-
-import { AppState } from '../../store/Store';
-import { AppRoutes } from '../App/App';
-
-import { CurrentAuth } from '../../store/reducers/AuthReducer';
-
-import CollabChat from '../../components/CollabChat/CollabChat';
+import useAppState from 'hooks/useAppState';
 
 import {
   addDetail,
@@ -20,7 +11,7 @@ import {
   getLatestProject,
   getProject,
   updateProject,
-} from '../../store/actions/ProjectActions';
+} from 'store/actions/ProjectActions';
 
 import {
   Detail,
@@ -28,239 +19,211 @@ import {
   DetailType,
   Project,
   ProjectStatus,
-} from '../../store/reducers/ProjectReducer';
+} from 'store/reducers/ProjectReducer';
 
-import CollabWorkzone from '../../components/CollabWorkzone/CollabWorkzone';
-import Header from '../../components/Header/Header';
-import Loading from '../../components/Loading/Loading';
+import { AppRoutes } from 'pages/App/App';
+
+import Header from 'components/Header/Header';
+import Loading from 'components/Loading/Loading';
+import CollabChat from 'components/CollabChat/CollabChat';
+import CollabWorkzone from 'components/CollabWorkzone/CollabWorkzone';
 
 import DetailsCollab from './DetailsCollab/DetailsCollab';
 import DetailsCollabMenu from './DetailsCollabMenu/DetailsCollabMenu';
 import DetailsInfo from './DetailsInfo/DetailsInfo';
 
-interface MatchParams {
+type MatchParams = {
   view: string;
   projectId: string;
-}
+};
 
-interface DetailsPageProps extends RouteComponentProps<MatchParams> {
-  auth?: CurrentAuth;
-  getLatestProject: () => Promise<Project>;
-  getProject: (id: string) => Promise<Project>;
-  updateProject: (project: Partial<Project>) => Promise<Project>;
-  getDetails: (id: string) => Promise<Detail[]>;
-  addDetail: (
-    project: Project,
-    file: File,
-    type: DetailType,
-    status: DetailStatus,
-  ) => Promise<Detail>;
-  deleteDetail: (id: string) => Promise<void>;
-}
-
-interface DetailsPageState {
+type DetailsPageState = {
   project?: Project;
   drawings: Detail[];
   inspirations: Detail[];
   furnitures: Detail[];
   selectedIndex: number;
-  view: string;
-}
+  view: DetailType;
+};
 
-class DetailsPage extends Component<DetailsPageProps, DetailsPageState> {
-  state: DetailsPageState = {
-    project: undefined,
-    drawings: [],
-    inspirations: [],
-    furnitures: [],
-    selectedIndex: 0,
-    view: 'DRAWING',
-  };
-
-  async componentDidMount() {
-    const { auth, match } = this.props;
-    const { params } = match;
-
-    if (params.view && params.projectId) {
-      // TODO: Check designer permissions
-      const promises = Promise.all([
-        this.props.getProject(params.projectId),
-        this.props.getDetails(params.projectId),
-      ]);
-
-      const data = await promises;
-
-      this.setState({ project: data[0] });
-      this.setDetails(data[1]);
-
-      return;
-    }
-
-    const project = await this.props.getLatestProject();
-
-    if (project && project.id) {
-      const isDesigner = project.designer && project.designer.id === auth!.user.id;
-      const view = isDesigner ? 'designer' : 'client';
-      this.props.history.replace(`${AppRoutes.DETAILS}/${view}/${project.id}`);
-      const details = await this.props.getDetails(project.id);
-      this.setState({ project });
-      this.setDetails(details);
-
-      return;
-    }
-
-    this.props.history.push(AppRoutes.DASHBOARD);
-  }
-
-  setDetails(details: Detail[]) {
-    const drawings = [];
-    const inspirations = [];
-    const furnitures = [];
-
-    for (const detail of details) {
-      switch (detail.type) {
-        case DetailType.DRAWING:
-          drawings.push(detail);
-          break;
-        case DetailType.INSPIRATION:
-          inspirations.push(detail);
-          break;
-        case DetailType.FURNITURE:
-          furnitures.push(detail);
-          break;
-      }
-    }
-    return this.setState({
-      drawings,
-      inspirations,
-      furnitures,
-    });
-  }
-
-  handleViewChanged = (e: React.SyntheticEvent<HTMLButtonElement>) => {
-    const { view } = e.currentTarget.dataset;
-    this.setState({ view: view as string });
-  }
-
-  handleFileChanged = async (e: React.SyntheticEvent<HTMLInputElement>) => {
-    const { files } = e.currentTarget;
-    const { project } = this.state;
-
-    if (files && project && project.id) {
-      const file = files[0];
-
-      switch (this.state.view) {
-        case DetailType.DRAWING:
-          await this.props.addDetail(project, file, DetailType.DRAWING, DetailStatus.APPROVED);
-          break;
-        case DetailType.INSPIRATION:
-          await this.props.addDetail(project, file, DetailType.INSPIRATION, DetailStatus.APPROVED);
-          break;
-        case DetailType.FURNITURE:
-          await this.props.addDetail(project, file, DetailType.FURNITURE, DetailStatus.APPROVED);
-          break;
-        default:
-          break;
-      }
-
-      const details = await this.props.getDetails(project.id);
-      this.setDetails(details);
-    }
-  }
-
-  handleThumbClicked = (e: React.SyntheticEvent<HTMLElement>) => {
-    const { index } = e.currentTarget.dataset;
-    this.setState({ selectedIndex: parseInt(index as string, 10) });
-  }
-
-  handleDeleteClicked = async (e: React.SyntheticEvent<HTMLElement>) => {
-    const { id } = e.currentTarget.dataset;
-    await this.props.deleteDetail(id as string);
-
-    const details = await this.props.getDetails(this.state.project!.id!);
-    this.setState({ selectedIndex: 0 });
-    this.setDetails(details);
-  }
-
-  handleSubmitClicked = async (project: Project) => {
-    const { user } = this.props.auth!;
-    await this.props.updateProject({ id: project.id, status: ProjectStatus.DESIGN });
-
-    let view = 'public';
-    switch (true) {
-      case project.designer && project.designer.id === user.id:
-        view = 'designer';
-        break;
-      case project.client.id === user.id:
-        view = 'client';
-        break;
-      default:
-        break;
-    }
-
-    this.props.history.push(`${AppRoutes.DESIGN}/${view}/${project.id}`);
-  }
-
-  render() {
-    const { auth } = this.props;
-    const {
+const DetailsPage = ({ match, history }: RouteComponentProps<MatchParams>) => {
+  const [{ authState: { auth } }, dispatch] = useAppState();
+  const [
+    {
       project,
       drawings,
       inspirations,
       furnitures,
       selectedIndex,
       view,
-    } = this.state;
+    },
+    setState,
+  ] = useState<DetailsPageState>({
+    project: undefined,
+    drawings: [],
+    inspirations: [],
+    furnitures: [],
+    selectedIndex: 0,
+    view: 'DRAWING',
+  });
 
-    return project ? (
-      <React.Fragment>
-        <Header auth={auth} title="Details" />
-        <main className="details">
-          <CollabWorkzone>
-            <DetailsCollabMenu
-              project={project}
-              view={view}
-              handleViewChanged={this.handleViewChanged}
-            />
-            <DetailsCollab
-              project={project}
-              drawings={drawings}
-              inspirations={inspirations}
-              furnitures={furnitures}
-              selectedIndex={selectedIndex}
-              view={view}
-              handleFileChanged={this.handleFileChanged}
-              handleThumbClicked={this.handleThumbClicked}
-              handleDeleteClicked={this.handleDeleteClicked}
-              handleSubmitClicked={this.handleSubmitClicked}
-            />
-          </CollabWorkzone>
-          <DetailsInfo project={project} />
-        </main>
-        {auth && project && (
-          <CollabChat auth={auth} project={project} />
-        )}
-      </React.Fragment>
-    ) : <Loading />;
-  }
-}
+  useEffect(() => {
+    const onMount = async () => {
+      const { params } = match;
 
-const mapStateToProps = (store: AppState) => ({
-  auth: store.authState.auth,
-});
+      if (params.view && params.projectId) {
+        // TODO: Check designer permissions
+        const promises = Promise.all([
+          dispatch(getProject(params.projectId)),
+          dispatch(getDetails(params.projectId)),
+        ]);
 
-const mapDispatchToProps = (dispatch: ThunkDispatch<AppState, void, Action>) => ({
-  getLatestProject: () => dispatch(getLatestProject()),
-  getProject: (id: string) => dispatch(getProject(id)),
-  updateProject: (project: Partial<Project>) => dispatch(updateProject(project)),
-  getDetails: (id: string) => dispatch(getDetails(id)),
-  addDetail: (
-    project: Project,
-    file: File,
-    type: DetailType,
-    status: DetailStatus,
-  ) => dispatch(addDetail(project, file, type, status)),
-  deleteDetail: (id: string) => dispatch(deleteDetail(id)),
-});
+        const [currentProject, details] = await promises;
 
-export default withRouter(connect(mapStateToProps, mapDispatchToProps)(DetailsPage));
+        setState((prevState) => ({ ...prevState, project: currentProject }));
+        setDetails(details);
+
+        return;
+      }
+
+      const latestProject = await dispatch(getLatestProject());
+
+      if (latestProject && latestProject.id) {
+        const isDesigner = latestProject.designer && latestProject.designer.id === auth!.user.id;
+        const currentView = isDesigner ? 'designer' : 'client';
+
+        const details = await dispatch(getDetails(latestProject.id));
+
+        setState((prevState) => ({ ...prevState, project: latestProject }));
+        setDetails(details);
+
+        history.replace(`${AppRoutes.DETAILS}/${currentView}/${latestProject.id}`);
+
+        return;
+      }
+
+      history.push(AppRoutes.DASHBOARD);
+    };
+
+    onMount();
+  }, []);
+
+  const setDetails = (details: Detail[]) => {
+    const getKey = (type: DetailType) => {
+      switch (type) {
+        case 'DRAWING':
+          return 'drawings';
+        case 'INSPIRATION':
+          return 'inspirations';
+        case 'FURNITURE':
+          return 'furnitures';
+        default:
+          return 'drawings';
+      }
+    };
+
+    const mappedDetails = details.reduce((result, { type, ...detail }) => {
+      const key = getKey(type);
+      return {
+          ...result,
+          [key]: [...result[key], { type, ...detail }],
+      };
+    }, {
+      drawings: [],
+      inspirations: [],
+      furnitures: [],
+    });
+
+    return setState((prevState) => ({
+      ...prevState,
+      ...mappedDetails,
+    }));
+  };
+
+  const handleViewChanged = ({ currentTarget }: React.SyntheticEvent<HTMLButtonElement>) => {
+    const { dataset } = currentTarget;
+    setState((prevState) => ({ ...prevState, view: dataset.view as DetailType }));
+  };
+
+  const handleFileChanged = async ({ currentTarget }: React.SyntheticEvent<HTMLInputElement>) => {
+    const { files } = currentTarget;
+
+    if (files && project && project.id) {
+      const file = files[0];
+
+      switch (view) {
+        case 'DRAWING':
+          await dispatch(addDetail(project, file, 'DRAWING', DetailStatus.APPROVED));
+          break;
+        case 'INSPIRATION':
+          await dispatch(addDetail(project, file, 'INSPIRATION', DetailStatus.APPROVED));
+          break;
+        case 'FURNITURE':
+          await dispatch(addDetail(project, file, 'FURNITURE', DetailStatus.APPROVED));
+          break;
+        default:
+          break;
+      }
+
+      const details = await dispatch(getDetails(project.id));
+      setDetails(details);
+    }
+  };
+
+  const handleThumbClicked = ({ currentTarget }: React.SyntheticEvent<HTMLElement>) => {
+    const { index } = currentTarget.dataset;
+    setState((prevState) => ({ ...prevState, selectedIndex: parseInt(index as string, 10) }));
+  };
+
+  const handleDeleteClicked = async ({ currentTarget }: React.SyntheticEvent<HTMLElement>) => {
+    const { id } = currentTarget.dataset;
+    await dispatch(deleteDetail(id as string));
+
+    const details = await dispatch(getDetails(project!.id!));
+
+    setState((prevState) => ({ ...prevState, selectedIndex: 0 }));
+    setDetails(details);
+  };
+
+  const handleSubmitClicked = async ({ id, designer}: Project) => {
+    const { user } = auth!;
+
+    await dispatch(updateProject({ id, status: ProjectStatus.DESIGN }));
+
+    const isDesigner = designer && designer.id === user.id;
+    const currentView = isDesigner ? 'designer' : 'client';
+
+    history.push(`${AppRoutes.DESIGN}/${currentView}/${id}`);
+  };
+
+  return project ? (
+    <Fragment>
+      <Header auth={auth} title="Details" />
+      <main className="details">
+        <CollabWorkzone>
+          <DetailsCollabMenu
+            project={project}
+            view={view}
+            handleViewChanged={handleViewChanged}
+          />
+          <DetailsCollab
+            project={project}
+            drawings={drawings}
+            inspirations={inspirations}
+            furnitures={furnitures}
+            selectedIndex={selectedIndex}
+            view={view}
+            handleFileChanged={handleFileChanged}
+            handleThumbClicked={handleThumbClicked}
+            handleDeleteClicked={handleDeleteClicked}
+            handleSubmitClicked={handleSubmitClicked}
+          />
+        </CollabWorkzone>
+        <DetailsInfo project={project} />
+      </main>
+      {auth && project && <CollabChat auth={auth} project={project} />}
+    </Fragment>
+  ) : <Loading />;
+};
+
+export default withRouter(DetailsPage);

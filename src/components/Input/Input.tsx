@@ -1,18 +1,18 @@
 import React from 'react';
 import './Input.scss';
 
-interface FieldErrors {
+type FieldErrors = {
   [propName: string]: string[] | undefined;
-}
+};
 
-interface InputProps {
+type InputProps = {
   type?: string;
   name: string;
   value: string;
   placeholder?: string;
   fieldErrors: FieldErrors;
-  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-}
+  onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
+};
 
 const Input = (props: InputProps) => {
   const {
@@ -46,4 +46,4 @@ const Input = (props: InputProps) => {
   );
 };
 
-export default React.memo(Input);
+export default Input;

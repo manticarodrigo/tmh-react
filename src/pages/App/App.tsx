@@ -1,25 +1,17 @@
 import React, { Fragment } from 'react';
-import { connect } from 'react-redux';
 import { BrowserRouter as Router } from 'react-router-dom';
 
-import { AppState } from '../../store/Store';
+import useAppState from 'hooks/useAppState';
+import { protectedApi } from 'store/reducers/AuthReducer';
+import { logout } from 'store/actions/AuthActions';
 
-import { CurrentAuth } from '../../store/reducers/AuthReducer';
+import ProtectedRoute, { ProtectedRouteProps } from 'components/ProtectedRoute/ProtectedRoute';
 
-import {
-  ProtectedRoute,
-  ProtectedRouteProps,
-} from '../../components/ProtectedRoute/ProtectedRoute';
-
-import DashboardPage from '../DashboardPage/DashboardPage';
-import DesignPage from '../DesignPage/DesignPage';
-import DetailsPage from '../DetailsPage/DetailsPage';
-import LoginPage from '../LoginPage/LoginPage';
-import OnboardingPage from '../OnboardingPage/OnboardingPage';
-
-interface AppProps {
-  auth?: CurrentAuth;
-}
+import DashboardPage from 'pages/DashboardPage/DashboardPage';
+import DesignPage from 'pages/DesignPage/DesignPage';
+import DetailsPage from 'pages/DetailsPage/DetailsPage';
+import LoginPage from 'pages/LoginPage/LoginPage';
+import OnboardingPage from 'pages/OnboardingPage/OnboardingPage';
 
 export enum AppRoutes {
   LOGIN = '/login',
@@ -30,8 +22,15 @@ export enum AppRoutes {
   FINAL_DELIVERY = '/final-delivery',
 }
 
-const App = (props: AppProps) => {
-  const { auth } = props;
+const App = () => {
+  const [{ authState: { auth } }, dispatch] = useAppState();
+
+  protectedApi.interceptors.response.use(undefined, ({ response }) => {
+    // if response is unauthorized
+    if (response.status === 403) {
+      return dispatch(logout());
+    }
+  });
 
   const defaultProtectedRouteProps: ProtectedRouteProps = {
     isAuthenticated: !!auth,
@@ -73,10 +72,6 @@ const App = (props: AppProps) => {
       </Router>
     </Fragment>
   );
-}
+};
 
-const mapStateToProps = (store: AppState) => ({
-  auth: store.authState.auth,
-});
-
-export default connect(mapStateToProps)(App);
+export default App;

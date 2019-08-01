@@ -36,4 +36,4 @@ const OnboardingPets = (props: OnboardingStepsProps) => (
   </div>
 );
 
-export default React.memo(OnboardingPets);
+export default OnboardingPets;

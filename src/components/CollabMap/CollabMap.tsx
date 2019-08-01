@@ -1,6 +1,6 @@
 import React, { Fragment, useEffect, useState } from 'react';
+import { ImageOverlay, Map } from 'react-leaflet';
 import './CollabMap.scss';
-
 import {
   CRS,
   LatLng,
@@ -9,26 +9,24 @@ import {
 } from 'leaflet';
 import '../../../node_modules/leaflet/dist/leaflet.css';
 
-import { ImageOverlay, Map } from 'react-leaflet';
-
-import { Detail, Item, ItemForm } from '../../store/reducers/ProjectReducer';
+import { Detail, Item, ItemForm } from 'store/reducers/ProjectReducer';
 
 import CollabFormMarker, { CollabFormMarkerState, ItemFieldErrors } from './CollabFormMarker';
 import CollabInfoMarker from './CollabInfoMarker';
 import CollabItemMarker from './CollabItemMarker';
 
-interface CollabMapProps {
+type CollabMapProps = {
   floorplan: Detail;
   items?: Item[];
   handleGetItems: () => void;
   handleAddItem: (itemForm: ItemForm) => void;
-}
+};
 
-interface CollabMapState {
+type CollabMapState = {
   height?: number;
   bounds?: LatLngBounds;
   newPoint?: [number, number];
-}
+};
 
 export const CollabMap = (props: CollabMapProps) => {
   const [state, setState] = useState<CollabMapState>({});
@@ -137,4 +135,4 @@ export const CollabMap = (props: CollabMapProps) => {
   );
 };
 
-export default React.memo(CollabMap);
+export default CollabMap;

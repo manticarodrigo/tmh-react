@@ -1,14 +1,14 @@
-import React, { memo } from 'react';
+import React from 'react';
 import { Marker, Popup } from 'react-leaflet';
-
 import { DivIcon } from 'leaflet';
 
-import { Item } from '../../store/reducers/ProjectReducer';
+import { Item } from 'store/reducers/ProjectReducer';
 
-interface CollabItemMarkerProps {
+type CollabItemMarkerProps = {
   index: number;
   item: Item;
-}
+};
+
 const CollabItemMarker = (props: CollabItemMarkerProps) => {
   const { index, item } = props;
 
@@ -34,4 +34,4 @@ const CollabItemMarker = (props: CollabItemMarkerProps) => {
   );
 };
 
-export default memo(CollabItemMarker);
+export default CollabItemMarker;

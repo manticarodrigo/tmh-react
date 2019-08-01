@@ -1,17 +1,17 @@
 import WebSocketService from './WebSocketService';
 
-export interface IChatMessage {
+export type ChatMessage = {
   id: string;
   from?: string;
   author: string;
   content: string;
   created_at: string;
-}
+};
 
-export interface IChatMessageForm {
+export type ChatMessageForm = {
   from: string;
   text: string;
-}
+};
 
 enum CallbackOptions {
   FETCH_MESSAGES = 'fetch_messages',
@@ -29,13 +29,13 @@ export default class ChatSocketSerivce extends WebSocketService {
     this.send({ command: CallbackOptions.FETCH_MESSAGES })
   )
 
-  sendMessage = (message: IChatMessageForm) => (
+  sendMessage = (message: ChatMessageForm) => (
     this.send({ command: CallbackOptions.NEW_MESSAGE, from: message.from, text: message.text })
   )
 
   addCallbacks(
-    messagesCallback: (messages: IChatMessage[]) => void,
-    newMessageCallback: (message: IChatMessage) => void,
+    messagesCallback: (messages: ChatMessage[]) => void,
+    newMessageCallback: (message: ChatMessage) => void,
   ) {
     this.callbacks[CallbackOptions.MESSAGES] = messagesCallback;
     this.callbacks[CallbackOptions.NEW_MESSAGE] = newMessageCallback;

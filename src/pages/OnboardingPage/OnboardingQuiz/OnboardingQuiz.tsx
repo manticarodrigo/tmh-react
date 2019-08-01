@@ -4,7 +4,7 @@ import './OnboardingQuiz.scss';
 import { OnboardingStepsProps } from '../OnboardingSteps/OnboardingSteps';
 
 const getQuizImage = (step: number, index: number) => {
-  return require(`../../../assets/images/onboarding/styles/quiz_${step - 1}_${index + 1}.jpg`);
+  return require(`assets/images/onboarding/styles/quiz_${step - 1}_${index + 1}.jpg`);
 };
 
 const OnboardingQuiz = (props: OnboardingStepsProps) => (
@@ -24,4 +24,4 @@ const OnboardingQuiz = (props: OnboardingStepsProps) => (
   </div>
 );
 
-export default React.memo(OnboardingQuiz);
+export default OnboardingQuiz;
